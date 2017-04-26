@@ -4,7 +4,7 @@ class BackgroundChanger extends Plugin {
     constructor() {
         super({
             author: 'stupid cat',
-            version: '1.0.4',
+            version: '1.0.5',
             description: 'Changes background images on an interval',
             color: '3622a1'
         });
@@ -14,8 +14,8 @@ class BackgroundChanger extends Plugin {
         this.styleTag.innerHTML = `/** Remove a background discord put in front of the body **/
 #app-mount > div > div.app.flex-vertical.theme-dark > div.layers.flex-vertical.flex-spacer,
 #app-mount > div > div:nth-child(2) > div > div.layers.flex-vertical.flex-spacer, 
-div.layers {
-	background: rgba(0, 0, 0, 0) !important;
+.theme-dark .layers, .theme-dark .layer {
+	background: transparent !important;
 }
 
 /** Set up animated transitions **/
