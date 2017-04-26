@@ -25,7 +25,7 @@ body {
     background-size: cover !important;
 }
 
-.app, .connecting {
+.app .layer {
     background: rgba(0, 0, 0, 0.7) !important;
 }`;
         document.head.appendChild(this.styleTag);
