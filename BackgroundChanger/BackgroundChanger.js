@@ -4,7 +4,7 @@ class BackgroundChanger extends Plugin {
     constructor() {
         super({
             author: 'stupid cat',
-            version: '1.0.0',
+            version: '1.0.2',
             description: 'Changes background images on an interval',
             color: '3622a1'
         });
