@@ -13,8 +13,8 @@ class BackgroundChanger extends Plugin {
         this.styleTag = document.createElement('style');
         this.styleTag.innerHTML = `/** Remove a background discord put in front of the body **/
 #app-mount > div > div.app.flex-vertical.theme-dark > div.layers.flex-vertical.flex-spacer,
-#app-mount > div > div:nth-child(2) > div > div.layers.flex-vertical.flex-spacer,
-.theme-dark .layer, .theme-dark .layers {
+#app-mount > div > div:nth-child(2) > div > div.layers.flex-vertical.flex-spacer, 
+div.layers {
 	background: rgba(0, 0, 0, 0) !important;
 }
 
@@ -23,6 +23,10 @@ body {
     -webkit-transition: background 3s ease-in-out !important;
     transition: background 3s ease-in-out !important;
     background-size: cover !important;
+}
+
+.app .layer {
+    background: rgba(0, 0, 0, 0.7) !important;
 }`;
         document.head.appendChild(this.styleTag);
 
