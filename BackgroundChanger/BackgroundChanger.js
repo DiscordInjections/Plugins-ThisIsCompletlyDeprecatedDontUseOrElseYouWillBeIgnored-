@@ -4,7 +4,7 @@ class BackgroundChanger extends Plugin {
     constructor() {
         super({
             author: 'stupid cat',
-            version: '1.0.2',
+            version: '1.0.3',
             description: 'Changes background images on an interval',
             color: '3622a1'
         });
@@ -25,7 +25,7 @@ body {
     background-size: cover !important;
 }
 
-.app .layer {
+.app, .connecting {
     background: rgba(0, 0, 0, 0.7) !important;
 }`;
         document.head.appendChild(this.styleTag);
