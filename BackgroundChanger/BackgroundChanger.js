@@ -20,9 +20,9 @@ class BackgroundChanger extends Plugin {
 
 /** Set up animated transitions **/
 body {
-    -webkit-transition: background 3s ease-in-out;
-    transition: background 3s ease-in-out;
-    background-size: cover;
+    -webkit-transition: background 3s ease-in-out !important;
+    transition: background 3s ease-in-out !important;
+    background-size: cover !important;
 }`;
         document.head.appendChild(this.styleTag);
 
@@ -30,7 +30,7 @@ body {
         this.lastUrl = '';
 
         // Switch every 10 minutes
-        setInterval(this.next.bind(this), 10 * 60 * 1000);
+        setInterval(this.next.bind(this), 1 * 60 * 1000);
         this.next();
         this.log('Rotater initialized.');
     }
