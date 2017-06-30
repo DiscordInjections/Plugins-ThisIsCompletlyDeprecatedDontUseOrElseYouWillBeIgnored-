@@ -51,13 +51,12 @@ class CustomCommand extends Plugin {
   }
 
   registerEvent(textarea = this.textarea) {
-    textarea.addEventListener('change', this.textChange.bind(this));
     textarea.parentElement.parentElement.parentElement.addEventListener('keydown', this.keyDown.bind(this));
+    textarea.parentElement.parentElement.parentElement.addEventListener('reset', this.onReset.bind(this));
   }
 
-  textChange(event) {
-    let lines = this.textarea.value.split('\n');
-    this.textarea.style.height = lines.length > 0 ? (this.textarea.value.split('\n').length * 18) + 'px' : 'auto';
+  onReset(event) {
+    this.textarea.style.height = 'auto';
   }
 
   keyDown(event) {
@@ -74,7 +73,15 @@ class CustomCommand extends Plugin {
         }
       }
 
-    } else this.lastKey = event.key;
+    } else {
+      this.lastKey = event.key;
+      if (event.key === 'Enter') {
+        setTimeout(() => {
+          let lines = this.textarea.value.split('\n');
+          this.textarea.style.height = lines.length > 1 ? (lines.length * 18) + 'px' : 'auto';
+        }, 0);
+      }
+    }
   }
 
   finishCommand(val) {
