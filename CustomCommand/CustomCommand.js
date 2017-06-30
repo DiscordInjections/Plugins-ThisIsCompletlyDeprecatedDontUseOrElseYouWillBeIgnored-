@@ -51,12 +51,13 @@ class CustomCommand extends Plugin {
   }
 
   registerEvent(textarea = this.textarea) {
+    textarea.addEventListener('change', this.textChange.bind(this));
     textarea.parentElement.parentElement.parentElement.addEventListener('keydown', this.keyDown.bind(this));
   }
 
   textChange(event) {
-    let text = event.target.value;
-    this.log(text);
+    let lines = this.textarea.value.split('\n');
+    this.textarea.style.height = lines.length > 0 ? (this.textarea.value.split('\n').length * 18) + 'px' : 'auto';
   }
 
   keyDown(event) {
