@@ -10,12 +10,19 @@ class CustomCommand extends Plugin {
       color: '3fd24c'
     });
 
-    this.log('WHAO');
     this.lastKey = '';
-    setTimeout(this.setup.bind(this), 3000);
 
     this.commands = {};
     this.loadCommands();
+
+    let DocObserver = new MutationObserver(mutations => {
+      this.setup();
+      DocObserver.disconnect();
+    });
+    DocObserver.observe(document.getElementById("app-mount"), {
+      childList: true,
+      subtree: true
+    });
   }
 
   loadCommands() {
@@ -37,6 +44,7 @@ class CustomCommand extends Plugin {
   }
 
   setup() {
+    this.log('Setting up!');
     let textarea = this.textarea;
     if (textarea) this.registerEvent(textarea);
     let changer = document.querySelector('.app .layers .layer section.flex-horizontal');
@@ -72,7 +80,6 @@ class CustomCommand extends Plugin {
           this.finishCommand(result);
         }
       }
-
     } else {
       this.lastKey = event.key;
       if (event.key === 'Enter') {
