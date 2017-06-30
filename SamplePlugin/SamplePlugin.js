@@ -1,4 +1,4 @@
-const Plugin = require('../Structures/Plugin');
+const Plugin = module.parent.require('../Structures/Plugin');
 
 /**
  * A sample plugin

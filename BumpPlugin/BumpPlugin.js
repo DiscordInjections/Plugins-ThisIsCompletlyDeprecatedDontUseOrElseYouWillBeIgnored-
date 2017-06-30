@@ -1,4 +1,4 @@
-const Plugin = require('../Structures/Plugin');
+const Plugin = module.parent.require('../Structures/Plugin');
 
 /**
  * You should place this file in the `Plugins` folder of the DiscordInjections project.
