@@ -46,7 +46,7 @@ class Repl extends Plugin {
     height: 20vh;
     overflow: hidden;
     background-color: rgba(24, 24, 24, 0.4);
-    box-shadow: 30px 30px 10px rgba(0, 0, 0, 0.8), 1.75vw 3.1vh 10px 0vw rgba(255, 255, 255, 0.2) inset;
+    box-shadow: 30px 30px 5px rgba(0, 0, 0, 0.4), 1.75vw 3.1vh 5px 0vw rgba(255, 255, 255, 0.2) inset;
     z-index: 5;
 }
 
