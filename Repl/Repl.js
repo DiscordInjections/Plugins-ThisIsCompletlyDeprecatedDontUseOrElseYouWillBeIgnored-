@@ -31,7 +31,7 @@ class Repl extends Plugin {
     constructor() {
         super({
             author: 'martmists',
-            version: '1.0.0',
+            version: '1.1.0',
             description: 'Gives you a REPL in Discord',
             color: '36393e'
         });
@@ -46,21 +46,31 @@ class Repl extends Plugin {
     height: 20vh;
     overflow: hidden;
     background-color: rgba(24, 24, 24, 0.4);
-    box-shadow: 30px 30px 5px rgba(0, 0, 0, 0.4), 1.75vw 3.1vh 5px 0vw rgba(255, 255, 255, 0.2) inset;
+    box-shadow: 35px 35px 15px rgba(0, 0, 0, 0.4), 35px 35px 15px rgba(255, 255, 255, 0.2) inset;
     z-index: 5;
+    border-radius: 20px;
 }
 
 #Repl-Input {
-    width: 96%;
+    width: 94%;
     background: rgba(255, 255, 255, 0.1);
     border: none;
     color: white;
     font-family: "monospace";
-    margin: 2%;
+    margin: 3%;
+    border-radius: 10px;
+    padding-left: 5px;
 }
 
 #Repl-Input:focus {
     outline: none;
+}
+
+#Repl-Code-Div {
+    width: 94%;
+    height: 94%;
+    margin: 3%;
+    margin-top: 1%;
 }
 
 #Repl-Code {
