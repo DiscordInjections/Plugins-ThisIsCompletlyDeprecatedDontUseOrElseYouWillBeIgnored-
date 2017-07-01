@@ -35,9 +35,16 @@ class Repl extends Plugin {
             description: 'Gives you a REPL in Discord',
             color: '36393e'
         });
+
         // CSS to make it look fancy
         this.style = document.createElement('style');
         this.style.innerHTML = `
+:root{
+    --repl-shadow-x: 35px;
+    --repl-shadow-y: 35px;
+    --repl-shadow-blur: 15px;
+}
+
 #Repl-Div {
     position: absolute;
     right: 20vw;
@@ -46,8 +53,9 @@ class Repl extends Plugin {
     height: 20vh;
     overflow: hidden;
     background-color: rgba(24, 24, 24, 0.4);
-    box-shadow: 35px 35px 15px rgba(0, 0, 0, 0.4), 35px 35px 15px rgba(255, 255, 255, 0.2) inset;
-    z-index: 5;
+    box-shadow: var(--repl-shadow-x) var(--repl-shadow-y) var(--repl-shadow-blur) rgba(0, 0, 0, 0.4),
+                var(--repl-shadow-x) var(--repl-shadow-y) var(--repl-shadow-blur) rgba(255, 255, 255, 0.2) inset;
+    z-index: 10;
     border-radius: 20px;
 }
 
