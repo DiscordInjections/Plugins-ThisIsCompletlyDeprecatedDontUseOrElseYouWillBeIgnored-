@@ -2,14 +2,13 @@ const Plugin = module.parent.require('../Structures/Plugin');
 
 
 // Utility functions stolen from SO
-function evalInContext(js, context) {
-    return function() { return eval(js); }.call(context);
+function evalInContext(js, ctx) {
+    return function() { return eval(js); }.call(ctx);
 }
 
 function addListeners(){
     document.getElementById('Repl-Div').addEventListener('mousedown', mouseDown, false);
     window.addEventListener('mouseup', mouseUp, false);
-
 }
 
 function mouseUp(){
@@ -43,7 +42,7 @@ class Repl extends Plugin {
     position: absolute;
     right: 20vw;
     top: 20vh;
-    width: 12vw;
+    width: 10vw;
     height: 20vh;
     overflow: hidden;
     background: rgba(0, 0, 0, 0.5);
@@ -54,7 +53,8 @@ class Repl extends Plugin {
     background: rgba(255, 255, 255, 0.1);
     border: none;
     color: white;
-    width: 12vw;
+    font-family: "monospace";
+    margin: 5px;
 }
 
 #Repl-Input:focus {
@@ -65,6 +65,8 @@ class Repl extends Plugin {
     word-wrap: break-word;
     oveflow-y: scroll;
     color: white;
+    margin: 2px;
+    background: rgba(0, 0, 0, 0.3)
 }`;
         document.head.appendChild(this.style);
 
@@ -117,7 +119,7 @@ class Repl extends Plugin {
         }
 
         // Return the result
-        this.code.innerHTML = this.ctx.res.toString();
+        this.code.innerHTML = this.ctx.res;
 
         this.log(evalText + " -> " + this.code.innerHTML);
     }
