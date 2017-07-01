@@ -22,8 +22,8 @@ function mouseDown(e){
 function divMove(e){
   let div = document.getElementById('Repl-Div');
   div.style.position = 'absolute';
-  div.style.top = e.clientY-30 + 'px';
-  div.style.left = e.clientX-30 + 'px';
+  div.style.top = e.clientY-70 + 'px';
+  div.style.left = e.clientX-70 + 'px';
 }
 
 
@@ -42,19 +42,21 @@ class Repl extends Plugin {
     position: absolute;
     right: 20vw;
     top: 20vh;
-    width: 10vw;
+    width: 20vw;
     height: 20vh;
     overflow: hidden;
-    background: rgba(0, 0, 0, 0.5);
-    box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.8);
+    background-color: rgba(24, 24, 24, 0.4);
+    box-shadow: 30px 30px 10px rgba(0, 0, 0, 0.8), 1.75vw 3.1vh 10px 0vw rgba(255, 255, 255, 0.2) inset;
+    z-index: 5;
 }
 
 #Repl-Input {
+    width: 96%;
     background: rgba(255, 255, 255, 0.1);
     border: none;
     color: white;
     font-family: "monospace";
-    margin: 5px;
+    margin: 2%;
 }
 
 #Repl-Input:focus {
@@ -66,7 +68,6 @@ class Repl extends Plugin {
     oveflow-y: scroll;
     color: white;
     margin: 2px;
-    background: rgba(0, 0, 0, 0.3)
 }`;
         document.head.appendChild(this.style);
 
@@ -74,20 +75,20 @@ class Repl extends Plugin {
         // Create all elements
         this.div = document.createElement("div");
         this.div.id = "Repl-Div"
-        this.sdiv = document.createElement("div");
         this.inp = document.createElement("input");
         this.inp.id = "Repl-Input"
+        this.sdiv = document.createElement("div");
+        this.sdiv.id = "Repl-Code-Div"
         this.code = document.createElement("code");
         this.code.id = "Repl-Code"
 
         // Context object to be passed around
-        this.ctx = {}
+        this.ctx = {};
 
-        // Put all elements together
-        this.sdiv.appendChild(this.inp);
+        this.sdiv.appendChild(this.code);
 
+        this.div.appendChild(this.inp);
         this.div.appendChild(this.sdiv);
-        this.div.appendChild(this.code);
 
         // Run eval on <enter> press
         this.inp.onkeydown = event => {
