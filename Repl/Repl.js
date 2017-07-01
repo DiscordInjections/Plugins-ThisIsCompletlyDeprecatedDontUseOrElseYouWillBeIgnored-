@@ -22,8 +22,8 @@ function mouseDown(e){
 function divMove(e){
   let div = document.getElementById('Repl-Div');
   div.style.position = 'absolute';
-  div.style.top = e.clientY-70 + 'px';
-  div.style.left = e.clientX-70 + 'px';
+  div.style.top = e.clientY-75 + 'px';
+  div.style.left = e.clientX-150 + 'px';
 }
 
 
