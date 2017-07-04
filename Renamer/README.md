@@ -3,6 +3,9 @@
 
 You should place this file in the `Plugins` folder of the DiscordInjections project.
 
-This plugin colors member's names in the "typing..." box.
+This requires the `jquery` NPM module.
+To install, use this command:
 
-#### Note: People using the same name/nickname will overwrite themselfes.
+    npm i jquery
+
+This plugin locally renames users and adds custom tags.
