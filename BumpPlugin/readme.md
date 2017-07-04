@@ -9,5 +9,7 @@ When someone starts to type, the guild gets a `channel-typing` class for 5 secon
 Selectors:
 - .guilds-wrapper .guilds .guild.unread.bump::before
 - .guilds-wrapper .guilds .guild.unread.channel-typing::before
+- .channels-wrap .scroller-fzNley .containerDefault-7RImuF.bump::before
+- .channels-wrap .scroller-fzNley .containerDefault-7RImuF.channel-typing::before
 
 Happy hacking!
