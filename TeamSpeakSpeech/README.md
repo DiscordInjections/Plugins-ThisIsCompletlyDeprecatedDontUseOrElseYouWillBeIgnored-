@@ -1,5 +1,4 @@
-# RenamerPlugin
-###### [Originally made by Megamit](https://github.com/megamit/repository/tree/gh-pages/renamer)
+# TeamSpeakSpeech
 
 You should place this file in the `Plugins` folder of the DiscordInjections project.
 
