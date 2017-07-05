@@ -1,5 +1,5 @@
 # Citador
-###### [Originally made by LuaTenshi](https://gist.github.com/LuaTenshi/c43c220d1cadd7af4ab8734daf7a6706)
+###### [Originally made by nirewen](https://github.com/nirewen/Citador/)
 
 You should place this file in the `Plugins` folder of the DiscordInjections project.
 
