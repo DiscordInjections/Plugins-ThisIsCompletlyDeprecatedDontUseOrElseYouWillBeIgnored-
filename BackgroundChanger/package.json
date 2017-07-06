@@ -1,0 +1,11 @@
+{
+  "name": "backgroundchanger",
+  "version": "1.0.6",
+  "description": "Changes the discord background",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "stupid cat",
+  "license": "ISC"
+}
