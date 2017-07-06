@@ -18,6 +18,12 @@ Folder - PluginName
   |-- license.md (optional)
 ```
 
-You may have as many CSS files in the CSS folder as you desire. They will, however, all be combined into a single style element before being injected.
+You may have as many CSS files in the `css` folder as you desire. They will, however, all be combined into a single style element before being injected.
+
+The `index.js` file name can be configured with the `main` property in the `package.json` file.
+
+The `config.json` file is automatically generated based on the `configTemplate` property in your `index.js` file.
+
+You may also use JS files for `package.json` and `config.json`.
 
 Please refer to `SamplePlugin/SamplePlugin.js` for a plugin template.
