@@ -1,36 +1,17 @@
 const Plugin = module.parent.require('../Structures/Plugin');
 
 class DiscordFMPlugin extends Plugin {
-    constructor() {
-        super({
-            author: 'Snazzah',
-            version: '1.0.0',
-            description: 'Show current song plaing while listening in Discord.FM.',
-            color: '266697'
-        });
+    constructor(...args) {
+        super(...args);
         this.html = `<div class="container-3lnMWU discord-fm"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO" style="flex: 0 0 auto;"><a href="https://discord.fm" target="_BLANK"><div class="dfm-icon"></div></a></div><div class="inner-ptMwR-"><div class="rtc-connection-status"><marquee scrollamount="5">Loading...</marquee></div><span class="channel-3YGMy1">Loading...</span></div><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO" style="flex: 0 0 auto;"><a target="_BLANK"><div class="dfm-lib button-3WJ5FX"></div></a></div></div>`;
-        this.css = `.discord-fm{background-size:cover;background-position:50%;border:none;}
-.discord-fm .channel-3YGMy1{opacity:0.5;display:inline-block;padding: 5px;border-radius:5px;background-color:rgba(24,25,28,.5);}
-.discord-fm .channel-3YGMy1:hover{opacity:1;text-decoration:none;}
-.dfm-icon {width: 48px;height: 48px;background:transparent no-repeat 50% 50%;background-size:48px 48px;background-image:url(https://widget.discord.fm/img/dfm.png);border-radius:50%;}
-.dfm-icon:hover{background-color:rgba(24,25,28,.3);}
-.dfm-lib{background-image:url(https://storage.googleapis.com/material-icons/external-assets/v4/icons/svg/ic_library_music_white_48px.svg);}
-.discord-fm.error{background:#f44!important;flex-direction:column;text-align:center;}
-.discord-fm.error>*:not(:first-child){display:none;}
-.discord-fm.error>*:first-child>a>div{background-image:url(https://storage.googleapis.com/material-icons/external-assets/v4/icons/svg/ic_error_outline_white_48px.svg);}
-.discord-fm.error>*:first-child>a>div:hover{background-color:transparent;}
-.discord-fm.error>*:first-child>a{cursor:default;}
-.discord-fm.error>*:first-child:after{content:'The bot doesn\'t seem to be in the channel!';display:block;font-size:20px;font-weight:bold;width:100%;height:100%;margin-bottom:5px;}
-.discord-fm.error:after{content:'Consult to a Music Manager or a Developer!';color:#ccc;display:block;width:100%;height:100%;}
-.discord-fm.afk{background:#444!important;flex-direction:column;}
-.discord-fm.afk>*:not(:first-child){display:none;}
-.discord-fm.afk>*:first-child>a>div{background-image:url(https://storage.googleapis.com/material-icons/external-assets/v4/icons/svg/ic_priority_high_white_48px.svg);}
-.discord-fm.afk>*:first-child>a>div:hover{background-color:transparent;}
-.discord-fm.afk>*:first-child>a{cursor:default;}
-.discord-fm.afk>*:first-child:after{content:'You are AFK in Discord.FM.';display:block;font-size:18px;font-weight:bold;width:100%;height:100%;margin-top:7px;}`;
-        document.querySelector("head").innerHTML += `<style class="discord-fm-css">${this.css}</style>`
         window.client.on('voiceStateUpdate', this.onVoiceUpdate.bind(this));
         window.client.on('presenceUpdate', this.onPresenceUpdate.bind(this));
+    }
+
+    get configTemplate() {
+        return {
+            color: '266697'
+        };
     }
 
     unload(){
@@ -72,6 +53,7 @@ class DiscordFMPlugin extends Plugin {
 
     removeHTML(){
         this.htmlElement = null;
+        document.querySelector("head").removeChild(document.querySelector(".discord-fm-css"));
         if(document.querySelector(".discord-fm")) document.querySelector(".channels-wrap").removeChild(document.querySelector(".discord-fm"));
         if(document.querySelector(".dfm-tt")) document.querySelector(".tooltips").removeChild(document.querySelector(".dfm-tt"));
     }
@@ -100,6 +82,17 @@ class DiscordFMPlugin extends Plugin {
                     document.querySelector('.justifyStart-2yIZo0:last-child a').href = `https://temp.discord.fm/libraries/${this.currentLib}`;
                     if(!newMember.voiceChannel.members.find(m=>m.roles.has("143688156837838848"))){ // Couldn't find the bot
                         document.querySelector(".discord-fm").classList.add("error");
+                        this.timeout = setInterval(()=>{
+                            if(newMember.voiceChannel.members.find(m=>m.roles.has("143688156837838848"))){
+                                if(!this.currentVC){
+                                    clearTimeout(this.timeout);
+                                    return;
+                                };
+                                document.querySelector(".discord-fm").classList.remove("error");
+                                this.setTitle(window.client.channels.get(this.currentVC).members.find(m=>m.roles.has("143688156837838848")).presence.game.name.slice(2));
+                                clearTimeout(this.timeout);
+                            }
+                        }, 2000)
                     }else{
                         this.setTitle(newMember.voiceChannel.members.find(m=>m.roles.has("143688156837838848")).presence.game.name.slice(2));
                     }
@@ -137,9 +130,10 @@ class DiscordFMPlugin extends Plugin {
                 if(newMember.voiceChannel && newMember.voiceChannel.id === this.currentVC){
                     document.querySelector(".discord-fm").classList.remove("error");
                     this.setTitle(newMember.presence.game.name.slice(2));
+                    clearTimeout(this.timeout);
                 }
             }
-        }, 50);
+        }, 300);
     }
 }
 

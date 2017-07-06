@@ -10,74 +10,10 @@ var isQuote = false,
 	stringLocal;
 
 class Citador extends Plugin {
-	constructor() {
-		super({
-			author: 'Nirewen, Ported by Snazzah',
-			version: '1.5.6',
-			description: 'Cita alguém no chat.'
-		});
+	constructor(...args) {
+		super(...args);
 		this.closeImg = "https://discordapp.com/assets/14f734d6803726c94b970c3ed80c0864.svg";
 		this.deleteMsgBtnImg = "https://imgh.us/deleteMsgBtnImgHover.svg";
-		this.css = `
-			@font-face {
-				font-family: 'Segoe MDL2 Assets';
-				src: url('https://crossorigin.me/https://nirewen.s-ul.eu/WJJ3bKJl.ttf');
-			}
-			.citar-btn {
-				cursor: pointer;
-				color: #fff !important;
-				position :relative;
-				top: -1px;
-				margin: 0 3px 0 5px;
-				text-transform: uppercase;
-				font-size: 10px;
-				padding: 3px 5px;
-				background: rgb(10, 10, 10);
-				font-family: "Segoe MDL2 Assets", "Whitney";
-				border-radius: 3px;
-				transition: all 200ms ease-in-out;
-				-webkit-transition: all 200ms ease-in-out;
-				opacity: 0.8;
-			}
-
-			.citar-btn.quoting {
-				background: #43b581;
-				cursor: default;
-				opacity: 1 !important;
-			}
-			.citar-btn.cant-embed {
-				background: #f04747;
-				cursor: default;
-				opacity: 1 !important;
-			}
-			.quote-close {
-				opacity: .5; 
-				float: right;
-				width: 12px;
-				height: 12px;
-				background: transparent url(${this.closeImg}); 
-				background-size: cover; 
-				transition: opacity .1s ease-in-out; 
-				cursor: pointer;
-				margin-right: 10px;
-			}
-			.quote-close:hover {
-				opacity: 1;
-			}
-			.delete-msg-btn {
-				opacity: 0;
-				float: right;
-				width: 16px;
-				height: 16px;
-				background-size: 16px 16px;
-				background-image: url(${this.deleteMsgBtnImg});
-				cursor: pointer;
-				transition: opacity 200ms ease-in-out;
-				-webkit-transition: opacity 200ms ease-in-out;
-			}
-			.delete-msg-btn:hover {
-				opacity: 1 !important;
-			}`;
 		this.componentToHex = (c) => {
 			var hex = Number(c).toString(16);
 			return hex.length == 1 ? "0" + hex : hex;
@@ -139,6 +75,15 @@ class Citador extends Plugin {
 					attachment: "Anexo"
 				};
 				break;
+			case 'en-US':
+				stringLocal = {
+					startMsg: "Started",
+					quoteTooltip: "Quote",
+					deleteTooltip: "Delete",
+					noPermTooltip: "No permission to quote",
+					attachment: "Attachment"
+				};
+				break;
 			case 'ru-RU':
 				stringLocal = {
 					startMsg: "Начало",
@@ -159,7 +104,6 @@ class Citador extends Plugin {
 				break;
 		}
 		var self = this;
-		$('head').append(`<style class='citador-css'>${this.css}</style>`);
 		$(document).on("mouseover.citador", function(e) {
 			var target = $(e.target);
 			if (target.parents(".message").length > 0) {
@@ -334,6 +278,7 @@ class Citador extends Plugin {
 		});
 		this.log(stringLocal.startMsg, "info");
         window.client.on('selectedUpdate', this.onSwitch.bind(this));
+        window.client.once('ready', this.onSwitch.bind(this));
 	}
 	attachParser() {
 		var el   = $('.channel-textarea textarea'),
@@ -466,7 +411,7 @@ class Citador extends Plugin {
 		$(document).off("mouseover.citador");
 		$('.messages .message-group').off('mouseover');
 		$('.messages .message-group').off('mouseleave');
-		$(".citador-css").remove();
+		$("#CSS-Citador").remove();
 	}
 	unload() {
 		this.deleteEverything();

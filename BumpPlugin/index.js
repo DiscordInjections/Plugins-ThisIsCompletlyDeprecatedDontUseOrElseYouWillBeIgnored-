@@ -17,7 +17,7 @@ const Plugin = module.parent.require('../Structures/Plugin');
 
 class BumpPlugin extends Plugin {
     constructor(...args) {
-        super();
+        super(...args);
         this.guildTimers = {};
         this.channelTimers = {};
         this.typingTimers = {};
