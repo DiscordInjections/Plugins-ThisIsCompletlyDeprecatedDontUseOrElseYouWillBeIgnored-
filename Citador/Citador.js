@@ -13,7 +13,7 @@ class Citador extends Plugin {
 	constructor() {
 		super({
 			author: 'Nirewen, Ported by Snazzah',
-			version: '1.5.5',
+			version: '1.5.6',
 			description: 'Cita alguém no chat.'
 		});
 		this.closeImg = "https://discordapp.com/assets/14f734d6803726c94b970c3ed80c0864.svg";
@@ -139,15 +139,6 @@ class Citador extends Plugin {
 					attachment: "Anexo"
 				};
 				break;
-			case 'en-US':
-				stringLocal = {
-					startMsg: "Started",
-					quoteTooltip: "Quote",
-					deleteTooltip: "Delete",
-					noPermTooltip: "No permission to quote",
-					attachment: "Attachment"
-				};
-				break;
 			case 'ru-RU':
 				stringLocal = {
 					startMsg: "Начало",
@@ -155,6 +146,15 @@ class Citador extends Plugin {
 					deleteTooltip: "Удалить",
 					noPermTooltip: "Нет прав для цитирования",
 					attachment: "Вложение"
+				};
+				break;
+			default:
+				stringLocal = {
+					startMsg: "Started",
+					quoteTooltip: "Quote",
+					deleteTooltip: "Delete",
+					noPermTooltip: "No permission to quote",
+					attachment: "Attachment"
 				};
 				break;
 		}
