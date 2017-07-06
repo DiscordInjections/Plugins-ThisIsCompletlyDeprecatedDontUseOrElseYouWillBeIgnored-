@@ -53,7 +53,6 @@ class DiscordFMPlugin extends Plugin {
 
     removeHTML(){
         this.htmlElement = null;
-        document.querySelector("head").removeChild(document.querySelector(".discord-fm-css"));
         if(document.querySelector(".discord-fm")) document.querySelector(".channels-wrap").removeChild(document.querySelector(".discord-fm"));
         if(document.querySelector(".dfm-tt")) document.querySelector(".tooltips").removeChild(document.querySelector(".dfm-tt"));
     }
