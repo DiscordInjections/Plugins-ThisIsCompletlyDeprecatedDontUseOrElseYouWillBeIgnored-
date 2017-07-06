@@ -16,12 +16,8 @@ const Plugin = module.parent.require('../Structures/Plugin');
  */
 
 class BumpPlugin extends Plugin {
-    constructor() {
-        super({
-            author: 'stupid cat',
-            version: '1.1.0',
-            description: 'Give a class to guild and channel indicators when a message is sent / when someone starts typing.'
-        });
+    constructor(...args) {
+        super();
         this.guildTimers = {};
         this.channelTimers = {};
         this.typingTimers = {};
@@ -29,6 +25,12 @@ class BumpPlugin extends Plugin {
         this.log('Loading listeners');
         window.client.on('typingStart', this.typingStart.bind(this));
         window.client.on('message', this.messageCreate.bind(this));
+    }
+
+    get configTemplate() {
+        return {
+            color: '8e0cd3'
+        };
     }
 
     unload() {
@@ -48,7 +50,7 @@ class BumpPlugin extends Plugin {
             }, 5000);
 
             const channelElement = channel.element;
-            if(!channelElement) return;
+            if (!channelElement) return;
             channelElement.classList.add('channel-typing');
             if (this.typingChannelTimers[channel.id]) clearTimeout(this.typingChannelTimers[channel.id]);
             this.typingChannelTimers[channel.id] = setTimeout(() => {
@@ -72,7 +74,7 @@ class BumpPlugin extends Plugin {
             }, 500);
 
             const channelElement = msg.channel.element;
-            if(!channelElement) return;
+            if (!channelElement) return;
             channelElement.classList.add('bump');
             channelElement.classList.remove('channel-typing');
             if (this.typingChannelTimers[msg.channel.id]) clearTimeout(this.typingChannelTimers[msg.channel.id]);

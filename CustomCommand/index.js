@@ -2,13 +2,8 @@ const Plugin = module.parent.require('../Structures/Plugin');
 const util = require('util');
 
 class CustomCommand extends Plugin {
-  constructor() {
-    super({
-      author: 'stupid cat',
-      version: '1.0.0',
-      description: 'CUSTOM COMAMDNSA?E',
-      color: '3fd24c'
-    });
+  constructor(...args) {
+    super(...args);
 
     this.lastKey = '';
 
@@ -23,6 +18,12 @@ class CustomCommand extends Plugin {
       childList: true,
       subtree: true
     });
+  }
+
+  get configTemplate() {
+    return {
+      color: '68f2c6'
+    };
   }
 
   loadCommands() {

@@ -1,0 +1,11 @@
+{
+  "name": "customcommand",
+  "version": "1.0.0",
+  "description": "Adds custom commands to Discord! YIPPEE!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "stupid cat",
+  "license": "ISC"
+}

@@ -5,14 +5,17 @@ const Plugin = module.parent.require('../Structures/Plugin');
  * The class name *must* be the same as the file name, and it *must* extend Plugin.
  */
 class SamplePlugin extends Plugin {
-    constructor() {
-        super({
-            author: 'stupid cat',
-            version: '1.0.0',
-            description: 'An example plugin.'
-        });
+    constructor(...args) {
+        super(...args);
 
         this.log('Hello, world!');
+    }
+
+    // This is what the config file will contain when it gets generated (first use)
+    get configTemplate() {
+        return {
+            color: 'aaaaaa'
+        };
     }
 
     unload() {
