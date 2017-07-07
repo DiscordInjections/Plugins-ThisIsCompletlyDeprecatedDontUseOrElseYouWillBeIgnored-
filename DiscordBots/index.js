@@ -9,6 +9,12 @@ Number.prototype.formatNumber = function(){
     return this.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
 }
 
+Object.defineProperty(Discord.User.prototype, 'avatarURL', {
+    get: function () {
+        return `https://images.discordapp.net/avatars/${this.id}/${this.avatar}.png?size=512`
+    }
+});
+
 class DiscordBots extends Plugin {
     constructor(...args) {
         super(...args);
