@@ -72,9 +72,12 @@ class ColoredTyping extends Plugin {
             return;
         }
         let m = channel.guild.members.get(user.id);
-        let rgb = this.hexToRgb(m.displayHexColor);
-        if(m.colorRole) this.data[m.displayName] = `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
-        this.colorize();
+        // Check if member is cached
+        if (m) {
+            let rgb = this.hexToRgb(m.displayHexColor);
+            if(m.colorRole) this.data[m.displayName] = `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
+            this.colorize();
+        } else this.colorize();
     }
 
     colorize() {
