@@ -291,7 +291,7 @@ class DiscordBots extends Plugin {
             return;
         }
         if($("#user-profile-modal>.fade:not(.injected)").length !== 0 && this.belowNoteHTML !== ""){
-            $(this.belowNoteHTML).insertAfter("#user-profile-modal>.fade:not(.injected) .section:first-child");
+            $(this.belowNoteHTML).insertAfter($("#user-profile-modal>.fade:not(.injected) .section").first());
             $("#user-profile-modal>.fade").addClass("injected");
             if($("iframe")[0]) $("iframe")[0].src = `data:text/html,${this.longdesc}`;
         }
