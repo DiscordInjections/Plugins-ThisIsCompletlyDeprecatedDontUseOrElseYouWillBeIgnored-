@@ -1,0 +1,34 @@
+.profile-badge.dblbadge{background-size:contain;background-position:50%!important;margin:0!important;transform:translateX(-2px);}
+.profile-badge.badge-dblcertdev{background-image:url(https://discordbots.org/images/certifieddeveloper.png);}
+.profile-badge.badge-dblcertbot{background-image:url(https://discordbots.org/images/certifiedbot.png);}
+.profile-badge.badge-dbladmin{background-image:url(https://discordbots.org/images/adminbadge.png);}
+.profile-badge.badge-dblmod{background-image:url(https://discordbots.org/images/modbadge.png);}
+.profile-badge.badge-dblsupporter{background-image:url(https://discordbots.org/images/supporterbadge.png);}
+.no-link{cursor:default!important;}
+.profile-badge.dblbadge+.profile-badge.badge-hypesquad{margin-right:0!important;margin-left:-12px;transform:translateX(6px);}
+.profile-badge.dblbadge+.profile-badge.badge-partner{margin-right:0!important;margin-left:-12px;transform:translateX(7px);}
+.profile-badge.dblbadge+.profile-badge.badge-hypesquad+.header-info-inner{margin-left:0px;transform:translateX(9px);}
+.profile-badge.dblbadge+.profile-badge.badge-partner+.header-info-inner{margin-left:0px;transform:translateX(9px);}
+.profile-badge.badge-partner+.profile-badge.dblbadge{margin-left:-20px!important;transform:translateX(15px);}
+.profile-badge.badge-partner+.profile-badge.dblbadge+.header-info-inner{margin-left:4px;transform:translateX(4px);}
+.with-background .header-info{border:5px solid transparent;background-color:rgba(255,255,255,0.4)!important;background-size:cover;}
+.with-background .header-info:before{content:'';display: block;position:absolute;width:inherit;height:inherit;width:300px;height:calc(100% + 10px);margin-left:-305px;background-color:rgba(255,255,255,0.4);}
+.with-background .actions{padding:0!important;transform:translateY(30px);}
+.with-background .header-info-inner{background-color:transparent!important;}
+.with-background+div+.avatar-wrapper{z-index:101;}
+.with-background .profile-badge.dblbadge+.profile-badge.badge-partner+.header-info-inner{margin-left:-5px;transform:translateX(13px);}
+.header-info{padding-top:0!important;transform:translateY(20px);}
+.db-bot.actions{padding:0!important;transform:translateY(30px);}
+.db-bot>*{padding:5px!important;height:auto!important;line-height:1!important;margin-right: 10px;margin-top:5px;}
+.db-prefix{color:rgba(0,0,0,0.8)!important;}
+.db-prefix strong{color:rgba(255,255,255,0.8)!important;font-family:Consolas,Liberation Mono,Menlo,Courier,monospace;padding:2px;background-color:rgba(0,0,0,0.3);border-radius:5px;}
+.db-bot .btn+.btn{margin-left: 0px!important;}
+.db-bot .btn:last-child{margin-right: 0px;}
+.with-background+div+.avatar-wrapper{background-color:transparent!important;}
+.with-background .username-wrapper{background-color:rgba(0,0,0,0.4);padding:5px 0;}
+.with-background .avatar-popout{border:none!important;}
+.user-popout .db-prefix{margin-top:2px;}
+.db-more .note{margin-top:-8px;}
+.db-more a{display:inline-block;}
+.db-more .btn:nth-child(odd){margin-left:8px;}
+.db-more .btn,.db-more iframe{margin-top:8px;}
