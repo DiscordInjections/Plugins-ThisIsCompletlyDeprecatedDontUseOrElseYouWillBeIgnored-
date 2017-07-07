@@ -1,12 +1,8 @@
 const Plugin = module.parent.require('../Structures/Plugin');
 
 class ColoredTyping extends Plugin {
-    constructor() {
-        super({
-            author: 'Snazzah, originally by Anxeal & Bolli',
-            version: '0.2.0',
-            description: "Make the text color of the \"typing...\" text same as role color"
-        });
+    constructor(...args) {
+        super(...args);
         this.data = {};
         window.client.on('message', this.onMessage.bind(this));
         window.client.on('typingStart', this.onTyping.bind(this));
@@ -71,7 +67,10 @@ class ColoredTyping extends Plugin {
 
     onTyping(channel, user) {
         if(!window.client.selectedChannel.id === channel.id) return;
-        if(!channel.guild) return;
+        if(!channel.guild){
+            this.data[user.username] = "inherit";
+            return;
+        }
         let m = channel.guild.members.get(user.id);
         let rgb = this.hexToRgb(m.displayHexColor);
         if(m.colorRole) this.data[m.displayName] = `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;

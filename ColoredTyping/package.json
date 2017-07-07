@@ -1,0 +1,14 @@
+{
+  "name": "ColoredTyping",
+  "version": "0.2.1",
+  "description": "Make the text color of the \"typing...\" text same as role color",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Snazzah, Anxeal, Bolli",
+  "license": "MIT",
+  "dependencies": {
+    "jquery": "^3.2.1"
+  }
+}

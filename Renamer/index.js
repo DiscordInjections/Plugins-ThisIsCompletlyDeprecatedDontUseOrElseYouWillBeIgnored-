@@ -3,200 +3,9 @@ const $ = require("jquery");
 const spectrum = require("spectrum-colorpicker");
 
 class Renamer extends Plugin {
-  constructor () {
-    super({
-        author: 'Megamit/Mitchell, Ported by Snazzah',
-        version: '1.6.1',
-        description: 'Rename your friends',
-        color: 'FFA500'
-    });
+  constructor (...args) {
+    super(...args);
     this.log("Loading variables...");
-    this.css = `<style class='renamer'>
-
-.pick-wrap {
-    position: relative;
-    padding: 0;
-    margin: 0;
-}
-
-.pick-wrap .color-picker-popout {
-    position: absolute;
-}
-
-.renamer-tag {
-    font-size: 10px;
-    font-weight: 600;
-    padding: 1px 2px;
-    border-radius: 3px;
-    text-transform: uppercase;
-    vertical-align: bottom;
-    line-height: 16px;
-    flex-shrink: 0;
-}
-
-.channel-members .renamer-tag {
-    line-height: 15px;
-    height: 14px;
-    margin-left: 6px;
-}
-
-.message-group .renamer-tag {
-    margin-right: 4px;
-}
-
-.message-group:not(.compact) .renamer-tag {
-    margin-left: 6px;
-}
-
-.ui-color-picker-swatch {
-    margin-bottom: 10px;
-    border: 1px solid black;
-}
-
-.ui-color-picker-swatch.large {
-    width: 100px;
-    height: 50px;
-}
-
-.ui-color-picker-swatch.selected {
-    border: 2px solid black;
-}
-
-.renamer-modal .modal {
-    display: flex;
-    position: absolute;
-    user-select: none;
-    height: 100%;
-    width: 100%;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    align-content: space-around;
-    padding-top: 60px;
-    padding-bottom: 60px;
-    z-index: 1000;
-    opacity: 0;
-    pointer-events: none;
-    box-sizing: border-box;
-    min-height: 340px;
-}
-
-.renamer-modal .form-header, .renamer-modal .form-actions{
-    padding: 20px;
-    background-color: rgba(32,34,37,.3);
-    box-shadow: inset 0 1px 0 rgba(32,34,37,.6);
-    
-}
-
-.renamer-modal .form-header{
-    color: #f6f6f7;
-    text-transform: uppercase;
-    letter-spacing: .3px;
-    cursor: default;
-    font-weight: 600;
-    line-height: 20px;
-    font-size: 16px;
-}
-
-.renamer-modal .form-actions{
-    display: flex;
-    flex-direction: row-reverse;
-    flex: 0 0 auto;
-    flex-wrap: nowrap;
-}
-
-.renamer-modal .form-inner{
-    padding: 0 20px;
-    margin: 20px 0;
-
-}
-
-.renamer-modal .modal-inner {
-    border-radius: 5px;
-
-    display: flex;
-    pointer-events: auto;
-    width: 470px;
-    max-height: 660px;
-    min-height: 200px;
-    background-color: #2f3136;
-    box-shadow: 0 0 0 1px rgba(32,34,37,.6),0 2px 10px 0 rgba(0,0,0,.2);
-}
-
-.renamer-modal input {
-    color: #f6f6f7;
-    background-color: rgba(0,0,0,.1);
-    border-color: rgba(0,0,0,.3);
-}
-
-.renamer-modal input {
-    padding: 10px;
-    height: 40px;
-}
-.renamer-modal input {
-    box-sizing: border-box;
-    width: 100%;
-    border-width: 1px;
-    border-style: solid;
-    border-radius: 3px;
-    outline: none;
-    transition: background-color .15s ease,border .15s ease;
-}
-
-.renamer-modal .btn {
-    min-width: 96px;
-    min-height: 38px;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-sizing: border-box;
-    background: none;
-    border: none;
-    border-radius: 3px;
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 16px;
-    padding: 2px 16px;
-}
-
-.renamer-modal .btn-default {
-    color: #dcddde;
-}
-
-.renamer-modal .btn-primary {
-    color: #fff;
-    background-color: #7289da;
-}
-
-.renamer-modal .control-group label {
-    color: #b9bbbe;
-    letter-spacing: .5px;
-    text-transform: uppercase;
-    flex: 1;
-    cursor: default;
-    margin-bottom: 8px;
-    margin-top: 0;
-    font-weight: 600;
-    line-height: 16px;
-    font-size: 12px;
-}
-
-.renamer-modal label.modal-reset, .renamer-modal label.reset-nick {
-    color: #dcddde;
-    text-transform: capitalize;
-    opacity: .6;
-    margin-bottom: 20px;
-    font-weight: 600;
-    line-height: 16px;
-    font-size: 12px;
-}
-
-.renamer-modal .control-group {
-    margin-top: 10px;
-}
-
-'</style>`;
     this.defaultSettings = {
       globals: {
         "158049329150427136": {
@@ -276,15 +85,19 @@ class Renamer extends Plugin {
     // dm_mo.observe($(".app>.flex-spacer>.flex-spacer")[0],{childList:true})
     this.log("Loading settings...");
     this.loadSettings()
-    this.log("Appending CSS...");
-    $('head').append(this.css)
-      .append("<link rel='stylesheet' href='https://bgrins.github.io/spectrum/spectrum.css' />");
+    $("head").append("<link rel='stylesheet' href='https://bgrins.github.io/spectrum/spectrum.css' />");
     this.contextExtention = $(this.contextMarkup)
     this.syncColoredTextSetting();
   }
 
+  get configTemplate() {
+      return {
+          color: 'FFA500'
+      };
+  }
+
   unload () {
-    $('.renamer').remove();
+    $('#CSS-Renamer').remove();
   }
 
   static getReactInstance (node) { return node[ Object.keys(node).find((key) => key.startsWith("__reactInternalInstance")) ] }
@@ -581,7 +394,7 @@ class Renamer extends Plugin {
     });
 
     // user popouts and profiles
-    $(".discord-tag:not([renamer])").each((i, member) => {
+    $(".user-popout .discord-tag:not([renamer]), #user-profile-modal .discord-tag:not([renamer])").each((i, member) => {
       member.setAttribute("renamer", "");
       const userData = this.getNickname(Renamer.getReactInstance(member.parentNode)._currentElement.props.children[member.parentNode.className === "header-info-inner" ? 0 : 1].props.user.id);
       if (userData) {

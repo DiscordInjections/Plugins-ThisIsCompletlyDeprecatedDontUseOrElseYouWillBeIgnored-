@@ -2,13 +2,8 @@ const Plugin = module.parent.require('../Structures/Plugin');
 const $ = require("jquery");
 
 class TeamSpeakSpeech extends Plugin {
-    constructor() {
-        super({
-            author: 'Snazzah',
-            version: '1.0.0',
-            description: 'Use TeamSpeak-eqsue speech notifications.',
-            color: '425f80'
-        });
+    constructor(...args) {
+        super(...args);
         this.trackSlider = 0;
         this.optionsInit = false;
         this.optionHTML = $(`<div class="margin-bottom-40 tss-options"><h5 class="h5-3KssQU title-1pmpPr marginReset-3hwONl size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY marginBottom8-1mABJ4">TeamSpeak Speech Plugin</h5><div class="flex-vertical marginBottom8-1mABJ4"><div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO" style="flex: 1 1 auto;"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO" style="flex: 1 1 auto;"><h3 class="h3-gDcP8B title-1pmpPr marginReset-3hwONl size16-3IvaX_ height24-2pMcnc weightMedium-13x9Y8 defaultColor-v22dK1 title-3i-5G_ marginReset-3hwONl flexChild-1KGW5q" style="flex: 1 1 auto;">Enable TeamSpeak-esque Speech Notifications</h3><div class="switchWrapperDefaultActive-2IdHq2 switchWrapperDefault-3GSsCS switchWrapper-3sSQdm flexChild-1KGW5q" style="flex: 0 0 auto;"><input type="checkbox" class="checkbox-1KYsPm" value="on"><div class="switch-3lyafC"></div></div></div></div></div><div class="flexChild-1KGW5q" style="flex: 1 1 auto;"><h5 class="h5-3KssQU title-1pmpPr marginReset-3hwONl size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH margin-bottom-4">Volume</h5><div class="slider-2e2iXJ"><input type="number" class="input-27JrJm tss-volume-slider" value="100" readonly=""><div class="track-1h2wOF"></div><div class="bar-2cFRGz"><div class="barFill-18ABna" style="width: 100%;"></div></div><div class="track-1h2wOF"><div class="grabber-1TZCZi" style="left: 100%;"><span class="bubble-17BwqU elevationHigh-3lNfp9">100%</span></div></div></div></div><div class="flexChild-1KGW5q" style="flex: 1 1 auto;"><h5 class="h5-3KssQU title-1pmpPr marginReset-3hwONl size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH margin-bottom-4">Speech Rate</h5><div class="slider-2e2iXJ"><input type="number" class="input-27JrJm tss-rate-slider" value="100" readonly=""><div class="track-1h2wOF"></div><div class="bar-2cFRGz"><div class="barFill-18ABna" style="width: 100%;"></div></div><div class="track-1h2wOF"><div class="grabber-1TZCZi" style="left: 100%;"><span class="bubble-17BwqU elevationHigh-3lNfp9">100%</span></div></div></div></div><div class="flexChild-1KGW5q" style="flex: 1 1 auto;"><h5 class="h5-3KssQU title-1pmpPr marginReset-3hwONl size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH margin-bottom-4">Pitch</h5><div class="slider-2e2iXJ"><input type="number" class="input-27JrJm tss-pitch-slider" value="100" readonly=""><div class="track-1h2wOF"></div><div class="bar-2cFRGz"><div class="barFill-18ABna" style="width: 100%;"></div></div><div class="track-1h2wOF"><div class="grabber-1TZCZi" style="left: 100%;"><span class="bubble-17BwqU elevationHigh-3lNfp9">100%</span></div></div></div><div class="divider-1G01Z9 divider-2nTTsf marginTop20-3UscxH"></div></div>`);
@@ -43,6 +38,12 @@ class TeamSpeakSpeech extends Plugin {
 
             this.settings[grabber.parentNode.parentNode.childNodes[0].classList[1].split("-")[1]] = value/100;
         }, false);
+    }
+
+    get configTemplate() {
+        return {
+            color: '425f80'
+        };
     }
 
     load() {
