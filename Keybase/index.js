@@ -4,46 +4,46 @@ const fs = require("fs");
 const exec = require("child_process").exec;
 
 class KeybaseIntegration extends Plugin {
-	constructor(...args) {
-		super(...args);
-		
-		this.interval = setInterval(this.tick.bind(this), 200);
-	}
+    constructor(...args) {
+        super(...args);
+        
+        this.interval = setInterval(this.tick.bind(this), 200);
+    }
 
-	get configTemplate() {
-		return {
-			color: '33a0ff'
-		};
-	}
+    get configTemplate() {
+        return {
+            color: '33a0ff'
+        };
+    }
 
-	unload() {
-		clearInterval(this.interval);
-	}
+    unload() {
+        clearInterval(this.interval);
+    }
 
-	tick() {
-		if(document.querySelector(".user-settings-connections") !== null && !document.querySelector(".user-settings-connections").hasAttribute("keybase")){
+    tick() {
+        if(document.querySelector(".user-settings-connections") !== null && !document.querySelector(".user-settings-connections").hasAttribute("keybase")){
             document.querySelector(".user-settings-connections").setAttribute("keybase", "checked");
-			let user = document.querySelector(".username").parentNode.previousSibling.getAttribute("style").split("/")[4];
-			
-			let _this = this;
-			this.getKeybaseAccount(user, function(data){
-				if(data.user.keybase === null){
-					_this.addConnectButton(_this.setKeybaseAccount.bind(_this));
-				}else{
-					_this.addSettingsConnection(data.user.keybase, _this.deleteKeybaseAccount.bind(_this));
-				}
-			});
-			
-		}else if(document.querySelector("#user-profile-modal") !== null && document.querySelector("#user-profile-modal").className !== "keybase-checked"){
+            let user = document.querySelector(".username").parentNode.previousSibling.getAttribute("style").split("/")[4];
+            
+            let _this = this;
+            this.getKeybaseAccount(user, function(data){
+                if(data.user.keybase === null){
+                    _this.addConnectButton(_this.setKeybaseAccount.bind(_this));
+                }else{
+                    _this.addSettingsConnection(data.user.keybase, _this.deleteKeybaseAccount.bind(_this));
+                }
+            });
+            
+        }else if(document.querySelector("#user-profile-modal") !== null && document.querySelector("#user-profile-modal").className !== "keybase-checked"){
             document.querySelector("#user-profile-modal").className = "keybase-checked";
-			let user = document.querySelector("#user-profile-modal .avatar-profile").getAttribute("style").split("/")[4];
-			let _this = this;
-			
-			this.getKeybaseAccount(user, function(data){
-				if(data.user.keybase !== null){
-					_this.addProfileConnection(data.user.keybase);
-					
-					let twitterList = document.querySelectorAll("#user-profile-modal img[src*='c795f9ef8be0d19a0555ee96213abd00'] + div > div");
+            let user = document.querySelector("#user-profile-modal .avatar-profile").getAttribute("style").split("/")[4];
+            let _this = this;
+            
+            this.getKeybaseAccount(user, function(data){
+                if(data.user.keybase !== null){
+                    _this.addProfileConnection(data.user.keybase);
+                    
+                    let twitterList = document.querySelectorAll("#user-profile-modal img[src*='c795f9ef8be0d19a0555ee96213abd00'] + div > div");
                     let redditList = document.querySelectorAll("#user-profile-modal img[src*='4a3496c5b0924198ae0234331c912d1b'] + div > div");
 
                     for(let i = 0; i < twitterList.length; ++i) {
@@ -56,7 +56,7 @@ class KeybaseIntegration extends Plugin {
                         reddit.parentNode.parentNode.setAttribute("data-account", "reddit:" + reddit.innerHTML.toLowerCase());
                     }
 
-					for(let accountId in data.user.accounts){
+                    for(let accountId in data.user.accounts){
                         let account_element = document.querySelector("#user-profile-modal .connected-account[data-account='" + accountId + "']");
                         if(account_element !== null){
                             let keybase_icon = document.createElement("a");
@@ -67,14 +67,14 @@ class KeybaseIntegration extends Plugin {
                             account_element.appendChild(keybase_icon);
                         }
                     }
-				}
-			});
-		}
-	}
-	
-	/* Keybase */
-	getKeybaseAccountData(callback) {		
-		let pathList = process.env.PATH.split(require("path").delimiter);
+                }
+            });
+        }
+    }
+    
+    /* Keybase */
+    getKeybaseAccountData(callback) {        
+        let pathList = process.env.PATH.split(require("path").delimiter);
         let ext = (process.platform == "win32" ? ".exe" : "");
         let keybase_exec = null;
         for (let i = 0; i < pathList.length; ++i) {
@@ -88,35 +88,35 @@ class KeybaseIntegration extends Plugin {
         if(keybase_exec === null){
             this.dialog("Whooops, something went wrong :(", "Keybase executable not found... :( Make sure Keybase is installed and in your PATH, restart Discord and try again. If this alert still appears, please contact Bowser65#4680", function(){});
         }else{
-			let user = document.querySelector(".username").parentNode.previousSibling.getAttribute("style").split("/")[4];
+            let user = document.querySelector(".username").parentNode.previousSibling.getAttribute("style").split("/")[4];
             exec(keybase_exec + " encrypt -m 'Discord:" + user + "' bowser65", function(err, data){
                 data = new Buffer(data).toString("base64");
                 callback(data);
             });
         }
-	}
-	
-	/* API */
-	getKeybaseAccount(accountId, callback){
-		let _this = this;
-		
-		request.get('https://api.bowser65.tk/v1/keybase/user/' + accountId, function (error, response, body) {
-			console.log(response.body);
-			
+    }
+    
+    /* API */
+    getKeybaseAccount(accountId, callback){
+        let _this = this;
+        
+        request.get('https://api.bowser65.tk/v1/keybase/user/' + accountId, function (error, response, body) {
+            console.log(response.body);
+            
             let parse = JSON.parse(response.body);
             if(parse.status != "success"){
                 _this.dialog("Whooops, something went wrong :(", "Sorry, my end sucks :( Please contact me, Bowser65#4680<br>Error message: " + parse.message);
             }else{
                 callback(parse);
-			}
-		});
-	}
-	
-	setKeybaseAccount(){
-		let _this = this;
-		
-		this.getKeybaseAccountData(function(keybaseData){
-			request.post({url: 'https://api.bowser65.tk/v1/keybase/user', headers:{"X-Keybase-Data": keybaseData}}, function (error, response, body) {
+            }
+        });
+    }
+    
+    setKeybaseAccount(){
+        let _this = this;
+        
+        this.getKeybaseAccountData(function(keybaseData){
+            request.post({url: 'https://api.bowser65.tk/v1/keybase/user', headers:{"X-Keybase-Data": keybaseData}}, function (error, response, body) {
                 let data = JSON.parse(body);
                 if(data.status != "success"){
                     _this.dialog("Whooops, something went wrong :(", "Sorry, my end sucks :( Please contact me, Bowser65#4680<br>Error message: " + data.message);
@@ -125,16 +125,16 @@ class KeybaseIntegration extends Plugin {
                     document.querySelector(".user-settings-connections").removeAttribute("keybase");
                 }
             });
-		});
-	}
-	
-	deleteKeybaseAccount(){
-		let _this = this;
-		
-		this.getKeybaseAccountData(function(keybaseData){
-			request.delete({url: 'https://api.bowser65.tk/v1/keybase/user', headers:{"X-Keybase-Data": keybaseData}}, function (error, response, body) {
-				debugger;
-				
+        });
+    }
+    
+    deleteKeybaseAccount(){
+        let _this = this;
+        
+        this.getKeybaseAccountData(function(keybaseData){
+            request.delete({url: 'https://api.bowser65.tk/v1/keybase/user', headers:{"X-Keybase-Data": keybaseData}}, function (error, response, body) {
+                debugger;
+                
                 let data = JSON.parse(body);
                 if(data.status != "success"){
                     _this.dialog("Whooops, something went wrong :(", "Sorry, my end sucks :( Please contact me, Bowser65#4680<br>Error message: " + data.message);
@@ -142,12 +142,12 @@ class KeybaseIntegration extends Plugin {
                     document.querySelector(".user-settings-connections").removeAttribute("keybase");
                 }
             });
-		});
-	}
-	
-	/* UI */
-	dialog(title, contents){
-		if(document.querySelector(".keybase-dialog") !== null) document.querySelector(".keybase-dialog").remove();
+        });
+    }
+    
+    /* UI */
+    dialog(title, contents){
+        if(document.querySelector(".keybase-dialog") !== null) document.querySelector(".keybase-dialog").remove();
         
         let global_container = document.createElement("div");
         global_container.className = "theme-dark keybase-dialog";
@@ -203,26 +203,26 @@ class KeybaseIntegration extends Plugin {
         global_container.appendChild(modal);
         
         document.querySelector("#app-mount > div").appendChild(global_container);
-	}
-	
-	addConnectButton(callback){
-		if(document.querySelector(".connect-account-list .settings-connected-accounts") !== null){
-			let connect = document.createElement("div");
-			connect.className = "connect-account-btn";
-			
-			let btn = document.createElement("button");
-			btn.className = "connect-account-btn-inner";
-			btn.type = "button";
-			btn.setAttribute("style", "background-image: url('https://api.bowser65.tk/assets/keybase-logo.png');");
-			btn.addEventListener("click", callback);
-			
-			connect.appendChild(btn);
-			document.querySelector(".connect-account-list .settings-connected-accounts").appendChild(connect);
-		}
-	}
-	
-	addSettingsConnection(name, deleteCallback){
-		if(document.querySelector(".user-settings-connections") !== null){
+    }
+    
+    addConnectButton(callback){
+        if(document.querySelector(".connect-account-list .settings-connected-accounts") !== null){
+            let connect = document.createElement("div");
+            connect.className = "connect-account-btn";
+            
+            let btn = document.createElement("button");
+            btn.className = "connect-account-btn-inner";
+            btn.type = "button";
+            btn.setAttribute("style", "background-image: url('https://api.bowser65.tk/assets/keybase-logo.png');");
+            btn.addEventListener("click", callback);
+            
+            connect.appendChild(btn);
+            document.querySelector(".connect-account-list .settings-connected-accounts").appendChild(connect);
+        }
+    }
+    
+    addSettingsConnection(name, deleteCallback){
+        if(document.querySelector(".user-settings-connections") !== null){
             /* Create elements */
             let connection = document.createElement("div");
             connection.className = "connection elevation-low margin-bottom-8";
@@ -263,10 +263,10 @@ class KeybaseIntegration extends Plugin {
             
             document.querySelector(".user-settings-connections .connection-list").appendChild(connection);
         }
-	}
-	
-	addProfileConnection(connectionName){
-		if(document.querySelector("#user-profile-modal") != null && document.querySelector("#user-profile-modal .tab-bar :first-child").className == "tab-bar-item selected"){
+    }
+    
+    addProfileConnection(connectionName){
+        if(document.querySelector("#user-profile-modal") != null && document.querySelector("#user-profile-modal .tab-bar :first-child").className == "tab-bar-item selected"){
             let account = document.createElement("div");
             account.className = "connected-account";
             
@@ -309,7 +309,7 @@ class KeybaseIntegration extends Plugin {
             }
             document.querySelector("#user-profile-modal .connected-accounts").appendChild(account);
         }
-	}
+    }
 }
 
 module.exports = KeybaseIntegration;
