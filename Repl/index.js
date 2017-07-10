@@ -11,8 +11,6 @@ function evalInContext(js, ctx) {
 class Repl extends Plugin {
     constructor(...args) {
         super(...args);
-        document.head.appendChild(this.style);
-
 
         // Create all elements
         this.div = document.createElement("div");
