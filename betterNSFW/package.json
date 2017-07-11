@@ -1,0 +1,14 @@
+{
+  "name": "betterNSFW",
+  "version": "1.0.0",
+  "description": "Changes the nsfw- prefix on channels into an 18+ icon",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Snazzah, digitalAlchemist",
+  "license": "MIT",
+  "dependencies": {
+    "jquery": "^3.2.1"
+  }
+}
