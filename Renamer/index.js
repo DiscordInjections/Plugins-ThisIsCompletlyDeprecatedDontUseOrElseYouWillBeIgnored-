@@ -84,10 +84,11 @@ class Renamer extends Plugin {
     contextmo.observe($("#app-mount>:first-child")[ 0 ], { childList: true })
     // dm_mo.observe($(".app>.flex-spacer>.flex-spacer")[0],{childList:true})
     this.log("Loading settings...");
-    this.loadSettings()
+    this.loadSettings();
     $("head").append("<link rel='stylesheet' href='https://bgrins.github.io/spectrum/spectrum.css' />");
     this.contextExtention = $(this.contextMarkup)
     this.syncColoredTextSetting();
+    this.attachSlugCommand();
   }
 
   get configTemplate() {
@@ -98,6 +99,130 @@ class Renamer extends Plugin {
 
   unload () {
     $('#CSS-Renamer').remove();
+    StateWatcher.removeListener('slugmod-reloaded', this.slugModFunction.bind(this));
+  }
+
+  attachSlugCommand () {
+    StateWatcher.on('slugmod-reloaded', this.slugModFunction.bind(this));
+    this.slugModFunction(window._pluginManager.plugins);
+  }
+
+  slugModFunction(plugins = window._pluginManager.plugins){
+    if(plugins.SlugMod){
+      plugins.SlugMod.addExternalCommand({
+        name: "tag",
+        desc: "Set people's tags.",
+        usage: "//tag @user #7289da tag",
+        plugin: "Renamer"
+      }, (command, args, su)=>{
+        if(!args[1]){
+          su.sendACMessage("Failed to execute: Not enough arguments.");
+          return;
+        }
+        let user = su.resolveMention(args[0]);
+        if(!user){
+          su.sendACMessage("Failed to execute: Invalid user.");
+          return;
+        }
+        let shorthandRegex = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i;
+        const h2rgb = hex => {
+          var result = shorthandRegex.exec(hex);
+          return result ? [
+            parseInt(result[1], 16),
+            parseInt(result[2], 16),
+            parseInt(result[3], 16)
+          ] : null;
+        };
+        let color = "#7289DA";
+        let tag = args.slice(1).join(" ");
+        if(args[1].match(shorthandRegex)){
+          color = args[1];
+          tag = args.slice(2).join(" ");
+        };
+        const fore = c => (c[ 0 ] * 0.299 + c[ 1 ] * 0.587 + c[ 2 ] * 0.114) > 186 ? "#000" : "#FFF"
+        this.setUserData(user, {
+          tag: {
+            text: tag,
+            back: color,
+            fore: fore(h2rgb(color))
+          }
+        });
+        su.sendACMessage(`Set ${user.username}'s tag to ${su.sanitize(tag)}.`);
+      });
+
+      plugins.SlugMod.addExternalCommand({
+        name: "resettag",
+        desc: "Reset people's tags.",
+        usage: "//resettag @user",
+        plugin: "Renamer"
+      }, (command, args, su)=>{
+        if(!args[0]){
+          su.sendACMessage("Failed to execute: Not enough arguments.");
+          return;
+        }
+        let user = su.resolveMention(args[0]);
+        if(!user){
+          su.sendACMessage("Failed to execute: Invalid user.");
+          return;
+        }
+        this.resetUserProp(user.id, "tag");
+        this.process(true);
+        this.saveSettings();
+        su.sendACMessage(`Reset ${user.username}'s tag.`);
+      });
+
+      plugins.SlugMod.addExternalCommand({
+        name: "localnick",
+        desc: "Set people's local nicknames.",
+        usage: "//localnick @user #7289da nick",
+        plugin: "Renamer"
+      }, (command, args, su)=>{
+        if(!args[1]){
+          su.sendACMessage("Failed to execute: Not enough arguments.");
+          return;
+        }
+        let user = su.resolveMention(args[0]);
+        if(!user){
+          su.sendACMessage("Failed to execute: Invalid user.");
+          return;
+        }
+        let shorthandRegex = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i;
+        let color = null;
+        let nick = args.slice(1).join(" ");
+        if(args[1].match(shorthandRegex)){
+          color = args[1];
+          nick = args.slice(2).join(" ");
+        };
+        let obj = {
+          nick: nick
+        }
+        if(color) obj.color = color;
+        this.setUserData(user, obj);
+        su.sendACMessage(`Set ${user.username}'s local nickname to ${su.sanitize(nick)}.`);
+      });
+
+      plugins.SlugMod.addExternalCommand({
+        name: "resetlocalnick",
+        desc: "Reset people's local nicknames.",
+        usage: "//resetlocalnick @user",
+        plugin: "Renamer"
+      }, (command, args, su)=>{
+        if(!args[0]){
+          su.sendACMessage("Failed to execute: Not enough arguments.");
+          return;
+        }
+        let user = su.resolveMention(args[0]);
+        if(!user){
+          su.sendACMessage("Failed to execute: Invalid user.");
+          return;
+        }
+        this.resetUserProp(user.id, "nick");
+        this.resetUserProp(user.id, "color");
+        this.process(true);
+        this.saveSettings();
+        su.sendACMessage(`Reset ${user.username}'s local nickname.`);
+      });
+    }
   }
 
   static getReactInstance (node) { return node[ Object.keys(node).find((key) => key.startsWith("__reactInternalInstance")) ] }
@@ -120,7 +245,6 @@ class Renamer extends Plugin {
     <div class="ui-color-picker-swatch large custom${selection === -1 && !useDefault ? ' selected' : ''}" style="background-color: rgb(255, 255, 255);"></div>
     <div class="regulars ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-wrap ui-color-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;">${ colorOptions.map((val, i) => `<div class="ui-color-picker-swatch${i === selection ? ' selected' : ''}" style="background-color: ${val};"></div>`).join("")}</div></div>`)
       .appendTo(parent);
-    //console.log("test");
     if (selection > -1) {
       parent.find(".regulars .ui-color-picker-swatch").eq(selection).addClass(".selected")
     } else if (useDefault) {
@@ -129,7 +253,6 @@ class Renamer extends Plugin {
       $(".custom", parent).addClass(".selected").css("backgroundColor", currentColor)
     }
     parent.on("click", ".ui-color-picker-swatch:not(.custom)", (e) => {
-      console.log(e.target)
       parent.find(".ui-color-picker-swatch.selected").removeClass("selected");
       e.target.classList.add("selected");
       custom.css("backgroundColor", "");
@@ -352,10 +475,6 @@ class Renamer extends Plugin {
                   if (el.parentElement.parentElement.classList.contains("markup")) {
                     el.parentElement.parentElement.style.color = userData.colour;
                     el.parentElement.parentElement.colour = true;
-                  } else {
-                    console.log(
-                      $(el).parents(".comment").find(".markup").css("color", userData.colour).attr("data-colour", true)
-                    )
                   }
                 }
               }

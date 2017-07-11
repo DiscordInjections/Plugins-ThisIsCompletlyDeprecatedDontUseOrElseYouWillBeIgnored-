@@ -4,7 +4,6 @@ class ColoredTyping extends Plugin {
     constructor(...args) {
         super(...args);
         this.data = {};
-        window.client.on('message', this.onMessage.bind(this));
         window.client.on('typingStart', this.onTyping.bind(this));
         window.client.on('selectedUpdate', this.onSwitch.bind(this));
         window.client.on('guildMemberUpdate', this.update.bind(this));
@@ -18,7 +17,6 @@ class ColoredTyping extends Plugin {
 
     unload() {
         this.decolorize();
-        window.client.removeListener('message', this.onMessage.bind(this));
         window.client.removeListener('typingStart', this.onTyping.bind(this));
         window.client.removeListener('selectedUpdate', this.onSwitch.bind(this));
         window.client.removeListener('guildMemberUpdate', this.update.bind(this));
@@ -37,16 +35,6 @@ class ColoredTyping extends Plugin {
             g: parseInt(result[2], 16),
             b: parseInt(result[3], 16)
         } : null;
-    }
-
-    onMessage(msg) {
-        if(!window.client.selectedChannel) return;
-        if(msg.channel.id !== window.client.selectedChannel.id) return;
-        let usrs = document.querySelectorAll(".message .user-name");
-        let lastuser = usrs[usrs.length-1];
-        var username = lastuser.innerText;
-        var color = lastuser.style.color;
-        this.data[username] = color;
     }
 
     onSwitch() {

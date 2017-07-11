@@ -200,7 +200,7 @@ class DiscordBots extends Plugin {
                             $(".tooltip.dblmod").remove();
                         });
                     };
-                    if(res.body.banner !== ""){
+                    if(res.body.banner !== "" && res.body.banner){
                         $("#user-profile-modal .header").addClass("with-background").attr('style', `background-image:url('${res.body.banner.replace(/^http:/g, "https:")}')!important;background-size:cover;background-position:center;`)
                     }
                     let html = '';
@@ -278,7 +278,7 @@ class DiscordBots extends Plugin {
         if(!this.settings.popout) return;
         if(this.settings.usedbl){
             DBLAPI.getUser(user.id).then(res => {
-                if(res.body.banner !== ""){
+                if(res.body.banner !== "" && res.body.banner){
                     $(".user-popout .header").addClass("with-background").attr('style', `background-image:url('${res.body.banner.replace(/^http:/g, "https:")}')!important;background-size:cover;background-position:center;`)
                 }
             }).catch(e => {
@@ -417,9 +417,9 @@ const cacherequest = (id,url,token)=>{
         setTimeout(()=>{
             cache.wrap(id, function(cb) {
                 if(token){
-                    request.get(url).set('Content-Type', 'DiscordBots Plugin (https://github.com/DiscordInjections/Plugins/tree/master/DiscordBots)').set('Authorization', token).then(res=>cb(null,res)).catch(cb)
+                    request.get(url).set('User-Agent', 'DiscordBots Plugin (https://github.com/DiscordInjections/Plugins/tree/master/DiscordBots)').set('Authorization', token).then(res=>cb(null,res)).catch(cb)
                 }else{
-                    request.get(url).set('Content-Type', 'DiscordBots Plugin (https://github.com/DiscordInjections/Plugins/tree/master/DiscordBots)').then(res=>cb(null,res)).catch(cb)
+                    request.get(url).set('User-Agent', 'DiscordBots Plugin (https://github.com/DiscordInjections/Plugins/tree/master/DiscordBots)').then(res=>cb(null,res)).catch(cb)
                 }
             }, (err, data)=>{
                 if(err) rj(err);
