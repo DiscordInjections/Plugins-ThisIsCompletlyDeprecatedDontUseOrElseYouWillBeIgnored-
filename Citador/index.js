@@ -277,8 +277,8 @@ class Citador extends Plugin {
 			}
 		});
 		this.log(stringLocal.startMsg, "info");
-        window.client.on('selectedUpdate', this.onSwitch.bind(this));
-        window.client.once('ready', this.onSwitch.bind(this));
+        window.DI.client.on('selectedUpdate', this.onSwitch.bind(this));
+        window.DI.client.once('ready', this.onSwitch.bind(this));
 	}
 	attachParser() {
 		var el   = $('.channel-textarea textarea'),
@@ -379,7 +379,7 @@ class Citador extends Plugin {
 						type : "POST",
 						url : `https://discordapp.com/api/channels/${chanID}/messages`,
 						headers : {
-							"Authorization": window.client.token
+							"Authorization": window.DI.client.token
 						},
 						dataType : "json",
 						contentType : "application/json",
@@ -415,7 +415,7 @@ class Citador extends Plugin {
 	}
 	unload() {
 		this.deleteEverything();
-        window.client.removeListener('selectedUpdate', this.onSwitch.bind(this));
+        window.DI.client.removeListener('selectedUpdate', this.onSwitch.bind(this));
 	}
 	onSwitch() {
 		this.attachParser();
