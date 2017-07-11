@@ -4,7 +4,7 @@ class BetterNSFW extends Plugin {
     constructor(...args) {
         super(...args);
         this.mo = new MutationObserver(this.check.bind(this));
-        this.mo.observe($("[data-reactroot]")[0], { childList: true, subtree: true });
+        this.mo.observe(document.querySelector("[data-reactroot]"), { childList: true, subtree: true });
     }
 
     get configTemplate() {
