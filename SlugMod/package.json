@@ -1,0 +1,15 @@
+{
+  "name": "SlugMod",
+  "version": "1.0.0",
+  "description": "Use in-client commands to do various things.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Snazzah",
+  "license": "MIT",
+  "dependencies": {
+    "jquery": "^3.2.1",
+    "fuzzy": "^0.1.3"
+  }
+}
