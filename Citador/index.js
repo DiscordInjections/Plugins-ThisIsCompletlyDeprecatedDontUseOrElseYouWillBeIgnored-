@@ -134,6 +134,7 @@ class Citador extends Plugin {
 								});
 							})
 							.click(function() {
+								self.log("Quoting a message");
 								self.attachParser();
 								isQuote      = true;
 								atServerName = '';
@@ -151,7 +152,7 @@ class Citador extends Plugin {
 								
 								this.createQuote = function() {
 									$(message).clone().hide().appendTo(".quote-msg").slideDown(150);
-									serverName = $('.guild-header header span').text();
+									serverName = $('.header-1tSljs .name-3gtcmp').text();
 									elem = $('.quote-msg');
 									
 									$('.quote-msg').find('.citar-btn').toggleClass('quoting');
@@ -262,7 +263,7 @@ class Citador extends Plugin {
 								}
 								
 								if (quoting == false) {
-									$('.channel-textarea').prepend('<div class="quote-msg"></div>');
+									$('.channel-text-area-default').prepend('<div class="quote-msg"></div>');
 									quoting = true;
 									this.createQuote();
 								}
@@ -281,7 +282,7 @@ class Citador extends Plugin {
         window.DI.client.once('ready', this.onSwitch.bind(this));
 	}
 	attachParser() {
-		var el   = $('.channel-textarea textarea'),
+		var el   = $('.textAreaEnabled-2vOfh8'),
 			self = this;
 			
 		if (el.length == 0) return;
