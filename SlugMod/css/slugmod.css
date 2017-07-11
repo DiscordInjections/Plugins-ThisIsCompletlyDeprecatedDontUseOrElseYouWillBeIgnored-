@@ -1,0 +1,20 @@
+.slugmod-autocomplete .contentTitle-sL6DrN{color:#e74c3c;}
+.slugmod-autocomplete .iconForeground-1U-F96{transform:translateX(2px);}
+.slugmod-autocomplete .iconForeground-1U-F96+.iconForeground-1U-F96{transform:translateX(-2px);}
+.slugmod-message .timer{-webkit-animation:slugmod-timer 5s linear;animation:slugmod-timer 5s linear;}
+@-webkit-keyframes slugmod-timer {
+    from {height:2px;width:100%;background-color:#72767d;}
+    100% {height:2px;width:0%;background-color:#e74c3c;}
+}
+@keyframes slugmod-timer {
+    from {height:2px;width:100%;background-color:#72767d;}
+    100% {height:2px;width:0%;background-color:#e74c3c;}
+}
+.slugmod-message+.slugmod-message{transform:translateY(-100%);}
+.slugmod-message+.slugmod-message+.slugmod-message{transform:translateY(-200%);}
+.slugmod-message+.slugmod-message+.slugmod-message+.slugmod-message{transform:translateY(-300%);}
+.slugmod-message+.slugmod-message+.slugmod-message+.slugmod-message+.slugmod-message{transform:translateY(-400%);}
+.slugmod-autocomplete:not(.in-command-usage) .command .selector-nbyEfM:hover{background-color:rgba(137,137,137,0.3)}
+.slugmod-autocomplete.in-command-usage .selector-nbyEfM{cursor:default;}
+.slugmod-autocomplete.in-command-usage .command .marginLeft4-3RAvyQ{font-weight:bold;}
+.slugmod-autocomplete .external-command{color:#ffd600;}
