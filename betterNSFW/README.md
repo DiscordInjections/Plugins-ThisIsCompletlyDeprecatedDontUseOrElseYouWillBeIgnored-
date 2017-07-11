@@ -1,4 +1,5 @@
 # betterNSFW
+###### [Originally made by digiAlchemist](https://github.com/digiAlchem/BD-betterNSFW/)
 
 You should place this file in the `Plugins` folder of the DiscordInjections project.
 
