@@ -4,8 +4,8 @@ class DiscordFMPlugin extends Plugin {
     constructor(...args) {
         super(...args);
         this.html = `<div class="container-3lnMWU discord-fm"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO" style="flex: 0 0 auto;"><a href="https://discord.fm" target="_BLANK"><div class="dfm-icon"></div></a></div><div class="inner-ptMwR-"><div class="rtc-connection-status"><marquee scrollamount="5">Loading...</marquee></div><span class="channel-3YGMy1">Loading...</span></div><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO" style="flex: 0 0 auto;"><a target="_BLANK"><div class="dfm-lib button-3WJ5FX"></div></a></div></div>`;
-        window.client.on('voiceStateUpdate', this.onVoiceUpdate.bind(this));
-        window.client.on('presenceUpdate', this.onPresenceUpdate.bind(this));
+        window.DI.client.on('voiceStateUpdate', this.onVoiceUpdate.bind(this));
+        window.DI.client.on('presenceUpdate', this.onPresenceUpdate.bind(this));
     }
 
     get configTemplate() {
@@ -19,8 +19,8 @@ class DiscordFMPlugin extends Plugin {
         this.currentLib = null;
         this.currentVC = null;
         this.removeHTML();
-        window.client.removeListener('voiceStateUpdate', this.onVoiceUpdate.bind(this));
-        window.client.removeListener('presenceUpdate', this.onPresenceUpdate.bind(this));
+        window.DI.client.removeListener('voiceStateUpdate', this.onVoiceUpdate.bind(this));
+        window.DI.client.removeListener('presenceUpdate', this.onPresenceUpdate.bind(this));
     }
 
     setTitle(title){
@@ -63,8 +63,8 @@ class DiscordFMPlugin extends Plugin {
     }
 
     onVoiceUpdate(oldMember, newMember) {
-        window.client.setTimeout(()=>{ // Delay the request because HTML rendering is too fast
-            if(oldMember.user.id === window.client.user.id || newMember.user.id === window.client.user.id){
+        window.DI.client.setTimeout(()=>{ // Delay the request because HTML rendering is too fast
+            if(oldMember.user.id === window.DI.client.user.id || newMember.user.id === window.DI.client.user.id){
                 if(!oldMember.voiceChannel && newMember.voiceChannel){ // Client joins a new channel
                     if((newMember.voiceChannel.guild.id !== '143686242687647745') || newMember.voiceChannel.id === '194816320045318144') return;
                     if(newMember.voiceChannel.id === '169559972764450816'){
@@ -88,7 +88,7 @@ class DiscordFMPlugin extends Plugin {
                                     return;
                                 };
                                 document.querySelector(".discord-fm").classList.remove("error");
-                                this.setTitle(window.client.channels.get(this.currentVC).members.find(m=>m.roles.has("143688156837838848")).presence.game.name.slice(2));
+                                this.setTitle(window.DI.client.channels.get(this.currentVC).members.find(m=>m.roles.has("143688156837838848")).presence.game.name.slice(2));
                                 clearTimeout(this.timeout);
                             }
                         }, 2000)
@@ -100,6 +100,7 @@ class DiscordFMPlugin extends Plugin {
                     this.currentLib = null;
                     this.currentLibName = null;
                     this.currentVC = null;
+                    clearTimeout(this.timeout);
                 }else if(oldMember.voiceChannel.id !== newMember.voiceChannel.id){ // Client switches channels
                     if((newMember.voiceChannel.guild.id !== '143686242687647745') || newMember.voiceChannel.id === '194816320045318144'){
                         this.removeHTML();
@@ -122,7 +123,23 @@ class DiscordFMPlugin extends Plugin {
                     document.querySelector(".discord-fm").style.backgroundImage = `url(https://widget.discord.fm/img/bgs/${this.currentLib}.png)`;
                     document.querySelector('.channel-3YGMy1').innerText = newMember.voiceChannel.name;
                     document.querySelector('.justifyStart-2yIZo0:last-child a').href = `https://temp.discord.fm/libraries/${this.currentLib}`;
-                    this.setTitle(newMember.voiceChannel.members.find(m=>m.roles.has("143688156837838848")).presence.game.name.slice(2));
+                    clearTimeout(this.timeout);
+                    if(!newMember.voiceChannel.members.find(m=>m.roles.has("143688156837838848"))){ // Couldn't find the bot
+                        document.querySelector(".discord-fm").classList.add("error");
+                        this.timeout = setInterval(()=>{
+                            if(newMember.voiceChannel.members.find(m=>m.roles.has("143688156837838848"))){
+                                if(!this.currentVC){
+                                    clearTimeout(this.timeout);
+                                    return;
+                                };
+                                document.querySelector(".discord-fm").classList.remove("error");
+                                this.setTitle(window.DI.client.channels.get(this.currentVC).members.find(m=>m.roles.has("143688156837838848")).presence.game.name.slice(2));
+                                clearTimeout(this.timeout);
+                            }
+                        }, 2000)
+                    }else{
+                        this.setTitle(newMember.voiceChannel.members.find(m=>m.roles.has("143688156837838848")).presence.game.name.slice(2));
+                    }
                 }
             }
             if(newMember.roles.has("143688156837838848")){

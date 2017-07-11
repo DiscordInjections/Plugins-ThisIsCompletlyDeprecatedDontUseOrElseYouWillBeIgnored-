@@ -9,7 +9,7 @@ class HackBanCmd extends SlugCommand {
 	}
 
 	execute(args, su) {
-		let guild = window.client.selectedGuild;
+		let guild = window.DI.client.selectedGuild;
 		if(!guild){
 			su.sendACMessage("Failed to execute: You currently aren't in a guild.");
 			return;
@@ -23,7 +23,7 @@ class HackBanCmd extends SlugCommand {
 			su.sendACMessage("Failed to execute: User is in guild.");
 			return;
 		}
-		if(!guild.members.get(window.client.user.id).hasPermission("BAN_MEMBERS")){
+		if(!guild.members.get(window.DI.client.user.id).hasPermission("BAN_MEMBERS")){
 			su.sendACMessage("Failed to execute: You do not have the Ban Members permission.");
 			return;
 		}

@@ -10,7 +10,7 @@ class DIReloadCmd extends SlugCommand {
 
 	execute(args, su) {
 		try{
-			window._pluginManager.reload(args.join(" "));
+			window.DI.PluginManager.reload(args.join(" "));
 			su.sendACMessage(`Reloaded ${args.join(" ")}.`);
 		}catch(e){
 			su.sendACMessage(`${e}`);

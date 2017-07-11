@@ -10,7 +10,7 @@ class DILoadCmd extends SlugCommand {
 
 	execute(args, su) {
 		try{
-			window._pluginManager.load(args.join(" "));
+			window.DI.PluginManager.load(args.join(" "));
 			su.sendACMessage(`Loaded ${args.join(" ")}.`);
 		}catch(e){
 			su.sendACMessage(`${e}`);
