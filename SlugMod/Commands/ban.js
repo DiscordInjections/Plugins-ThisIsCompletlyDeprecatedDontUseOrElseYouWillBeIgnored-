@@ -18,7 +18,7 @@ class BanCmd extends SlugCommand {
 			su.sendACMessage("Failed to execute: Invalid user.");
 			return;
 		}
-		let guild = window.client.selectedGuild;
+		let guild = window.DI.client.selectedGuild;
 		if(!guild){
 			su.sendACMessage("Failed to execute: You currently aren't in a guild.");
 			return;
