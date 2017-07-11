@@ -1,7 +1,7 @@
 const Plugin = module.parent.require('../Structures/Plugin');
 const $ = require("jquery");
 const fuzzy = require("fuzzy");
-const resolver = new (require("discord.js/src/client/ClientDataResolver"))(window.client);
+const resolver = new (require("discord.js/src/client/ClientDataResolver"))(window.DI.client);
 
 class SlugMod extends Plugin {
     constructor(...args) {
@@ -121,7 +121,7 @@ class SlugUtil {
         return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
     }
     resolveUser(query){
-        return window.client.users.find("tag", query.slice(1));
+        return window.DI.client.users.find("tag", query.slice(1));
     }
     resolveMention(query){
         let res = query.match(/<@!?[0-9]+>/g);
@@ -129,7 +129,7 @@ class SlugUtil {
         return resolver.resolveUser(res[0].replace(/<|!|>|@/g, ''));
     }
     filterMessage(message){
-        window.client.users.forEach(u=>message=message.replace(new RegExp(this.escape(`@${u.tag}`), "g"), `<@${u.id}>`));
+        window.DI.client.users.forEach(u=>message=message.replace(new RegExp(this.escape(`@${u.tag}`), "g"), `<@${u.id}>`));
         return message;
     }
     sanitize(query){
