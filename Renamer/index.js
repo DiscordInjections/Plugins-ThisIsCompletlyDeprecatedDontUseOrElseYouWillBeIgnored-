@@ -103,7 +103,7 @@ class Renamer extends Plugin {
   }
 
   attachSlugCommand () {
-    StateWatcher.on('slugmod-reloaded', this.slugModFunction.bind(this));
+    window.DI.StateWatcher.on('slugmod-reloaded', this.slugModFunction.bind(this));
     this.slugModFunction(window.DI.PluginManager.plugins);
   }
 
