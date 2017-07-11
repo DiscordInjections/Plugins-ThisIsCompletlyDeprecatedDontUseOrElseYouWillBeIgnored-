@@ -104,10 +104,10 @@ class Renamer extends Plugin {
 
   attachSlugCommand () {
     StateWatcher.on('slugmod-reloaded', this.slugModFunction.bind(this));
-    this.slugModFunction(window._pluginManager.plugins);
+    this.slugModFunction(window.DI.PluginManager.plugins);
   }
 
-  slugModFunction(plugins = window._pluginManager.plugins){
+  slugModFunction(plugins = window.DI.PluginManager.plugins){
     if(plugins.SlugMod){
       plugins.SlugMod.addExternalCommand({
         name: "tag",
@@ -417,11 +417,11 @@ class Renamer extends Plugin {
   }
 
   saveSettings () {
-    $localStorage.setItem("Renamer", JSON.stringify(this.settings));
+    window.DI.localStorage.setItem("Renamer", JSON.stringify(this.settings));
   }
 
   loadSettings () {
-    this.settings = $.extend({}, this.defaultSettings, JSON.parse($localStorage.getItem("Renamer")))
+    this.settings = $.extend({}, this.defaultSettings, JSON.parse(window.DI.localStorage.getItem("Renamer")))
     this.saveSettings();
   }
 

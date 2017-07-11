@@ -95,7 +95,7 @@ class DiscordBots extends Plugin {
                 if(res.body.github !== "") html += `<a href="${res.body.github}"><button class="btn">GitHub Repo</button></a>`;
                 html += `</div></div></div>`;
                 let owners = [];
-                res.body.owners.map(id => {if(window.client.users.get(id)) owners.push(window.client.users.get(id))});
+                res.body.owners.map(id => {if(window.DI.client.users.get(id)) owners.push(window.DI.client.users.get(id))});
                 if(owners.length !== 0){
                     html += `<div class="section"><div class="section-header">Owner(s)</div>`;
                     owners.map(user=>html+=this.makeProfileGuild(user));
@@ -128,7 +128,7 @@ class DiscordBots extends Plugin {
                     if(res.body.website !== "") html += `<a href="${res.body.website}"><button class="btn">Website</button></a>`;
                     html += `</div></div></div>`;
                     let owners = [];
-                    res.body.owner_ids.map(id => {if(window.client.users.get(id)) owners.push(window.client.users.get(id))});
+                    res.body.owner_ids.map(id => {if(window.DI.client.users.get(id)) owners.push(window.DI.client.users.get(id))});
                     if(owners.length !== 0){
                         html += `<div class="section"><div class="section-header">Owner(s)</div>`;
                         owners.map(user=>html+=this.makeProfileGuild(user));
@@ -205,8 +205,8 @@ class DiscordBots extends Plugin {
                     }
                     let html = '';
                     let owners = [];
-                    res2.body.results.map(bot => owners.push(new Discord.User(window.client, bot)));
-                    this.log(owners, res2, new Discord.User(window.client, res2.body.results[0]))
+                    res2.body.results.map(bot => owners.push(new Discord.User(window.DI.client, bot)));
+                    this.log(owners, res2, new Discord.User(window.DI.client, res2.body.results[0]))
                     if(owners.length !== 0){
                         html += `<div class="section"><div class="section-header">Bots</div>`;
                         owners.map(user=>html+=this.makeProfileGuild(user));
@@ -225,7 +225,7 @@ class DiscordBots extends Plugin {
             BDPAPI.getUser(user.id).then(res => {
                 let html = `</div></div></div>`;
                 let owners = [];
-                res.body.bots.map(bot => {if(window.client.users.get(bot.user_id)) owners.push(window.client.users.get(bot.user_id))});
+                res.body.bots.map(bot => {if(window.DI.client.users.get(bot.user_id)) owners.push(window.DI.client.users.get(bot.user_id))});
                 if(owners.length !== 0){
                     html += `<div class="section"><div class="section-header">Bots</div>`;
                     owners.map(user=>html+=this.makeProfileGuild(user));

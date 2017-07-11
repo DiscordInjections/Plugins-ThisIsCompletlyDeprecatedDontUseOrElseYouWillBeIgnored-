@@ -4,22 +4,22 @@ class ColoredTyping extends Plugin {
     constructor(...args) {
         super(...args);
         this.data = {};
-        window.client.on('typingStart', this.onTyping.bind(this));
-        window.client.on('selectedUpdate', this.onSwitch.bind(this));
-        window.client.on('guildMemberUpdate', this.update.bind(this));
+        window.DI.client.on('typingStart', this.onTyping.bind(this));
+        window.DI.client.on('selectedUpdate', this.onSwitch.bind(this));
+        window.DI.client.on('guildMemberUpdate', this.update.bind(this));
         this.mo = new MutationObserver((changes, _) => {
           this.colorize();
         });
         this.mo.observe(document.querySelector(".app>*:first-child>*:first-child"), { childList: true, subtree: true });
-        window.client.once('ready', this.onSwitch.bind(this));
+        window.DI.client.once('ready', this.onSwitch.bind(this));
         this.colorize();
     }
 
     unload() {
         this.decolorize();
-        window.client.removeListener('typingStart', this.onTyping.bind(this));
-        window.client.removeListener('selectedUpdate', this.onSwitch.bind(this));
-        window.client.removeListener('guildMemberUpdate', this.update.bind(this));
+        window.DI.client.removeListener('typingStart', this.onTyping.bind(this));
+        window.DI.client.removeListener('selectedUpdate', this.onSwitch.bind(this));
+        window.DI.client.removeListener('guildMemberUpdate', this.update.bind(this));
     }
 
     hexToRgb(hex) {
@@ -38,17 +38,19 @@ class ColoredTyping extends Plugin {
     }
 
     onSwitch() {
-        if(!window.client.selectedGuild) return;
-        window.client.selectedGuild.members.forEach(m=>{
+        if(!window.DI.client.selectedGuild) return;
+        window.DI.client.selectedGuild.members.forEach(m=>{
             let rgb = this.hexToRgb(m.displayHexColor);
             if(m.colorRole){
                 this.data[m.displayName] = `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
+            }else{
+                this.data[m.displayName] = `inherit`
             }
         });
     }
 
     update(_, m) {
-        if(!window.client.selectedGuild) return;
+        if(!window.DI.client.selectedGuild) return;
         let rgb = this.hexToRgb(m.displayHexColor);
         if(m.colorRole) this.data[m.displayName] = `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
     }
@@ -65,7 +67,10 @@ class ColoredTyping extends Plugin {
             let rgb = this.hexToRgb(m.displayHexColor);
             if(m.colorRole) this.data[m.displayName] = `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
             this.colorize();
-        } else this.colorize();
+        } else {
+            this.data[user.username] = "inherit";
+            this.colorize();
+        }
     }
 
     colorize() {

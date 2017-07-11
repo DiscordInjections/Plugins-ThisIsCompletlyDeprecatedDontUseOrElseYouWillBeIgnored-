@@ -9,9 +9,9 @@ class SlugMod extends Plugin {
         this.commands = {};
         this.loadCommands();
         this.util = new SlugUtil(this);
+        if(!window.DI) throw new Error("Please update DiscordInjections to use this plugin!");
         setTimeout(()=>{
-            if(!StateWatcher) throw new Error("Please update DiscordInjections to use this plugin!");
-            StateWatcher.emit('slugmod-reloaded');
+            window.DI.StateWatcher.emit('slugmod-reloaded');
         }, 2000)
         $(document).on('input', this.onInput.bind(this));
         $(document).on('keydown', this.onKeyDown.bind(this));
@@ -42,7 +42,7 @@ class SlugMod extends Plugin {
                 }
             }
         });
-        StateWatcher.emit('slugmod-reloaded');
+        window.DI.StateWatcher.emit('slugmod-reloaded');
     }
 
     addExternalCommand(obj, execute) {

@@ -23,8 +23,8 @@ class BumpPlugin extends Plugin {
         this.typingTimers = {};
         this.typingChannelTimers = {};
         this.log('Loading listeners');
-        window.client.on('typingStart', this.typingStart.bind(this));
-        window.client.on('message', this.messageCreate.bind(this));
+        window.DI.client.on('typingStart', this.typingStart.bind(this));
+        window.DI.client.on('message', this.messageCreate.bind(this));
     }
 
     get configTemplate() {
@@ -35,8 +35,8 @@ class BumpPlugin extends Plugin {
 
     unload() {
         this.log('Killing listeners');
-        window.client.removeListener('typingStart', this.typingStart.bind(this));
-        window.client.removeListener('message', this.messageCreate.bind(this));
+        window.DI.client.removeListener('typingStart', this.typingStart.bind(this));
+        window.DI.client.removeListener('message', this.messageCreate.bind(this));
     }
 
     typingStart(channel, user, timestamp) {
