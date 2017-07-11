@@ -417,9 +417,9 @@ const cacherequest = (id,url,token)=>{
         setTimeout(()=>{
             cache.wrap(id, function(cb) {
                 if(token){
-                    request.get(url).set('Content-Type', 'DiscordBots Plugin (https://github.com/DiscordInjections/Plugins/tree/master/DiscordBots)').set('Authorization', token).then(res=>cb(null,res)).catch(cb)
+                    request.get(url).set('User-Agent', 'DiscordBots Plugin (https://github.com/DiscordInjections/Plugins/tree/master/DiscordBots)').set('Authorization', token).then(res=>cb(null,res)).catch(cb)
                 }else{
-                    request.get(url).set('Content-Type', 'DiscordBots Plugin (https://github.com/DiscordInjections/Plugins/tree/master/DiscordBots)').then(res=>cb(null,res)).catch(cb)
+                    request.get(url).set('User-Agent', 'DiscordBots Plugin (https://github.com/DiscordInjections/Plugins/tree/master/DiscordBots)').then(res=>cb(null,res)).catch(cb)
                 }
             }, (err, data)=>{
                 if(err) rj(err);
