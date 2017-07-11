@@ -1,5 +1,4 @@
 const Plugin = module.parent.require('../Structures/Plugin');
-const $ = require("jquery");
 
 class BetterNSFW extends Plugin {
     constructor(...args) {
