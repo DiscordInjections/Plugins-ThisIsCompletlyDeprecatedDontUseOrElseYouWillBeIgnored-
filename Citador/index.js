@@ -134,7 +134,6 @@ class Citador extends Plugin {
 								});
 							})
 							.click(function() {
-								self.log("Quoting a message");
 								self.attachParser();
 								isQuote      = true;
 								atServerName = '';
