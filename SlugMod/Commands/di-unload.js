@@ -10,7 +10,7 @@ class DIUnloadCmd extends SlugCommand {
 
 	execute(args, su) {
 		try{
-			window.DI.PpluginManager.unload(args.join(" "));
+			window.DI.PluginManager.unload(args.join(" "));
 			su.sendACMessage(`Unloaded ${args.join(" ")}.`);
 		}catch(e){
 			su.sendACMessage(`${e}`);
