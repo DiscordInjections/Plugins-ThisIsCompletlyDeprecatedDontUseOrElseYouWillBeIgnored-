@@ -1,0 +1,128 @@
+.keybase-modal{
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    padding-top: 60px;
+    padding-bottom: 60px;
+    z-index: 1000;
+    box-sizing: border-box;
+    min-height: 340px;
+    animation: modalShow .1s;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    flex-direction: column;
+    pointer-events: auto;
+    flex-direction: column;
+    -webkit-box-pack: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.keybase-modal-hide{
+    animation: modalHide .1s;
+}
+
+.keybase-modal-inner{
+    flex-direction: column;
+    display: flex;
+    background-color: #2f3136;
+    box-shadow: 0 0 0 1px rgba(32,34,37,.6), 0 2px 10px 0 rgba(0,0,0,.2);
+    width: 440px;
+    max-height: 660px;
+    min-height: 200px;
+    position: relative;
+    border-radius: 5px;
+}
+
+.keybase-modal-header{
+    transition: box-shadow .1s ease-out;
+    word-wrap: break-word;
+    position: relative;
+    flex: 0 0 auto;
+    padding: 20px;
+    z-index: 1;
+    overflow-x: hidden;
+}
+
+.keybase-modal-header h4{
+    color: #f6f6f7;
+    text-transform: uppercase;
+    letter-spacing: .3px;
+    font-weight: 600;
+    line-height: 20px;
+    font-size: 16px;
+}
+
+.keybase-modal-scrollerWrap::-webkit-scrollbar,
+.keybase-modal-scroller::-webkit-scrollbar{
+    display: none;
+}
+
+.keybase-modal-scrollerWrap{
+    position: relative;
+    min-height: 1px;
+    height: 100%;
+    display: flex;
+    flex: 1;
+}
+
+.keybase-modal-scroller{
+    padding: 0 12px 0 20px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    min-height: 1px;
+    flex: 1;
+    color: #f6f6f7;
+    font-weight: 400;
+    line-height: 24px;
+    font-size 16px;
+    margin-bottom: 20px;
+}
+
+.keybase-modal-footer{
+    background-color: rgba(32,34,37,.3);
+    box-shadow: inset 0 1px 0 rgba(32,34,37,.6);
+    border-radius: 0 0 5px 5px;
+    position: relative;
+    flex: 0 0 auto;
+    padding: 20px;
+    z-index: 1;
+    overflow-x: hidden;
+}
+
+.keybase-modal-button-done{
+    border: none;
+    border-radius: 3px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 16px;
+    color: #fff;
+    background-color: #7289da;
+    transition: background-color .17s ease;
+    cursor: pointer;
+    min-width: 96px;
+    min-height: 38px;
+}
+
+.keybase-modal-button-done:hover{
+    background-color: #677bc4;
+}
+
+.keybase-modal-button-inner{
+    display: inline;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.connected-account-keybase-icon{
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    background: url(https://api.bowser65.tk/assets/keybase-logo.png) no-repeat;
+    background-size: 18px;
+    margin-left: 5px;
+}
