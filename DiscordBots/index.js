@@ -44,12 +44,12 @@ class DiscordBots extends Plugin {
     }
 
     load() {
-        this.settings = $.extend({}, {enabled:true,usedbl:false,renderdesc:false,bdptoken:"",popout:false}, JSON.parse($localStorage.getItem("DiscordBotsPlugin")));
+        this.settings = $.extend({}, {enabled:true,usedbl:false,renderdesc:false,bdptoken:"",popout:false}, JSON.parse(window.DI.localStorage.getItem("DiscordBotsPlugin")));
         this.save();
     }
 
     save() {
-        $localStorage.setItem("DiscordBotsPlugin", JSON.stringify(this.settings));
+        window.DI.localStorage.setItem("DiscordBotsPlugin", JSON.stringify(this.settings));
     }
 
     reactInst(node){

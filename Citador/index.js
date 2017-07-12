@@ -151,7 +151,7 @@ class Citador extends Plugin {
 								
 								this.createQuote = function() {
 									$(message).clone().hide().appendTo(".quote-msg").slideDown(150);
-									serverName = $('.guild-header header span').text();
+									serverName = $('.header-1tSljs .name-3gtcmp').text();
 									elem = $('.quote-msg');
 									
 									$('.quote-msg').find('.citar-btn').toggleClass('quoting');
@@ -262,7 +262,7 @@ class Citador extends Plugin {
 								}
 								
 								if (quoting == false) {
-									$('.channel-textarea').prepend('<div class="quote-msg"></div>');
+									$('.channel-text-area-default').prepend('<div class="quote-msg"></div>');
 									quoting = true;
 									this.createQuote();
 								}
@@ -277,11 +277,11 @@ class Citador extends Plugin {
 			}
 		});
 		this.log(stringLocal.startMsg, "info");
-        window.client.on('selectedUpdate', this.onSwitch.bind(this));
-        window.client.once('ready', this.onSwitch.bind(this));
+        window.DI.client.on('selectedUpdate', this.onSwitch.bind(this));
+        window.DI.client.once('ready', this.onSwitch.bind(this));
 	}
 	attachParser() {
-		var el   = $('.channel-textarea textarea'),
+		var el   = $('.textAreaEnabled-2vOfh8'),
 			self = this;
 			
 		if (el.length == 0) return;
@@ -379,7 +379,7 @@ class Citador extends Plugin {
 						type : "POST",
 						url : `https://discordapp.com/api/channels/${chanID}/messages`,
 						headers : {
-							"Authorization": window.client.token
+							"Authorization": window.DI.client.token
 						},
 						dataType : "json",
 						contentType : "application/json",
@@ -415,7 +415,7 @@ class Citador extends Plugin {
 	}
 	unload() {
 		this.deleteEverything();
-        window.client.removeListener('selectedUpdate', this.onSwitch.bind(this));
+        window.DI.client.removeListener('selectedUpdate', this.onSwitch.bind(this));
 	}
 	onSwitch() {
 		this.attachParser();
