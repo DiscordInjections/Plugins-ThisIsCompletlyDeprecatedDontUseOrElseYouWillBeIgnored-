@@ -210,7 +210,7 @@ class Citador extends Plugin {
 											});
 										});
 									
-									$('.content .channel-textarea textarea').focus();
+									$('.textAreaEnabled-2vOfh8').focus();
 
 									if (range) {
 										var startPost = $(range.startContainer).closest('.comment'),
@@ -296,7 +296,7 @@ class Citador extends Plugin {
 					var color     = $('.quote-msg').find('.user-name').first().css('color'),
 						user      = $('.quote-msg').find('.user-name').first().text(),
 						avatarUrl = $('.quote-msg').find('.avatar-large').css('background-image') ? $('.quote-msg').find('.avatar-large').css('background-image').replace(/.*\s?url\([\'\"]?/, '').replace(/[\'\"]?\).*/, '') : '',
-						oldText   = $('.content .channel-textarea textarea').val(),
+						oldText   = $('.textAreaEnabled-2vOfh8').val(),
 						hourpost  = $('.quote-msg').find('.timestamp').text(),
 						quoteMsg  = $('.quote-msg').find('.comment'),
 						text      = '';
@@ -448,12 +448,12 @@ class Citador extends Plugin {
 				$('.quote-msg').find('.citar-btn.cant-embed').toggleClass('cant-embed');
 				$('.quote-msg').find('.citar-btn').text("");
 			}
-			if (serverName !== $('.guild-header header span').text() && serverName !== "") {
+			if (serverName !== $('.header-1tSljs .name-3gtcmp').text() && serverName !== "") {
 				atServerName = " at " + serverName;
-			} else if (serverName == $('.guild-header header span').text() || serverName == ""){
+			} else if (serverName == $('.header-1tSljs .name-3gtcmp').text() || serverName == ""){
 				atServerName = '';
 			}
-			$('.channel-textarea').prepend(elem);
+			$('.channel-text-area-default').prepend(elem);
 		}
 	}
 }
