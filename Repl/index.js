@@ -1,6 +1,7 @@
 const Plugin = module.parent.require('../Structures/Plugin');
-const $ = require("jquery");
-
+jQuery = global.jQuery = require("jquery");
+require("jquery-ui");
+const fuckJQuery = global.jQuery;
 
 // Utility functions stolen from SO
 function evalInContext(js, ctx) {
@@ -11,7 +12,6 @@ function evalInContext(js, ctx) {
 class Repl extends Plugin {
     constructor(...args) {
         super(...args);
-
         // Create all elements
         this.div = document.createElement("div");
         this.div.id = "Repl-Div"
@@ -40,10 +40,11 @@ class Repl extends Plugin {
         this.log("REPL Elements created!");
 
         document.body.appendChild(this.div);
-
-        $(function() {
-            $("#Repl-Div").draggable();
-        });
+        fuckJQuery(document).ready(function(){
+            fuckJQuery(function() {
+                fuckJQuery("#Repl-Div").draggable();
+            })
+        })
 
         this.log("REPL added!")
     }
@@ -66,6 +67,10 @@ class Repl extends Plugin {
 
         this.log(evalText + " -> " + this.code.innerHTML);
     }
-}
+
+    unload(){
+
+    }
+};
 
 module.exports = Repl;
