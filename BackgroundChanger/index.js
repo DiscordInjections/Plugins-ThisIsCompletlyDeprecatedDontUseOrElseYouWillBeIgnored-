@@ -4,6 +4,11 @@ class BackgroundChanger extends Plugin {
     constructor(...args) {
         super(...args);
 
+        if (this.config.urls.length === 0) {
+            this.log('No URLs were provided! Please fill out the config and restart (ctrl+r).');
+            return;
+        }
+
         this.nextButton = document.createElement('button');
         this.nextButton.id = 'BackgroundRotatorNext';
         this.nextButton.appendChild(document.createElement('span'));
@@ -14,15 +19,26 @@ class BackgroundChanger extends Plugin {
         this.lastUrl = '';
 
         // Switch every 10 minutes
-        setInterval(this.next.bind(this), 10 * 60 * 1000);
+        setInterval(this.next.bind(this), this.config.interval);
         this.next();
         this.log('Rotater initialized.');
+
+        this.registerCommand({
+            name: 'background-switch',
+            info: 'Switches to the next background.',
+            func: function () {
+                this.next();
+                this.sendLocalMessage('Switched backgrounds!');
+            }.bind(this)
+        });
     }
 
     get configTemplate() {
         return {
             color: '3622a1',
-            urls: []
+            urls: [],
+            iconURL: 'https://cat.needs-to-s.top/41b287.png',
+            interval: 10 * 60 * 1000
         };
     }
 
