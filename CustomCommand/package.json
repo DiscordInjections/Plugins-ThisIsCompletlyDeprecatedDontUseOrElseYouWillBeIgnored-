@@ -1,6 +1,6 @@
 {
   "name": "customcommand",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "Adds custom commands to Discord! YIPPEE!",
   "main": "index.js",
   "scripts": {
