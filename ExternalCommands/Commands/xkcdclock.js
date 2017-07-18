@@ -23,7 +23,6 @@ module.exports = {
 					}
 				}]
 			}
-			console.log(res,originalfile,obj)
 			window.DI.Helpers.sendLog('xkcd', obj, 'https://xkcd.com/s/0b7742.png');
 		});
 	}
