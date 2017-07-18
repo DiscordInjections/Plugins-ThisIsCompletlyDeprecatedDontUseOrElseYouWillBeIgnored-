@@ -61,7 +61,7 @@ class DiscordBots extends Plugin {
                     case "discordbots.org":
                     case "discordbotsorg":
                     case "dborg":
-                        this.settings.usedbl = false;
+                        this.settings.usedbl = true;
                         this.save();
                         window.DI.Helpers.sendLog('Discord Bots Plugin', "Mode set to Discordbots.org.", this.iconURL);
                         break;
