@@ -18,15 +18,15 @@ class Renamer extends Plugin {
     };
     this.contextMarkup =
       `<div class="item-group renamer">
-		  <div class="item name-item">
-  			<span>Change Local Nickname</span>
-  			<div class="hint"></div>
+      <div class="item name-item">
+        <span>Change Local Nickname</span>
+        <div class="hint"></div>
       </div>
       <div class="item tag-item">
-  			<span>Change User Tag</span>
-  			<div class="hint"></div>
-		  </div>
-		</div>`;
+        <span>Change User Tag</span>
+        <div class="hint"></div>
+      </div>
+    </div>`;
 
     this.modalMarkup =
       `<span class="renamer-modal"><div class="callout-backdrop renamer" style="background-color:#000; opacity:0.85"></div><div class="modal" style="opacity: 1">
@@ -60,7 +60,7 @@ class Renamer extends Plugin {
         </div>
     </div></span>`
 
-		this.colourList = ['rgb(26, 188, 156)','rgb(46, 204, 113)','rgb(52, 152, 219)','rgb(155, 89, 182)','rgb(233, 30, 99)','rgb(241, 196, 15)','rgb(230, 126, 34)','rgb(231, 76, 60)','rgb(149, 165, 166)','rgb(96, 125, 139)','rgb(17, 128, 106)','rgb(31, 139, 76)','rgb(32, 102, 148)','rgb(113, 54, 138)','rgb(173, 20, 87)','rgb(194, 124, 14)','rgb(168, 67, 0)','rgb(153, 45, 34)','rgb(151, 156, 159)','rgb(84, 110, 122)'];
+    this.colourList = ['rgb(26, 188, 156)','rgb(46, 204, 113)','rgb(52, 152, 219)','rgb(155, 89, 182)','rgb(233, 30, 99)','rgb(241, 196, 15)','rgb(230, 126, 34)','rgb(231, 76, 60)','rgb(149, 165, 166)','rgb(96, 125, 139)','rgb(17, 128, 106)','rgb(31, 139, 76)','rgb(32, 102, 148)','rgb(113, 54, 138)','rgb(173, 20, 87)','rgb(194, 124, 14)','rgb(168, 67, 0)','rgb(153, 45, 34)','rgb(151, 156, 159)','rgb(84, 110, 122)'];
 
     //this.getUpdates()
     this.log("Initializing MutationObserver...");
@@ -99,17 +99,131 @@ class Renamer extends Plugin {
 
   unload () {
     $('#CSS-Renamer').remove();
-    StateWatcher.removeListener('slugmod-reloaded', this.slugModFunction.bind(this));
+    this.processmo.disconnect();
+    window.DI.StateWatcher.removeListener('slugmod-reloaded', this.slugModFunction.bind(this));
   }
 
   attachSlugCommand () {
     window.DI.StateWatcher.on('slugmod-reloaded', this.slugModFunction.bind(this));
-    this.slugModFunction(window.DI.PluginManager.plugins);
+    this.slugModFunction();
+    this.registerCommand({
+      name: "tag",
+      info: "Set people's tags.",
+      usage: "<@user> [#color] <tag>",
+      func: (args) => {
+        if(!args[1]){
+          window.DI.Helpers.sendLog('Renamer', "Failed to execute: Not enough arguments.");
+          return;
+        }
+        let user = window.DI.Helpers.resolveMention(args[0]);
+        if(!user){
+          window.DI.Helpers.sendLog('Renamer', "Failed to execute: Invalid user.");
+          return;
+        }
+        let shorthandRegex = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i;
+        const h2rgb = hex => {
+          var result = shorthandRegex.exec(hex);
+          return result ? [
+            parseInt(result[1], 16),
+            parseInt(result[2], 16),
+            parseInt(result[3], 16)
+          ] : null;
+        };
+        let color = "#7289DA";
+        let tag = args.slice(1).join(" ");
+        if(args[1].match(shorthandRegex)){
+          color = args[1];
+          tag = args.slice(2).join(" ");
+        };
+        const fore = c => (c[ 0 ] * 0.299 + c[ 1 ] * 0.587 + c[ 2 ] * 0.114) > 186 ? "#000" : "#FFF"
+        this.setUserData(user, {
+          tag: {
+            text: tag,
+            back: color,
+            fore: fore(h2rgb(color))
+          }
+        });
+        window.DI.Helpers.sendLog('Renamer', `Set ${user.username}'s tag to ${su.sanitize(tag)}.`);
+      }
+    });
+
+    this.registerCommand({
+      name: "resettag",
+      info: "Reset people's tags.",
+      usage: "<@user>",
+      func: (args) => {
+        if(!args[0]){
+          window.DI.Helpers.sendLog('Renamer', "Failed to execute: Not enough arguments.");
+          return;
+        }
+        let user = window.DI.Helpers.resolveMention(args[0]);
+        if(!user){
+          window.DI.Helpers.sendLog('Renamer', "Failed to execute: Invalid user.");
+          return;
+        }
+        this.resetUserProp(user.id, "tag");
+        this.process(true);
+        this.saveSettings();
+        window.DI.Helpers.sendLog('Renamer', `Reset ${user.username}'s tag.`);
+      }
+    });
+
+    this.registerCommand({
+      name: "localnick",
+      info: "Set people's local nicknames.",
+      usage: "<@user> [#color] <nick>",
+      func: (args) => {
+        if(!args[1]){
+          window.DI.Helpers.sendLog('Renamer', "Failed to execute: Not enough arguments.");
+          return;
+        }
+        let user = window.DI.Helpers.resolveMention(args[0]);
+        if(!user){
+          window.DI.Helpers.sendLog('Renamer', "Failed to execute: Invalid user.");
+          return;
+        }
+        let shorthandRegex = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i;
+        let color = null;
+        let nick = args.slice(1).join(" ");
+        if(args[1].match(shorthandRegex)){
+          color = args[1];
+          nick = args.slice(2).join(" ");
+        };
+        let obj = {
+          nick: nick
+        }
+        if(color) obj.color = color;
+        this.setUserData(user, obj);
+        window.DI.Helpers.sendLog('Renamer', `Set ${user.username}'s local nickname to ${su.sanitize(nick)}.`);
+      }
+    });
+
+    this.registerCommand({
+      name: "resetlocalnick",
+      info: "Reset people's local nicknames.",
+      usage: "<@user>",
+      func: (args)=>{
+        if(!args[0]){
+          window.DI.Helpers.sendLog('Renamer', "Failed to execute: Not enough arguments.");
+          return;
+        }
+        let user = window.DI.Helpers.resolveMention(args[0]);
+        if(!user){
+          window.DI.Helpers.sendLog('Renamer', "Failed to execute: Invalid user.");
+          return;
+        }
+        this.resetUserProp(user.id, "nick");
+        this.resetUserProp(user.id, "color");
+        this.process(true);
+        this.saveSettings();
+        window.DI.Helpers.sendLog('Renamer', `Reset ${user.username}'s local nickname.`);
+      }
+    });
   }
 
   slugModFunction(plugins = window.DI.PluginManager.plugins){
-    if(plugins.SlugMod){
-      plugins.SlugMod.addExternalCommand({
+    if(plugins.slugmod){
+      plugins.slugmod.addExternalCommand({
         name: "tag",
         desc: "Set people's tags.",
         usage: "//tag @user #7289da tag",
@@ -150,7 +264,7 @@ class Renamer extends Plugin {
         su.sendACMessage(`Set ${user.username}'s tag to ${su.sanitize(tag)}.`);
       });
 
-      plugins.SlugMod.addExternalCommand({
+      plugins.slugmod.addExternalCommand({
         name: "resettag",
         desc: "Reset people's tags.",
         usage: "//resettag @user",
@@ -171,7 +285,7 @@ class Renamer extends Plugin {
         su.sendACMessage(`Reset ${user.username}'s tag.`);
       });
 
-      plugins.SlugMod.addExternalCommand({
+      plugins.slugmod.addExternalCommand({
         name: "localnick",
         desc: "Set people's local nicknames.",
         usage: "//localnick @user #7289da nick",
@@ -201,7 +315,7 @@ class Renamer extends Plugin {
         su.sendACMessage(`Set ${user.username}'s local nickname to ${su.sanitize(nick)}.`);
       });
 
-      plugins.SlugMod.addExternalCommand({
+      plugins.slugmod.addExternalCommand({
         name: "resetlocalnick",
         desc: "Reset people's local nicknames.",
         usage: "//resetlocalnick @user",
@@ -310,7 +424,7 @@ class Renamer extends Plugin {
     //this.log(nick, username, colour)
     let colorGroup =
       `<div class="ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-nowrap" style="flex: 1 1 auto; margin-top: 5px;"><div class="ui-color-picker-swatch large${colour == null ? " selected" : ""}" style="background-color: rgb(153, 170, 181);"></div><div class="ui-color-picker-swatch large custom${selection == -1 && colour ? " selected" : ""}" style="background-color:${selection == -1 && colour ? colour : 'rgb(255, 255, 255)'}"></div>
-		<div class="regulars ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-wrap ui-color-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;">` + this.colourList.map((val, i) => `<div class="ui-color-picker-swatch${i == selection ? " selected" : ""}" style="background-color: ${val};"></div>`).join("") + `</div></div>`
+    <div class="regulars ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-wrap ui-color-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;">` + this.colourList.map((val, i) => `<div class="ui-color-picker-swatch${i == selection ? " selected" : ""}" style="background-color: ${val};"></div>`).join("") + `</div></div>`
     let modal = $(`<span class="renamer-modal"><div class="callout-backdrop renamer" style="background-color:#000; opacity:0.85"></div><div class="modal" style="opacity: 1">
         <div class="modal-inner">
             <form class="form">
@@ -327,14 +441,14 @@ class Renamer extends Plugin {
                     <div class="control-group">
                         <label class="reset-nick"><a>Reset Nickname</a></label>
                     </div>
-					<div class="control-group">
-					  <label for="role-name">Nickname color</label>
-					  <div class="color-picker">
-						<div class="swatches">
-							${colorGroup}
-						</div>
-					  </div>
-					</div>
+          <div class="control-group">
+            <label for="role-name">Nickname color</label>
+            <div class="color-picker">
+            <div class="swatches">
+              ${colorGroup}
+            </div>
+            </div>
+          </div>
                 </div>
                 <div class="form-actions">
                     <button type="button" class="btn btn-default">Cancel</button>
@@ -582,12 +696,12 @@ class Renamer extends Plugin {
   }
 
   attachChatListners () {
-    const processmo = new MutationObserver((changes, _) => {
+    this.processmo = new MutationObserver((changes, _) => {
       this.process();
     })
-    processmo.observe($(".app>*:first-child>*:first-child")[ 0 ], { childList: true, subtree: true });
+    this.processmo.observe($(".app>*:first-child>*:first-child")[ 0 ], { childList: true, subtree: true });
     $("div[data-reactroot]>.theme-dark:not(.pictureInPicture-Ryvh67), div[data-reactroot]>.theme-light:not(.pictureInPicture-Ryvh67)").each((i, elm) => {
-      processmo.observe(elm, { childList: true, subtree: true });
+      this.processmo.observe(elm, { childList: true, subtree: true });
     });
     // processmo.observe( $(".channel-members")[0] , {childList:true, subtree: true} )
     // processmo.observe( $(".channel-voice-states")[0] , {childList:true, subtree: true} )

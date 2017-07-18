@@ -31,12 +31,56 @@ class DiscordBots extends Plugin {
         });
         this.load();
         this.mo.observe($("[data-reactroot]")[0], { childList: true, subtree: true });
+        this.registerCommand({
+            name: "db-setbdptoken",
+            info: "Sets your bots.discord.pw token.",
+            usage: "<token>",
+            func: (args) => {
+                this.settings.bdptoken = args[0] || "";
+                this.save();
+                if(args[0] || args[0] === "") window.DI.Helpers.sendLog('Discord Bots Plugin', "Reset bots.discord.pw token.", this.iconURL);
+                    else window.DI.Helpers.sendLog('Discord Bots Plugin', "Set bots.discord.pw token.", this.iconURL);
+            }
+        });
+        this.registerCommand({
+            name: "db-mode",
+            info: "Change the mode of the plugin.",
+            usage: "<bdp|dbl>",
+            func: (args) => {
+                if(!args[0]) args[0] = "";
+                switch(args[0].toLowerCase()){
+                    case "bdp":
+                    case "bots.discord.pw":
+                    case "botsdiscordpw":
+                        this.settings.usedbl = false;
+                        this.save();
+                        window.DI.Helpers.sendLog('Discord Bots Plugin', "Mode set to bots.discord.pw.", this.iconURL);
+                        break;
+                    case "dbl":
+                    case "discordbotslist":
+                    case "discordbots.org":
+                    case "discordbotsorg":
+                    case "dborg":
+                        this.settings.usedbl = false;
+                        this.save();
+                        window.DI.Helpers.sendLog('Discord Bots Plugin', "Mode set to Discordbots.org.", this.iconURL);
+                        break;
+                    default:
+                        window.DI.Helpers.sendLog('Discord Bots Plugin', "Error: Invalid mode", this.iconURL);
+                        break;
+                }
+            }
+        });
     }
 
     get configTemplate() {
         return {
             color: '7A78BD'
         };
+    }
+
+    get iconURL() {
+        return this.settings.usedbl ? 'https://i-need.discord.cards/da0e09.webp' : 'https://i-need.discord.cards/5e6c8d.png';
     }
 
     unload() {
