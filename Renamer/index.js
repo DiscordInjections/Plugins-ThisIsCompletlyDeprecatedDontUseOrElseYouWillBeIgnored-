@@ -143,7 +143,7 @@ class Renamer extends Plugin {
             fore: fore(h2rgb(color))
           }
         });
-        window.DI.Helpers.sendLog('Renamer', `Set ${user.username}'s tag to ${su.sanitize(tag)}.`);
+        window.DI.Helpers.sendLog('Renamer', `Set ${user.username}'s tag to ${tag}.`);
       }
     });
 
@@ -194,7 +194,7 @@ class Renamer extends Plugin {
         }
         if(color) obj.color = color;
         this.setUserData(user, obj);
-        window.DI.Helpers.sendLog('Renamer', `Set ${user.username}'s local nickname to ${su.sanitize(nick)}.`);
+        window.DI.Helpers.sendLog('Renamer', `Set ${user.username}'s local nickname to ${nick}.`);
       }
     });
 
