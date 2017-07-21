@@ -1,128 +1,216 @@
-.keybase-modal{
-    display: flex;
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,500'); /* Material Design > all */
+
+
+/* Checkboxes */
+.keybase-checkbox-wrap{
+    margin-right: 0;
+    margin-left: 10px;
+    user-select: none;
+    position: relative;
+    width: 44px;
+    height: 24px;
+    display: block;
+}
+
+.keybase-checkbox{
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.keybase-checkbox-wrap:hover .keybase-checkbox-switch{
+    box-shadow: inset 0 0 0 2px hsla(0,0%,100%,.4);
+}
+
+.keybase-checkbox-switch{
     position: absolute;
     top: 0;
+    right: 0;
+    bottom: 0;
     left: 0;
-    height: 100%;
-    width: 100%;
-    padding-top: 60px;
-    padding-bottom: 60px;
-    z-index: 1000;
-    box-sizing: border-box;
-    min-height: 340px;
-    animation: modalShow .1s;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    flex-direction: column;
-    pointer-events: auto;
-    flex-direction: column;
-    -webkit-box-pack: center;
-    align-items: center;
-    justify-content: center;
+    background: transparent;
+    box-shadow: inset 0 0 0 2px hsla(0,0%,100%,.2);
+    border-radius: 14px;
+    transition: background .15s ease-in-out,box-shadow .15s ease-in-out,border .15s ease-in-out;
+}
+.keybase-checkbox-switch.keybase-checkbox-checked{
+    background: hsla(0,0%,100%,.2);
 }
 
-.keybase-modal-hide{
-    animation: modalHide .1s;
+.keybase-checkbox-switch:before{
+    content: "";
+    display: block;
+    width: 18px;
+    height: 18px;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    bottom: 3px;
+    background: #f6f6f7;
+    border-radius: 10px;
+    transition: all .15s ease;
+    box-shadow: 0 3px 1px 0 rgba(0,0,0,.05), 0 2px 2px 0 rgba(0,0,0,.1), 0 3px 3px 0 rgba(0,0,0,.05);
+}
+.keybase-checkbox-switch.keybase-checkbox-checked:before{
+    -webkit-transform: translateX(20px);
+    transform: translateX(20px);
 }
 
-.keybase-modal-inner{
-    flex-direction: column;
-    display: flex;
-    background-color: #2f3136;
-    box-shadow: 0 0 0 1px rgba(32,34,37,.6), 0 2px 10px 0 rgba(0,0,0,.2);
-    width: 440px;
-    max-height: 660px;
-    min-height: 200px;
-    position: relative;
-    border-radius: 5px;
-}
-
-.keybase-modal-header{
-    transition: box-shadow .1s ease-out;
-    word-wrap: break-word;
-    position: relative;
-    flex: 0 0 auto;
-    padding: 20px;
-    z-index: 1;
-    overflow-x: hidden;
-}
-
-.keybase-modal-header h4{
-    color: #f6f6f7;
-    text-transform: uppercase;
-    letter-spacing: .3px;
-    font-weight: 600;
-    line-height: 20px;
-    font-size: 16px;
-}
-
-.keybase-modal-scrollerWrap::-webkit-scrollbar,
-.keybase-modal-scroller::-webkit-scrollbar{
-    display: none;
-}
-
-.keybase-modal-scrollerWrap{
-    position: relative;
-    min-height: 1px;
-    height: 100%;
-    display: flex;
-    flex: 1;
-}
-
-.keybase-modal-scroller{
-    padding: 0 12px 0 20px;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    min-height: 1px;
-    flex: 1;
-    color: #f6f6f7;
+/* Toast */
+.toast{
+    position: absolute;
+    z-index: 666666666666;
+    min-width: 288px;
+    padding: 24px 14px 18px;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%) translateY(100%);
+    transition: transform .4s;
+    font-family: Roboto, sans-serif;
     font-weight: 400;
-    line-height: 24px;
-    font-size 16px;
-    margin-bottom: 20px;
+    color: white;
+    font-size: 16px;
+    border-radius: 2px;
+    background-color: #323232;
+    text-align: center;
+    border-bottom: 6px #b92222 solid;
+    box-shadow: 0 0 30px black;
 }
 
-.keybase-modal-footer{
-    background-color: rgba(32,34,37,.3);
-    box-shadow: inset 0 1px 0 rgba(32,34,37,.6);
-    border-radius: 0 0 5px 5px;
-    position: relative;
-    flex: 0 0 auto;
-    padding: 20px;
-    z-index: 1;
-    overflow-x: hidden;
+.toast-show{
+    transform: translateX(-50%) translateY(-15px);
 }
 
-.keybase-modal-button-done{
-    border: none;
-    border-radius: 3px;
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 16px;
-    color: #fff;
-    background-color: #7289da;
-    transition: background-color .17s ease;
-    cursor: pointer;
-    min-width: 96px;
-    min-height: 38px;
+/* Icons */
+.icon-twitter{
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url("https://canary.discordapp.com/assets/c795f9ef8be0d19a0555ee96213abd00.png");
+    background-size: 16px;
+    margin-bottom: -3px;
 }
 
-.keybase-modal-button-done:hover{
-    background-color: #677bc4;
+.icon-facebook{
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url("https://api.bowser65.tk/assets/facebook-logo.png");
+    background-size: 16px;
+    margin-bottom: -3px;
 }
 
-.keybase-modal-button-inner{
-    display: inline;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
+.icon-github{
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url("https://api.bowser65.tk/assets/github-logo.png");
+    background-size: 16px;
+    margin-bottom: -3px;
+}
+
+.icon-reddit{
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url("https://canary.discordapp.com/assets/4a3496c5b0924198ae0234331c912d1b.png");
+    background-size: 16px;
+    margin-bottom: -3px;
+}
+
+.icon-hackernews{
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url("https://api.bowser65.tk/assets/hackernews-logo.png");
+    background-size: 16px;
+    margin-bottom: -3px;
+}
+
+.icon-site{
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url("https://api.bowser65.tk/assets/site-logo.png");
+    background-size: 16px;
+    margin-bottom: -3px;
 }
 
 .connected-account-keybase-icon{
     width: 18px;
     height: 18px;
     flex-shrink: 0;
-    background: url(https://api.bowser65.tk/assets/keybase-logo.png) no-repeat;
+    background: url("https://api.bowser65.tk/assets/keybase-logo.png") no-repeat;
     background-size: 18px;
     margin-left: 5px;
+}
+
+/* Loading icon */
+.connect-account-btn{
+    max-height: 52px;
+}
+
+.waiting-spinner-wrapper{
+    width: 52px;
+    height: 52px;
+    position: relative;
+    background-color: rgba(0, 0, 0, 0.52);
+    border-radius: 5px;
+    transform: translateY(-100%);
+}
+
+.waiting-spinner{
+    animation: waiting-spinner 2s linear infinite;
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    top: 50%;
+    left: 50%;
+    margin-top: -16px;
+    margin-left: -16px;
+}
+
+.waiting-spinner-path{
+    animation: waiting-spinner-path 2s ease-in-out infinite;
+    stroke-dasharray: 1,200;
+    stroke-dashoffset: 0;
+    fill: none;
+    stroke-width: 6;
+    stroke-miterlimit: 10;
+    stroke-linecap: round;
+    stroke: #7289da;
+}
+
+.waiting-spinner-path-light{
+    animation-delay: .15s;
+    opacity: .6;
+}
+
+.waiting-spinner-path-dark{
+    animation-delay: .23s;
+    stroke: #222941;
+}
+
+/* Keyframes */
+@keyframes waiting-spinner{
+    to{
+        transform: rotate(1turn);
+    }
+}
+
+@keyframes waiting-spinner-path{
+    0%{
+        stroke-dasharray: 1,200;
+        stroke-dashoffset: 0;
+    }
+    50%{
+        stroke-dasharray: 130,200;
+    }
+    to{
+        stroke-dasharray: 130,200;
+        stroke-dashoffset: -124;
+    }
 }
