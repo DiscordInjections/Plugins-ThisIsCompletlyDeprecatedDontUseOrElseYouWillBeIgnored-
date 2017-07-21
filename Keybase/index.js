@@ -27,10 +27,10 @@ class KeybaseIntegration extends Plugin {
             
             let _this = this;
             this.getKeybaseAccount(user, function(data){
-                if(data.user.keybase === null){
+                if(data === null){
                     _this.addConnectButton(_this.setKeybaseAccount.bind(_this));
                 }else{
-                    _this.addSettingsConnection(data.user.keybase, _this.deleteKeybaseAccount.bind(_this));
+                    _this.addSettingsConnection(data.user, _this.deleteKeybaseAccount.bind(_this));
                 }
             });
             
@@ -40,8 +40,8 @@ class KeybaseIntegration extends Plugin {
             let _this = this;
             
             this.getKeybaseAccount(user, function(data){
-                if(data.user.keybase !== null){
-                    _this.addProfileConnection(data.user.keybase);
+                if(data !== null){
+                    _this.addProfileConnection(data.user.keybase, "https://keybase.io/" + data.user.keybase);
                     
                     let twitterList = document.querySelectorAll("#user-profile-modal img[src*='c795f9ef8be0d19a0555ee96213abd00'] + div > div");
                     let redditList = document.querySelectorAll("#user-profile-modal img[src*='4a3496c5b0924198ae0234331c912d1b'] + div > div");
@@ -56,11 +56,21 @@ class KeybaseIntegration extends Plugin {
                         reddit.parentNode.parentNode.setAttribute("data-account", "reddit:" + reddit.innerHTML.toLowerCase());
                     }
 
-                    for(let accountId in data.user.accounts){
+                    for(let accountId in data.user.proofs){
                         let account_element = document.querySelector("#user-profile-modal .connected-account[data-account='" + accountId + "']");
                         if(account_element !== null){
                             let keybase_icon = document.createElement("a");
-                            keybase_icon.href = data.user.accounts[accountId];
+                            keybase_icon.href = data.user.proofs[accountId].proof;
+                            keybase_icon.rel = "noreferrer";
+                            keybase_icon.target = "_blank";
+                            keybase_icon.innerHTML = "<div class=\"connected-account-keybase-icon\"></div>";
+                            account_element.appendChild(keybase_icon);
+                        }else if(data.user.proofs[accountId].show){
+                            let account_data = accountId.split(":");
+                            account_element = _this.addProfileConnection(account_data[1], data.user.proofs[accountId].link, "https://api.bowser65.tk/assets/" + account_data[0].replace("generic_web_site", "site").replace("dns", "site") + "-logo.png");
+                            
+                            let keybase_icon = document.createElement("a");
+                            keybase_icon.href = data.user.proofs[accountId].proof;
                             keybase_icon.rel = "noreferrer";
                             keybase_icon.target = "_blank";
                             keybase_icon.innerHTML = "<div class=\"connected-account-keybase-icon\"></div>";
@@ -86,10 +96,10 @@ class KeybaseIntegration extends Plugin {
         }
 
         if(keybase_exec === null){
-            this.dialog("Whooops, something went wrong :(", "Keybase executable not found... :( Make sure Keybase is installed and in your PATH, restart Discord and try again. If this alert still appears, please contact Bowser65#4680", function(){});
+            this.toast("Sorry, your Keybase executable seems to be hidden... Make sure Keybase is installed and in your PATH, then try again");
         }else{
             let user = document.querySelector(".username").parentNode.previousSibling.getAttribute("style").split("/")[4];
-            exec(keybase_exec + " encrypt -m 'Discord:" + user + "' bowser65", function(err, data){
+            exec(keybase_exec + " encrypt -m '" + user + "' bowser65", function(err, data){
                 data = new Buffer(data).toString("base64");
                 callback(data);
             });
@@ -101,28 +111,52 @@ class KeybaseIntegration extends Plugin {
         let _this = this;
         
         request.get('https://api.bowser65.tk/v1/keybase/user/' + accountId, function (error, response, body) {
-            console.log(response.body);
-            
-            let parse = JSON.parse(response.body);
-            if(parse.status != "success"){
-                _this.dialog("Whooops, something went wrong :(", "Sorry, my end sucks :( Please contact me, Bowser65#4680<br>Error message: " + parse.message);
-            }else{
+            if(response.statusCode == 200){
+                let parse = JSON.parse(response.body);
                 callback(parse);
+            }else if(response.statusCode == 404){
+                callback(null);
+            }else{
+                _this.handleAPIResponse(response);
             }
         });
     }
     
     setKeybaseAccount(){
+        let spinner = document.createElement("div");
+        spinner.className = "waiting-spinner-wrapper";
+        spinner.innerHTML = "<svg viewBox=\"25 25 50 50\" class=\"waiting-spinner\"><circle cx=\"50\" cy=\"50\" r=\"20\" class=\"waiting-spinner-path waiting-spinner-path-dark\"></circle><circle cx=\"50\" cy=\"50\" r=\"20\" class=\"waiting-spinner-path waiting-spinner-path-light\"></circle><circle cx=\"50\" cy=\"50\" r=\"20\" class=\"waiting-spinner-path\"></circle></svg>";
+        
+        document.querySelector(".connect-account-btn-inner[style*='keybase-logo.png']").parentNode.appendChild(spinner);
+        
         let _this = this;
         
         this.getKeybaseAccountData(function(keybaseData){
-            request.post({url: 'https://api.bowser65.tk/v1/keybase/user', headers:{"X-Keybase-Data": keybaseData}}, function (error, response, body) {
-                let data = JSON.parse(body);
-                if(data.status != "success"){
-                    _this.dialog("Whooops, something went wrong :(", "Sorry, my end sucks :( Please contact me, Bowser65#4680<br>Error message: " + data.message);
+            request.post({url: 'https://api.bowser65.tk/v1/keybase/user', json:{keybase_data: keybaseData}}, function (error, response, body) {
+                if(!response.statusCode == 200){
+                    document.querySelector(".waiting-spinner").remove();
+                    _this.handleAPIResponse(response);
                 }else{
                     document.querySelector(".connect-account-btn-inner[style*='keybase-logo.png']").parentNode.remove();
                     document.querySelector(".user-settings-connections").removeAttribute("keybase");
+                }
+            });
+        });
+    }
+    
+    changeDisplay(account, display){
+        let _this = this;
+        
+        this.getKeybaseAccountData(function(keybaseData){
+            request.put({url: 'https://api.bowser65.tk/v1/keybase/user', json:{keybase_data: keybaseData, action: (display?"show":"hide"), account: account}}, function (error, response, body) {
+                if(!response.statusCode == 200){
+                    if(response.statusCode == 404){
+                        this.toast("Wew! Your Keybase account is no longer linked, but for unknown reasons still displayed here...");
+                        document.querySelector(".connection[style*='border-color: #33a0ff'").remove();
+                        document.querySelector(".user-settings-connections").removeAttribute("keybase");
+                    }else{
+                        _this.handleAPIResponse(response);
+                    }
                 }
             });
         });
@@ -132,104 +166,73 @@ class KeybaseIntegration extends Plugin {
         let _this = this;
         
         this.getKeybaseAccountData(function(keybaseData){
-            request.delete({url: 'https://api.bowser65.tk/v1/keybase/user', headers:{"X-Keybase-Data": keybaseData}}, function (error, response, body) {
-                debugger;
-                
-                let data = JSON.parse(body);
-                if(data.status != "success"){
-                    _this.dialog("Whooops, something went wrong :(", "Sorry, my end sucks :( Please contact me, Bowser65#4680<br>Error message: " + data.message);
-                }else{
+            request.delete({url: 'https://api.bowser65.tk/v1/keybase/user', json:{"keybase_data": keybaseData}}, function (error, response, body) {
+                if(response.statusCode == 200){
                     document.querySelector(".user-settings-connections").removeAttribute("keybase");
+                }else if(response.statusCode == 404){
+                    this.toast("Wew! Your Keybase account was already unlinked, but for unknown reasons still displayed here...");
+                    document.querySelector(".user-settings-connections").removeAttribute("keybase");
+                }else{
+                    _this.handleAPIResponse(response);
                 }
             });
         });
     }
     
-    /* UI */
-    dialog(title, contents){
-        if(document.querySelector(".keybase-dialog") !== null) document.querySelector(".keybase-dialog").remove();
+    handleAPIResponse(response){
+        let text = null;
         
-        let global_container = document.createElement("div");
-        global_container.className = "theme-dark keybase-dialog";
+        if(response.statusCode == 429){
+            text = "Wow too fast! You got rate limited... Try again in " + Math.ceil(response.headers["retry-after"].replace("ms", "") / 1000) + "s";
+        }else if(response.statusCode == 400){
+            text = "Wew this was unexpected, same as your request params! Check your Keybase install, and make sure you're connected and able to encrypt messages through Keybase";
+        }else if(response.statusCode == 418){
+            text = "Whoops, something went wrong! An external service had issues, try again later";
+        }else if(response.statusCode == 500){
+            text = "Oh, sorry dude, server looks like to be in vacations :( Please contact Bowser65#4680";
+        }else if(response.statusCode == 426){
+            text = "Hey dude, it's time to update! This plugin version no longer works";
+        }else if(response.statusCode == 403 && response.statusMessage.includes("Banned")){
+            text = "You are " + response.statusMessage.replace(" Banned", "").toLowerCase() + " banned from the API (Reason: " + response.headers["ban-reason"] + ")";
+            if(response.statusMessage.replace(" Banned", "") === "Temporarily"){
+                text = text + ". You will get unbanned on " + response.headers["banned-until"];
+            }
+        }
         
-        let overlay = document.createElement("div");
-        overlay.className = "callout-backdrop";
-        overlay.setAttribute("style", "opacity: 0.85; background-color: rgb(0, 0, 0); transform: translateZ(0px);")
-        overlay.addEventListener("click", function(){
-            document.querySelector(".keybase-dialog").remove();
-        });
-        
-        let modal = document.createElement("div");
-        modal.className = "keybase-modal";
-        
-        let modal_inner = document.createElement("div");
-        modal_inner.className = "keybase-modal-inner";
-        
-        let header = document.createElement("div");
-        header.className = "keybase-modal-header";
-        
-        let header_title = document.createElement("h4");
-        header_title.innerHTML = title;
-        
-        let modal_contents_wrap = document.createElement("div");
-        modal_contents_wrap.className = "keybase-modal-scollerWrap";
-        
-        let modal_contents = document.createElement("div");
-        modal_contents.className = "keybase-modal-scroller";
-        modal_contents.innerHTML = contents;
-        
-        let modal_footer = document.createElement("div");
-        modal_footer.className = "keybase-modal-footer";
-        
-        let modal_button = document.createElement("button");
-        modal_button.className = "keybase-modal-button-done";
-        modal_button.type = "button";
-        modal_button.innerHTML = "<div class=\"keybase-modal-button-inner\">Done</div>";
-        modal_button.addEventListener("click", function(){
-            document.querySelector(".keybase-dialog").remove();
-        });
-        
-        modal_footer.appendChild(modal_button);
-        modal_contents_wrap.appendChild(modal_contents);
-        
-        header.appendChild(header_title);
-        
-        modal_inner.appendChild(header);
-        modal_inner.appendChild(modal_contents_wrap);
-        modal_inner.appendChild(modal_footer);
-        modal.appendChild(modal_inner);
-        
-        global_container.appendChild(overlay);
-        global_container.appendChild(modal);
-        
-        document.querySelector("#app-mount > div").appendChild(global_container);
-    }
-    
-    addConnectButton(callback){
-        if(document.querySelector(".connect-account-list .settings-connected-accounts") !== null){
-            let connect = document.createElement("div");
-            connect.className = "connect-account-btn";
-            
-            let btn = document.createElement("button");
-            btn.className = "connect-account-btn-inner";
-            btn.type = "button";
-            btn.setAttribute("style", "background-image: url('https://api.bowser65.tk/assets/keybase-logo.png');");
-            btn.addEventListener("click", callback);
-            
-            connect.appendChild(btn);
-            document.querySelector(".connect-account-list .settings-connected-accounts").appendChild(connect);
+        if(text !== null){
+            this.toast(text);
         }
     }
+    /* UI */
+    toast(text){
+        let toast = document.createElement("div");
+        toast.className = "toast";
+        toast.innerHTML = text;
+            
+        setTimeout(() => {
+            document.querySelector(".toast").className = "toast";
+            setTimeout(() => {
+                document.querySelector(".toast").remove();
+            }, 500);
+        }, 10000);
+            
+        document.body.appendChild(toast);
+            
+        setTimeout(() => {
+            document.querySelector(".toast").className = "toast toast-show";
+        }, 100);
+    }
     
-    addSettingsConnection(name, deleteCallback){
+    addSettingsConnection(data, deleteCallback){
         if(document.querySelector(".user-settings-connections") !== null){
+            let state = true;
             /* Create elements */
             let connection = document.createElement("div");
             connection.className = "connection elevation-low margin-bottom-8";
             connection.setAttribute("style", "border-color: #33a0ff; background-color: #33a0ff;");
             
             let connection_header = document.createElement("div");
-            connection_header.className = "connection-header";
+            connection_header.className = "connection-header margin-bottom-20";
             
             let img = document.createElement("img");
             img.className = "connection-icon no-user-drag";
@@ -239,7 +242,7 @@ class KeybaseIntegration extends Plugin {
             
             let connection_name = document.createElement("div");
             connection_name.className = "connection-account-value";
-            connection_name.innerHTML = name;
+            connection_name.innerHTML = data.keybase;
             
             let connection_label = document.createElement("div");
             connection_label.className = "connection-account-label";
@@ -253,26 +256,91 @@ class KeybaseIntegration extends Plugin {
                 deleteCallback();
             });
             
+            let connections_options_wrap = document.createElement("div");
+            connections_options_wrap.className = "connection-options-wrapper";
+            
+            let connections_options = document.createElement("div");
+            connections_options.className = "connection-options";
+            
+            let i = 0;
+            for(let key in data.proofs) {
+                if(i === 3){
+                    connections_options_wrap.appendChild(connections_options);
+                    connections_options = document.createElement("div");
+                    connections_options.className = "connection-options";
+                }
+                
+                if(key.split(":")[0] === "twitter" && document.querySelector(".connection[style*='border-color: rgb(29, 161, 242);']") !== null)
+                    continue;
+                else if(key.split(":")[0] === "reddit" && document.querySelector(".connection[style*='border-color: rgb(95, 153, 207);']") !== null)
+                    continue;
+                
+                
+                let connections_options_inner = document.createElement("div");
+                connections_options_inner.className = "connection-option-switch margin-bottom-20";
+                connections_options_inner.setAttribute("style", "display: flex; flex: 1 1 auto;");
+                
+                let connections_options_h3 = document.createElement("h3");
+                connections_options_h3.innerHTML = "Display <div class=\"icon-" + key.split(":")[0].replace("generic_web_site", "site").replace("dns", "site") + "\"></div> " + key.split(":")[1] + " on profile";
+                connections_options_h3.setAttribute("style", "line-height: 24px; flex: 1 1 auto;");
+                
+                let checkbox_wrap = document.createElement('div');
+                checkbox_wrap.className = "keybase-checkbox-wrap";
+                
+                let checkbox_switch = document.createElement('div');
+                checkbox_switch.className = data.proofs[key].show?'keybase-checkbox-switch keybase-checkbox-checked':'keybase-checkbox-switch';
+                
+                let checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.value = data.proofs[key].show?'on':'off';
+                checkbox.className = 'keybase-checkbox';
+                checkbox.setAttribute("data-account", key);
+                
+                let _this = this;
+                checkbox.addEventListener("click", function(){
+                    let isOn = this.value === "on";
+                    this.value = isOn?'off':'on';
+                    
+                    checkbox_switch.className = isOn?'keybase-checkbox-switch':'keybase-checkbox-switch keybase-checkbox-checked';
+                    
+                    _this.changeDisplay(this.getAttribute("data-account"), !isOn);
+                });
+                
+                checkbox_wrap.appendChild(checkbox);
+                checkbox_wrap.appendChild(checkbox_switch);
+                connections_options_inner.appendChild(connections_options_h3);
+                connections_options_inner.appendChild(checkbox_wrap);
+                connections_options.appendChild(connections_options_inner);
+                
+                i++;
+            }
+            connections_options_wrap.appendChild(connections_options);
+            
             /* Build elements */
+            
             connection_name_wrapper.appendChild(connection_name);
             connection_name_wrapper.appendChild(connection_label);
             connection_header.appendChild(img);
             connection_header.appendChild(connection_name_wrapper);
             connection_header.appendChild(connection_delete);
             connection.appendChild(connection_header);
+            connection.appendChild(connections_options_wrap);
             
             document.querySelector(".user-settings-connections .connection-list").appendChild(connection);
         }
     }
     
-    addProfileConnection(connectionName){
+    addProfileConnection(connectionName, externalLink, iconUrl){
         if(document.querySelector("#user-profile-modal") != null && document.querySelector("#user-profile-modal .tab-bar :first-child").className == "tab-bar-item selected"){
+            if(!iconUrl)
+                iconUrl = "https://api.bowser65.tk/assets/keybase-logo.png";
+            
             let account = document.createElement("div");
             account.className = "connected-account";
             
             let icon = document.createElement("img");
             icon.className = "connected-account-icon";
-            icon.src = "https://api.bowser65.tk/assets/keybase-logo.png";
+            icon.src = iconUrl;
             
             let name_wrapper = document.createElement("div");
             name_wrapper.className = "connected-account-name-inner";
@@ -280,12 +348,13 @@ class KeybaseIntegration extends Plugin {
             let name = document.createElement("div");
             name.className = "connected-account-name";
             name.innerHTML = connectionName;
+            name.setAttribute("title", connectionName);
             
             let verified = document.createElement("i");
             verified.className = "connected-account-verified-icon";
             
             let link = document.createElement("a");
-            link.href = "https://keybase.io/" + connectionName;
+            link.href = externalLink;
             link.rel = "noreferrer";
             link.target = "_blank";
             link.innerHTML = "<div class=\"connected-account-open-icon\"></div>";
@@ -308,6 +377,7 @@ class KeybaseIntegration extends Plugin {
                 document.querySelector("#user-profile-modal .guilds").appendChild(section);
             }
             document.querySelector("#user-profile-modal .connected-accounts").appendChild(account);
+            return account;
         }
     }
 }
