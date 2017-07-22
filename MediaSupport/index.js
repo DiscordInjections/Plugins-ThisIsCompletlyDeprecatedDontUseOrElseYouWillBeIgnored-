@@ -20,7 +20,10 @@ class MediaSupport extends Plugin {
             var video = true;
             var type = "webm";
             if(href.endsWith(".mp4")) type = "mp4";
-            if(href.endsWith(".ogg")) type = "ogg";
+            if(href.endsWith(".ogg")) {
+                type = "ogg";
+                video = false;
+            }
             if(href.endsWith(".mp3")) {
                 type = "mpeg";
                 video = false;
@@ -46,7 +49,10 @@ class MediaSupport extends Plugin {
             var video = true;
             var type = "webm";
             if(href.endsWith(".mp4")) type = "mp4";
-            if(href.endsWith(".ogg")) type = "ogg";
+            if(href.endsWith(".ogg")) {
+                type = "ogg";
+                video = false;
+            }
             if(href.endsWith(".mp3")) {
                 type = "mpeg";
                 video = false;
