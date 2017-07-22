@@ -1,0 +1,14 @@
+{
+  "name": "MediaSupport",
+  "version": "0.1.0",
+  "description": "Adds support for HTML5 media.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Snazzah, Jiiks",
+  "license": "MIT",
+  "dependencies": {
+    "jquery": "^3.2.1"
+  }
+}
