@@ -36,10 +36,11 @@ class BetterNSFW extends Plugin {
 
     check() {
         let nsfwRegex = /^nsfw(-|$)/;
-        document.querySelectorAll(".channels-wrap .scroller-fzNley .containerDefault-7RImuF").forEach(channel => {
-            if(!channel.childNodes[0].lastChild.childNodes[1]) return;
+        document.querySelectorAll(".channels-wrap div[class*=scroller] div[class*=containerDefault]").forEach(channel => {
+            let svg = channel.childNodes[0].lastChild.childNodes[0].childNodes[0]
+            if (svg.childNodes.length == 1) return;
             let channelname = channel.childNodes[0].lastChild.childNodes[1].childNodes[0];
-            if(!channel.classList.contains("nsfw-filtered") && nsfwRegex.test(channelname.data)){
+            if(!channel.classList.contains("nsfw-filtered") && (svg.childNodes.length > 1 || nsfwRegex.test(channelname.data))){
                 channel.classList.add("nsfw-filtered");
                 channelname.parentNode.outerHTML += `<span class="nsfw-channel-tag">18+</span>`;
                 //channelname.data = channelname.data.replace(/^nsfw-/, "");
