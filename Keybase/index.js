@@ -222,6 +222,22 @@ class KeybaseIntegration extends Plugin {
             document.querySelector(".toast").className = "toast toast-show";
         }, 100);
     }
+	
+	addConnectButton(callback){
+        if(document.querySelector(".connect-account-list .settings-connected-accounts") !== null){
+            let connect = document.createElement("div");
+            connect.className = "connect-account-btn";
+            
+            let btn = document.createElement("button");
+            btn.className = "connect-account-btn-inner";
+            btn.type = "button";
+            btn.setAttribute("style", "background-image: url('https://api.bowser65.tk/assets/keybase-logo.png');");
+            btn.addEventListener("click", callback);
+            
+            connect.appendChild(btn);
+            document.querySelector(".connect-account-list .settings-connected-accounts").appendChild(connect);
+        }
+    }
     
     addSettingsConnection(data, deleteCallback){
         if(document.querySelector(".user-settings-connections") !== null){
