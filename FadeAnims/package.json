@@ -1,0 +1,11 @@
+{
+  "name": "FadeAnims",
+  "version": "1.3.0",
+  "description": "Adds fade animations to pretty much everything in Discord",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "PikaDude",
+  "license": "MIT"
+}
