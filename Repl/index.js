@@ -39,14 +39,14 @@ class Repl extends Plugin {
         this.log("REPL Elements created!");
 
         this.registerCommand({
-            name: 'hide',
+            name: 'hide-repl',
             info: 'hide the REPL',
             func: this.hiderepl.bind(this)
         })
         this.log("added //hide");
 
         this.registerCommand({
-            name: 'show',
+            name: 'show-repl',
             info: 'show the REPL',
             func: this.showrepl.bind(this)
         })
