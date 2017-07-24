@@ -1,7 +1,4 @@
 const Plugin = module.parent.require('../Structures/Plugin');
-jQuery = global.jQuery = require("jquery");
-require("jquery-ui");
-const fuckJQuery = global.jQuery;
 
 // Utility functions stolen from SO
 function evalInContext(js, ctx) {
@@ -23,7 +20,7 @@ class Repl extends Plugin {
         this.code.id = "Repl-Code"
 
         // Context object to be passed around
-        this.ctx = {};
+        this.ctx = { log: this.log };
 
         this.sdiv.appendChild(this.code);
 
@@ -37,16 +34,83 @@ class Repl extends Plugin {
             }
         }
 
+        document.body.appendChild(this.div);
+
         this.log("REPL Elements created!");
 
-        document.body.appendChild(this.div);
-        fuckJQuery(document).ready(function(){
-            fuckJQuery(function() {
-                fuckJQuery("#Repl-Div").draggable();
-            })
+        this.registerCommand({
+            name: 'hide',
+            info: 'hide the REPL',
+            func: this.hiderepl.bind(this)
         })
+        this.log("added //hide");
 
-        this.log("REPL added!")
+        this.registerCommand({
+            name: 'show',
+            info: 'show the REPL',
+            func: this.showrepl.bind(this)
+        })
+        this.log("added //show");
+
+        /* BEGIN DRAGGABLE CODE */
+        this.el_y = 0;
+        this.el_x = 0;
+        this.y = 0;
+        this.x = 0;
+        this.selected = null;
+        this.hidden = false;
+
+        this.div.onmousedown = this.select.bind(this);
+        this.log("added onmousedown");
+
+
+        document.onmousemove = this.drag.bind(this);
+        this.log("added onmousemove");
+
+        document.onmouseup = this.unselect.bind(this);
+        this.log("added onmouseup");
+
+        this.log("REPL added!");
+    }
+
+    select(el) {
+        el = el.toElement;
+        while (el.parentElement.localName != "body")
+            el = el.parentElement;
+        this.selected = el;
+        this.el_y = this.y - el.offsetTop;
+        this.el_x = this.x - el.offsetLeft;
+    }
+
+    drag(e) {
+        this.y = document.all ? window.event.clientY : e.pageY;
+        this.x = document.all ? window.event.clientX : e.pageX;
+        if (this.selected != null) {
+            // Apparently this.selected is undefined here?
+            this.selected.style.left = this.x - this.el_x + "px";
+            this.selected.style.top = this.y - this.el_y + "px";
+        }
+    }
+
+    unselect() {
+        this.selected = null;
+    }
+
+    /* END DRAGGABLE CODE */
+
+
+    hiderepl() {
+        if (!this.hidden) {
+            document.body.removeChild(this.div);
+            this.hidden = true;
+        }
+    }
+
+    showrepl() {
+        if (this.hidden) {
+            document.body.appendChild(this.div);
+            this.hidden = false;
+        }
     }
 
     runCode() {
@@ -58,7 +122,7 @@ class Repl extends Plugin {
             // Eval, on error, res = error
             // `res` is the latest eval result
             this.ctx.res = evalInContext(evalText, this.ctx);
-        } catch(e) {
+        } catch (e) {
             this.ctx.res = e;
         }
 
@@ -68,8 +132,11 @@ class Repl extends Plugin {
         this.log(evalText + " -> " + this.code.innerHTML);
     }
 
-    unload(){
-
+    unload() {
+        if (!this.hidden) {
+            document.body.removeChild(this.div);
+        }
+        this.div = null;
     }
 };
 
