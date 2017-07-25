@@ -1,4 +1,5 @@
 const Plugin = module.parent.require('../Structures/Plugin');
+const settingsTab = require('./settingsTab');
 
 /**
  * A sample plugin
@@ -38,6 +39,9 @@ class SamplePlugin extends Plugin {
                 // Please refrain from using `DI.Helpers.sendDI(message, sanitize)`. Thanks.
             }
         });
+
+        // Example settings tab registration
+        this.registerSettingsTab('Sample Settings', SettingsSamplePlugin);
     }
 
     // This is what the config file will contain when it gets generated (first use)
@@ -55,5 +59,53 @@ class SamplePlugin extends Plugin {
         this.log('Goodbye, world!');
     }
 }
+
+const e = window.DI.React.createElement;
+const { SettingsExpandableSection, SettingsDivider, SettingsOptionTextbox, SettingsOptionToggle,
+    SettingsDescription } = window.DI.require('./Structures/Components');
+
+class SettingsSamplePlugin extends window.DI.React.Component {
+    render() {
+        return e('div', {},
+            e(SettingsDescription, {
+                text: 'This is an example settings page, constructed with React!'
+            }),
+            e(SettingsOptionTextbox, {
+                title: 'Example Textbox',
+                description: 'This is an example textbox!',
+                // lsKey refers to the localStorage key to store in
+                lsKey: 'SamplePlugin',
+                // lsNode refers to the property of the parsed localStorage value to store in
+                lsNode: 'exampleTextbox',
+                // This is the default value
+                defaultValue: 'value',
+                // For example, this would parse to `DI-DiscordInjections: {"exampleTextbox": "value"}`
+                // Reset adds a button to reset the value to the default
+                reset: true,
+                // Apply adds a button to explicitly set the new value
+                apply: true,
+                // onApply is a function used for any external logic
+                onApply: () => console.log('Example Textbox was applied!')
+            }),
+            // A basic divider
+            e(SettingsDivider),
+            e(SettingsOptionToggle, {
+                title: 'Example Toggle Switch',
+                lsKey: 'SamplePlugin',
+                lsNode: 'exampleToggle',
+                defaultValue: false
+            }),
+            e(SettingsDivider),
+            e(SettingsExpandableSection, {
+                title: 'Expandable Section',
+                // An array of components to put in the section
+                components: [
+                    e(SettingsDescription, { text: 'This is an expandable section to put things into!' })
+                ]
+            })
+        );
+    }
+}
+
 
 module.exports = SamplePlugin;
