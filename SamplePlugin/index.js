@@ -72,13 +72,13 @@ class SettingsSamplePlugin extends window.DI.React.Component {
             e(SettingsOptionTextbox, {
                 title: 'Example Textbox',
                 description: 'This is an example textbox!',
-                // lsKey refers to the localStorage key to store in
-                lsKey: 'SamplePlugin',
+                // plugin refers to the plugin that the settings option belongs to
+                plugin: this.props.plugin,
                 // lsNode refers to the property of the parsed localStorage value to store in
                 lsNode: 'exampleTextbox',
                 // This is the default value
                 defaultValue: 'value',
-                // For example, this would parse to `DI-DiscordInjections: {"exampleTextbox": "value"}`
+                // For example, this would parse to `DI-SamplePlugin: {"exampleTextbox": "value"}`
                 // Reset adds a button to reset the value to the default
                 reset: true,
                 // Apply adds a button to explicitly set the new value
@@ -90,7 +90,7 @@ class SettingsSamplePlugin extends window.DI.React.Component {
             e(SettingsDivider),
             e(SettingsOptionToggle, {
                 title: 'Example Toggle Switch',
-                lsKey: 'SamplePlugin',
+                plugin: this.props.plugin,
                 lsNode: 'exampleToggle',
                 defaultValue: false
             }),
