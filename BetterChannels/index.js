@@ -4,14 +4,18 @@ class BetterChannels extends Plugin {
     constructor(...args) {
         super(...args);
         
-        this.interval = setInterval(this.tickChannels.bind(this), 1000);
+        this.mo = new MutationObserver(this.tickChannels.bind(this));
+        this.mo.observe(document.querySelector(".channels-wrap"), { childList: true, subtree: true });
     }
 
     tickChannels(){
+        this.mo.disconnect(); // Prevent loop
+        
         let c_channels = document.querySelectorAll(".channel-margin-left");
         let c_headers = document.querySelectorAll(".channel-header");
         for(let i = 0; i < c_channels.length; i++){
-            c_channels[i].className = c_channels[i].className.replace(" channel-margin-left", "");
+            c_channels[i].className = c_channels[i].classList.remove("channel-margin-left");
+            c_channels[i].querySelector("div[class*='name']").innerHTML = c_channels[i].dataset.name
         }
         for(let i = 0; i < c_headers.length; i++){
             c_headers[i].remove();
@@ -23,10 +27,10 @@ class BetterChannels extends Plugin {
             let channel_category_c = false;
             for(let i = 0; i < channels.length; i++){
                 let channel = channels[i];
-                let channel_name = channel.querySelector("div").parentNode.parentNode.parentNode.getAttribute("data-name");
-                if(channel_name === null){
+                let channel_name = channel.querySelector("div").parentNode.parentNode.parentNode.dataset.name;
+                if(channel_name === null || channel_name === undefined){
                     channel_name = channel.querySelector("div + div").innerHTML;
-                    channel.querySelector("div").parentNode.parentNode.parentNode.setAttribute("data-name", channel_name);
+                    channel.querySelector("div").parentNode.parentNode.parentNode.dataset.name = channel_name;
                 }
                 
                 let channel_name_s = channel_name.split("-");
@@ -56,7 +60,7 @@ class BetterChannels extends Plugin {
                             
                             channel_container.parentNode.insertBefore(header, channel_container.previousSibling);
                         }else{
-                            channel_container.className += " channel-margin-left";
+                            channel_container.classList.add("channel-margin-left");
                             channel.querySelector("div + div").innerHTML = channel.querySelector("div + div").innerHTML.replace(channel_prefix + "-", "");
                         }
                     }
@@ -66,10 +70,12 @@ class BetterChannels extends Plugin {
                 }
             } 
         }
+        
+        this.mo.observe(document.querySelector(".channels-wrap"), { childList: true, subtree: true });
     }
     
     unload() {
-        clearInterval(this.interval);
+        this.mo.disconnect();
     }
 }
 
