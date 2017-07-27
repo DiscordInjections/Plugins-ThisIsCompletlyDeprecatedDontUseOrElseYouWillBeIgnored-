@@ -1,5 +1,4 @@
 const Plugin = module.parent.require('../Structures/Plugin');
-const settingsTab = require('./settingsTab');
 
 /**
  * A sample plugin
