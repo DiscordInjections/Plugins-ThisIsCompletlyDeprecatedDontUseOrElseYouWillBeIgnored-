@@ -1,0 +1,14 @@
+{
+  "name": "BFRedux",
+  "version": "2.0.0",
+  "description": "Lets you format your messages with buttons and adds more formatting options.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Snazzah, Jiiks",
+  "license": "MIT",
+  "dependencies": {
+    "jquery": "^3.2.1"
+  }
+}
