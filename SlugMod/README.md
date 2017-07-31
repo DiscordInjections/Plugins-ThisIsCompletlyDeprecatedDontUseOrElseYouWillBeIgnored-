@@ -1,5 +1,7 @@
 # SlugMod
 
+## This plugin is now depricated now that DiscordInjections serves a build-in commands system.
+
 You should place this file in the `Plugins` folder of the DiscordInjections project.
 
 This requires JQuery and the `fuzzy` NPM module.
