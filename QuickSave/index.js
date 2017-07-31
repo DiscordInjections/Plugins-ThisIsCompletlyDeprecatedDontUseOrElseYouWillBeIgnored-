@@ -112,6 +112,26 @@ class QuickSave extends Plugin {
                     }
                 });
         });
+        $(".attachment-image").each(function() {
+            if($(this).children(".quicksave-icon-btn")[0] !== undefined) return;
+            $("<div class='quicksave-icon-btn'></div>")
+                .insertBefore($(this.childNodes[0]))
+                .on("click", function() {
+                    if(!$(this).hasClass("downloading") && !$(this).hasClass("finished")) {
+                        self.saveFromIcon($(this));
+                    }
+                });
+        });
+        $(".attachment").each(function() {
+            if($(this).children(".quicksave-icon-btn")[0] !== undefined) return;
+            $("<div class='quicksave-icon-btn qs-attachment'></div>")
+                .insertAfter($(this).children(".attachment-inner"))
+                .on("click", function() {
+                    if(!$(this).hasClass("downloading") && !$(this).hasClass("finished")) {
+                        self.saveFromAttachment($(this));
+                    }
+                });
+        });
     }
 
     accessSync(dir) {
@@ -171,6 +191,86 @@ class QuickSave extends Plugin {
         var settings = this.lsSettings;
         var dir = settings.directory;
         var url = $sender.siblings("img").attr("href");
+        var net = (url.split('//')[0]=='https:') ? require('https') : require('http');
+
+        var namemethod = this.namingMethods[settings.namingmethod] || this.namingMethods.original;
+        var filename = namemethod(this, settings, url, dir);
+
+        if(filename == null){
+            this.toast('Error while trying to find a free filename! Check console for more details.');
+            return;
+        }
+
+        var dest = dir+(dir.endsWith("\\")?"":"\\")+filename;
+        self.log("Quicksaving", url, '-->', dest);
+
+        var file = fs.createWriteStream(dest);
+        
+        
+        $sender.removeClass("finished").addClass("downloading");
+        net.get(url, function(response) {
+            response.pipe(file);
+            file.on('finish', function() {
+                self.log("Finished");
+                file.close();
+                $sender.removeClass("downloading").addClass("finished");
+                self.toast(`Saved as ${dest.split("/").reverse()[0].split("\\").reverse()[0]}`);
+            });
+        }).on('error', function(err) {
+            fs.unlink(dest)
+            self.toast('Failed to download file '+url+'\nError: '+err.message);
+            self.error(err.message);
+            
+            file.close();
+            $sender.removeClass("downloading");
+        });
+    }
+
+    saveFromIcon($sender) {
+        let self = this;
+        var settings = this.lsSettings;
+        var dir = settings.directory;
+        var url = $sender.siblings("a").attr("href");
+        var net = (url.split('//')[0]=='https:') ? require('https') : require('http');
+
+        var namemethod = this.namingMethods[settings.namingmethod] || this.namingMethods.original;
+        var filename = namemethod(this, settings, url, dir);
+
+        if(filename == null){
+            this.toast('Error while trying to find a free filename! Check console for more details.');
+            return;
+        }
+
+        var dest = dir+(dir.endsWith("\\")?"":"\\")+filename;
+        self.log("Quicksaving", url, '-->', dest);
+
+        var file = fs.createWriteStream(dest);
+        
+        
+        $sender.removeClass("finished").addClass("downloading");
+        net.get(url, function(response) {
+            response.pipe(file);
+            file.on('finish', function() {
+                self.log("Finished");
+                file.close();
+                $sender.removeClass("downloading").addClass("finished");
+                self.toast(`Saved as ${dest.split("/").reverse()[0].split("\\").reverse()[0]}`);
+            });
+        }).on('error', function(err) {
+            fs.unlink(dest)
+            self.toast('Failed to download file '+url+'\nError: '+err.message);
+            self.error(err.message);
+            
+            file.close();
+            $sender.removeClass("downloading");
+        });
+    }
+
+    saveFromAttachment($sender) {
+        let self = this;
+        var settings = this.lsSettings;
+        var dir = settings.directory;
+        var url = $sender.siblings(".attachment-inner").children("a").attr("href");
         var net = (url.split('//')[0]=='https:') ? require('https') : require('http');
 
         var namemethod = this.namingMethods[settings.namingmethod] || this.namingMethods.original;

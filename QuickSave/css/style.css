@@ -17,6 +17,7 @@
 .embed .quicksave-icon-btn {
 	margin-bottom: -36px;
 }
+.attachment-image .quicksave-icon-btn{margin-top:5px;}
 .quicksave-icon-btn::before
 {
     position: absolute;
@@ -28,9 +29,16 @@
 }
 :-webkit-any(.embed, .attachment-image):hover .quicksave-icon-btn,
 .quicksave-icon-btn.downloading,
-.quicksave-icon-btn.finished
+.quicksave-icon-btn.finished,
+.quicksave-icon-btn.qs-attachment
 {
     opacity: .7;
+}
+.quicksave-icon-btn.qs-attachment{
+    margin: 7.5px 7px 0;
+}
+.quicksave-icon-btn.qs-attachment:hover{
+    opacity: 1;
 }
 :-webkit-any(.embed, .attachment-image):hover .quicksave-icon-btn:hover
 {
@@ -75,3 +83,4 @@
 .toast-show{
     transform: translateX(-50%) translateY(-15px);
 }
+.quicksave-icon-btn.qs-attachment+.msp-attachment{margin-left:0px}
