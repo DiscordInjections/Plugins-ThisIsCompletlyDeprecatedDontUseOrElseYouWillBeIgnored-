@@ -115,7 +115,7 @@ class LineStickers extends Plugin {
 
     sendEmote(e){
         if ($(e).parent().parent().attr("class") === 'line-pack-stickers') {
-            var emote = $(e).attr("src");
+            var emote = e.style.backgroundImage.replace(/url\("(.+)"\)/, "$1");
         } else {
             var emote = $(e).attr("title");
         }

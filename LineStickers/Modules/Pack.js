@@ -12,11 +12,11 @@ class Pack {
         let self = this;
         for (var i = 0; i < pack['length']; ++i) {
             stickers.push($(`<div class="emote-container"></div>`).append(
-                $(`<img class="emote-icon" src="https://api.snazzah-is.cool/line-sticker/${Number(stickerid) + i}">`)
-                    .mouseenter((e) => this.plugin.menu.previewShow(e.target.src))
+                $(`<div class="emote-icon" style="background-image: url(https://api.snazzah-is.cool/line-sticker/${Number(stickerid) + i})">`)
+                    .mouseenter((e) => this.plugin.menu.previewShow(e.target.style.backgroundImage.replace(/url\("(.+)"\)/, "$1")))
                     .mouseleave(() => this.plugin.menu.previewHide())
                     .on("click", function() {
-                        self.plugin.sendEmote(this)
+                        self.plugin.sendEmote(this);
                     })
             ));
         };

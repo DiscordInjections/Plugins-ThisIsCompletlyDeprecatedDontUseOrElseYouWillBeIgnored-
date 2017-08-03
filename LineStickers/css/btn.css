@@ -28,5 +28,5 @@
     opacity: 1;
 }
 .textAreaEnabled-2vOfh8{
-    padding-right: 68px;
+    padding-right: var(--bd-les-textarea-pad);
 }
