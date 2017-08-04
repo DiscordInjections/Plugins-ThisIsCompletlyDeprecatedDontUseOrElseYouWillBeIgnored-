@@ -1,0 +1,38 @@
+.telegram-emotes-btn{
+    position: absolute;
+    top: 11.5px;
+    right: 40px;
+    max-height: 50px;
+    cursor: pointer;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+}
+.telegram-emotes-btn>div{
+    background-size: contain;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    /*background-image: url(https://i-need.discord.cards/69a326.png);*/
+    width: 22px;
+    height: 22px;
+    display: block;
+    transition: transform 0.1s ease-in-out, opacity 0.1s ease-in-out, filter 0.1s ease-in-out;
+    filter: grayscale(100%);
+    opacity: 0.5;
+}
+.telegram-emotes-btn>div:hover,.telegram-emotes-btn>div.hovered{
+    transform: scale(1.275);
+    filter: none;
+    opacity: 1;
+}
+.telegram-emotes-btn+.line-emotes-btn{
+    right: 70px;
+}
+.line-emotes-btn+.telegram-emotes-btn{
+    right: 70px;
+}
+.textAreaEnabled-2vOfh8{
+    padding-right: 68px;
+}
