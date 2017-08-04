@@ -10,6 +10,6 @@ You must install the following NPM packages:
 
 ## Usage
 First, you must edit the configuration file.
-Then you need to create an SSH connection by using the `ssh` command
+Then you need to create a SSH connection by using the `ssh` command
 
 To execute a SSH command use the `exec <command>` command
