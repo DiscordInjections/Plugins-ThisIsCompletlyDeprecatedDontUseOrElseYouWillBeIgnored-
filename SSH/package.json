@@ -1,0 +1,11 @@
+{
+  "name": "ssh-discordinjections",
+  "version": "1.0.0",
+  "description": "Adds SSH commands to Discord!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "kev",
+  "license": "ISC"
+}
