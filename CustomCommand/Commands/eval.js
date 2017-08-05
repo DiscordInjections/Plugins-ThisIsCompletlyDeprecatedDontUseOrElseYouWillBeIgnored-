@@ -11,7 +11,7 @@ class EvalCommand extends Command {
 
   execute(args) {
     try {
-      return `Input\n\`\`\`js\n${args.slice(1).join(' ')}\n\`\`\`\nOutput\n\`\`\`js\n${eval(args.slice(1).join(' '))}\n\`\`\``;
+      return `Input\n\`\`\`js\n${args.join(' ')}\n\`\`\`\nOutput\n\`\`\`js\n${eval(args.join(' '))}\n\`\`\``;
     } catch (err) {
       return `Error\n\`\`\`js\n${err.stack}\`\`\``;
     }
