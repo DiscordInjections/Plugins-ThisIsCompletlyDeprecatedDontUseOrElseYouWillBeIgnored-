@@ -31,6 +31,17 @@ class Storage {
     }
 
     getSet(name) { return this.sets.find(p => p.name === name) }
+    indexOf(name) { 
+        var sets = this.sets;
+        let index = -1;
+        for (var pack = 0; pack < sets.length; ++pack) {
+            if (sets[pack].name === name) {
+                index = pack;
+                break;
+            }
+        }
+        return index;
+    }
     pushSet(set) {
         if(this.getSet(set.name)){
             this.plugin.log('Set is already in storage, aborting')

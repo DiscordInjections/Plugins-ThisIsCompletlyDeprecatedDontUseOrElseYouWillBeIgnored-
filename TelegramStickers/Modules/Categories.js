@@ -30,17 +30,17 @@ class Categories {
                     $('#telegram-status').removeClass('bad').text('Requesting...');
                     var title = $('#line-add-title').val().trim();
                     superagent.get(`https://api.snazzah-is.cool/telegram/${title.split("/")[0]}`).then(res => {
-                        this.plugin.log(res);
+                        this.plugin.log(res.body);
                         if(!$('#bda-qem-telegram-container')[0]) return;
-                        this.plugin.log("pass");
                         this.plugin.pack.appendSet(res.body);
                         $('#line-add-title').val('');
                     }).catch(e => {
-                        this.plugin.error(e);
                         if(!$('#bda-qem-telegram-container')[0]) return;
-                        this.plugin.log("pass");
-                        if(e.response && e.response.statusCode === 404) $('#telegram-status').addClass('bad').html('Not found - <a onclick="window.open(\'https://gist.github.com/SnazzyPine25/a3388954d5e386a35ae39d9d00962adb\')">Add a sticker set</a>');
-                            else $('#telegram-status').addClass('bad').text('Invalid request');
+                        if(e.response && e.response.statusCode === 404) $('#telegram-status').addClass('bad').html('Not found - <a onclick="window.open(\'https://gist.github.com/SnazzyPine25/a3388954d5e386a35ae39d9d00962adb\')">Publish a sticker set</a>');
+                            else {
+                                $('#telegram-status').addClass('bad').text('Invalid request, check console');
+                                this.plugin.error(e);
+                        }
                     });
                 })
             ]),

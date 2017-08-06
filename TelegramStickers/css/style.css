@@ -104,19 +104,19 @@
   .theme-dark #bda-qem button {
     box-shadow: #2b2b2b 1px 0 0 0; }
 .theme-dark #bda-qem-telegram-container {
-  background-color: #36393E;
+  background-color: #353535;
   border-color: #2b2b2b;
   color: #777; }
   .theme-dark #bda-qem-telegram-container .scroller::-webkit-scrollbar,
   .theme-dark #bda-qem-telegram-container .scroller::-webkit-scrollbar-track,
   .theme-dark #bda-qem-telegram-container .scroller::-webkit-scrollbar-track-piece {
-    background-color: #42464D;
-    border-color: #42464D; }
+    background-color: #303030;
+    border-color: #303030; }
   .theme-dark #bda-qem-telegram-container .scroller::-webkit-scrollbar-thumb {
     border-color: #202020;
     background-color: #202020; }
   .theme-dark #bda-qem-telegram-container .preview-container .preview-wrapper {
-    background-color: #36393E;
+    background-color: #353535;
     border-color: #2b2b2b; }
   .theme-dark #bda-qem-telegram-container .confirm {
     background-color: rgba(35, 35, 35, 0.8); }

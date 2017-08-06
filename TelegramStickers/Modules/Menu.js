@@ -11,7 +11,8 @@ class Menu {
         const boxLeft = btnBCR.left-318;
         $(`<div class="popout popout-top-right no-arrow no-shadow" style="z-index: 2000; visibility: visible; left: ${boxLeft}px; top: ${boxTop}px;"></div>`)
             .appendTo($('[data-reactroot]>[class="theme-dark"],[data-reactroot]>[class="theme-light"]').first())
-            .append(this.build())
+            .append(this.build());
+        this.plugin.pack.checkSets();
     }
 
     build(){

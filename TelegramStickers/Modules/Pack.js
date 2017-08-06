@@ -1,4 +1,5 @@
 const $ = require('jquery');
+const superagent = require('superagent');
 
 class Pack {
     constructor(plugin) {
@@ -70,15 +71,48 @@ class Pack {
     }
 
     appendSet(set){
-        if (!this.plugin.storage.getSet(set.name)) {
+        if (!this.checking) {
+            $('#telegram-status').text('Cannot add set, checking in progress');
+        } else if (!this.plugin.storage.getSet(set.name)) {
             this.plugin.storage.pushSet(set);
             this.plugin.menu.rebuild();
             this.plugin.menu.appendSet(set.name);
             $('#telegram-status').text('');
         } else {
-            $('#telegram-status').text('Pack already exists in storage');
+            let index = this.plugin.storage.indexOf(set.name);
+            let sets = this.plugin.storage.sets;
+            this.plugin.storage.sets[index] = set;
+            this.plugin.storage.sets = sets;
+            this.plugin.menu.rebuild();
+            $('#telegram-status').text('');
         }
         return true;
+    }
+
+    checkSets(set){
+        let sets = this.plugin.storage.sets;
+        let lastSet = sets[sets.length-1];
+        this.checking = true;
+        let checked = 0;
+        let doneCheck = () => {
+            this.plugin.storage.sets = sets;
+            this.plugin.menu.rebuild();
+            this.checking = false;
+        };
+        for (var i in sets) {
+            let set = sets[i];
+            this.plugin.log("checking set", set)
+            superagent.get(`https://api.snazzah-is.cool/telegram/${set.name}/${set.files[0]}`).then(() => {
+                if(lastSet.name === set.name) doneCheck();
+                this.plugin.log("checked set", set.name);
+            }).catch(e => {
+                this.plugin.log("caught error while checking set", set.name, e);
+                superagent.get(`https://api.snazzah-is.cool/telegram/${set.name}`).then(res => {
+                    this.plugin.storage.sets[i] = res.body;
+                    if(lastSet.name === set.name) doneCheck();
+                });
+            });
+        };
     }
 }
 
