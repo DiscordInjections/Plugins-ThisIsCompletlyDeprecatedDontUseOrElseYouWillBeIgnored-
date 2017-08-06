@@ -71,7 +71,7 @@ class Pack {
     }
 
     appendSet(set){
-        if (!this.checking) {
+        if (this.checking) {
             $('#telegram-status').text('Cannot add set, checking in progress');
         } else if (!this.plugin.storage.getSet(set.name)) {
             this.plugin.storage.pushSet(set);
