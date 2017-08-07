@@ -51,7 +51,7 @@ class QuickSave extends Plugin {
                 let num = 2;
                 let loops = 2048;
                 const dest = _path.join(dir, filename);
-                while(plugin.accessSync(dest) && loops--)
+                while(plugin.accessSync(dest) && loops--) {
                     filename = filename_original + ` (${num})` + filetype_original;
                     num++;
                 }
