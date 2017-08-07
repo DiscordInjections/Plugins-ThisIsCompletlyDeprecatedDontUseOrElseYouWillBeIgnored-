@@ -28,7 +28,8 @@ class QuickSave extends Plugin {
                 let filetype =  '.'+url.split('.').slice(-1)[0].split('?')[0];
 
                 let loops = 50;
-                while(plugin.accessSync(dir+(dir.endsWith("\\")?"":"\\")+filename+filetype) && loops--)
+                const dest = _path.join(dir, filename, filetype);
+                while(plugin.accessSync(dest) && loops--)
                     filename = plugin.randomFilename64(parseInt(settings.fnLength));
 
                 if(loops == -1){
@@ -49,7 +50,8 @@ class QuickSave extends Plugin {
 
                 let num = 2;
                 let loops = 2048;
-                while( plugin.accessSync(dir+(dir.endsWith("\\")?"":"\\")+filename) && loops-- ){
+                const dest = _path.join(dir, filename);
+                while(plugin.accessSync(dest) && loops--)
                     filename = filename_original + ` (${num})` + filetype_original;
                     num++;
                 }
@@ -281,7 +283,7 @@ class QuickSave extends Plugin {
             return;
         }
 
-        var dest = dir+(dir.endsWith("\\")?"":"\\")+filename;
+        const dest = _path.join(dir, filename);
         self.log("Quicksaving", url, '-->', dest);
 
         var file = fs.createWriteStream(dest);
