@@ -91,17 +91,20 @@ class Pack {
 
     checkSets(set){
         let sets = this.plugin.storage.sets;
+        if(sets.length === 0) return;
         let lastSet = sets[sets.length-1];
         this.checking = true;
         let checked = 0;
+        console.log("STARTING CHECK", lastSet);
         let doneCheck = () => {
             this.plugin.storage.sets = sets;
             this.plugin.menu.rebuild();
             this.checking = false;
+            this.plugin.log("FINISHING CHECK");
         };
         for (var i in sets) {
             let set = sets[i];
-            this.plugin.log("checking set", set)
+            this.plugin.log("checking set", set);
             superagent.get(`https://api.snazzah-is.cool/telegram/${set.name}/${set.files[0]}`).then(() => {
                 if(lastSet.name === set.name) doneCheck();
                 this.plugin.log("checked set", set.name);
