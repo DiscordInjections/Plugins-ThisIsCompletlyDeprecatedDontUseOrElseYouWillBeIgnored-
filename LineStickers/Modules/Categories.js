@@ -67,7 +67,7 @@ class Categories {
                         var title = $('#line-add-title').val().trim();
                         var length = $('#line-add-length').val().trim();
                         var id = $('#line-add-id').val().trim();
-                        this.plugin.pack.appendPack(title, id, length);
+                        this.plugin.lspack.appendPack(title, id, length);
                         $('#line-add-title').val('');
                         $('#line-add-length').val(40);
                         $('#line-add-id').val('');

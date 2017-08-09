@@ -12,7 +12,7 @@ class Menu {
         $(`<div class="popout popout-top-right no-arrow no-shadow" style="z-index: 2000; visibility: visible; left: ${boxLeft}px; top: ${boxTop}px;"></div>`)
             .appendTo($('[data-reactroot]>[class="theme-dark"],[data-reactroot]>[class="theme-light"]').first())
             .append(this.build());
-        this.plugin.pack.checkSets();
+        this.plugin.tspack.checkSets();
     }
 
     build(){
@@ -21,7 +21,7 @@ class Menu {
                 this.confirmBuild(),
                 $(`<div class="scroller"></div>`).append(
                     $(`<div class="emote-menu-inner"></div>`).append(
-                        this.plugin.storage.sets.map(e=>this.plugin.pack.wrapSet(e.name))
+                        this.plugin.storage.sets.map(e=>this.plugin.tspack.wrapSet(e.name))
                     )
                 )
             ]),
@@ -33,7 +33,7 @@ class Menu {
     appendSet(name){
         if (!this.open) return;
         this.plugin.log('Appending a pack to the current container');
-        $('#bda-qem-telegram-container .emote-menu-inner').append(this.plugin.pack.wrapSet(name));
+        $('#bda-qem-telegram-container .emote-menu-inner').append(this.plugin.tspack.wrapSet(name));
         var set = this.plugin.storage.getSet(name);
         var name = set.name;
         $('#bda-qem-telegram-container .categories-wrapper').append(`<div class="item" data-name="${name}" onclick='document.querySelector(\`#bda-qem-telegram-container .line-pack[data-name="${name}"]\`).scrollIntoView()' style='background-image: url("https://api.snazzah-is.cool/telegram/${name}/${set.files[0]}")'></div>`);
@@ -54,7 +54,7 @@ class Menu {
     }
 
     rebuild(){
-        return $(`.emote-menu-inner`).empty().append(this.plugin.storage.sets.map(e=>this.plugin.pack.wrapSet(e.name)));
+        return $(`.emote-menu-inner`).empty().append(this.plugin.storage.sets.map(e=>this.plugin.tspack.wrapSet(e.name)));
     }
 
     confirmBuild(){

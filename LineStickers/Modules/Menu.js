@@ -20,7 +20,7 @@ class Menu {
                 this.confirmBuild(),
                 $(`<div class="scroller"></div>`).append(
                     $(`<div class="emote-menu-inner"></div>`).append(
-                        this.plugin.storage.stickers.map(e=>this.plugin.pack.wrapPack(e.starting_id))
+                        this.plugin.storage.stickers.map(e=>this.plugin.lspack.wrapPack(e.starting_id))
                     )
                 )
             ]),
@@ -32,7 +32,7 @@ class Menu {
     appendPack(id){
         if (!this.open) return;
         this.plugin.log('Appending a pack to the current container');
-        $('#bda-qem-line-container .emote-menu-inner').append(this.plugin.pack.wrapPack(id));
+        $('#bda-qem-line-container .emote-menu-inner').append(this.plugin.lspack.wrapPack(id));
         var pack = this.plugin.storage.getPack(id);
         var id = pack['starting_id'];
         $('#bda-qem-line-container .categories-wrapper').append(`<div class="item" data-id="${id}" onclick='document.querySelector(\`#bda-qem-line-container .line-pack[data-id="${id}"]\`).scrollIntoView()' style='background-image: url("https://api.snazzah-is.cool/line-sticker/${id}")'></div>`);
@@ -53,7 +53,7 @@ class Menu {
     }
 
     rebuild(){
-        return $(`.emote-menu-inner`).empty().append(this.plugin.storage.stickers.map(e=>this.plugin.pack.wrapPack(e.starting_id)));
+        return $(`.emote-menu-inner`).empty().append(this.plugin.storage.stickers.map(e=>this.plugin.lspack.wrapPack(e.starting_id)));
     }
 
     confirmBuild(){

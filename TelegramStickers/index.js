@@ -37,7 +37,7 @@ class TelegramStickers extends Plugin {
         window.DI.DISettings.registerSettingsTab(this, 'Telegram Stickers', TelegramStickersSettings);
         this.storage = new Storage(this, "DI-TelegramStickers");
         this.storage.data; // Spawn new data if there is none
-        this.pack = new Pack(this);
+        this.tspack = new Pack(this);
         this.categories = new Categories(this);
         this.menu = new Menu(this);
         this.observer = new Observer(this);

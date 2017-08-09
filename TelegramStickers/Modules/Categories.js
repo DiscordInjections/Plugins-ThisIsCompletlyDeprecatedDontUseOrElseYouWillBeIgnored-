@@ -32,7 +32,7 @@ class Categories {
                     superagent.get(`https://api.snazzah-is.cool/telegram/${title.split("/")[0]}`).then(res => {
                         this.plugin.log(res.body);
                         if(!$('#bda-qem-telegram-container')[0]) return;
-                        this.plugin.pack.appendSet(res.body);
+                        this.plugin.tspack.appendSet(res.body);
                         $('#line-add-title').val('');
                     }).catch(e => {
                         if(!$('#bda-qem-telegram-container')[0]) return;

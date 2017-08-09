@@ -37,7 +37,7 @@ class LineStickers extends Plugin {
         window.DI.DISettings.registerSettingsTab(this, 'Line Stickers', LineStickersSettings);
         this.storage = new Storage(this, "DI-LineStickers");
         this.storage.data; // Spawn new data if there is none
-        this.pack = new Pack(this);
+        this.lspack = new Pack(this);
         this.categories = new Categories(this);
         this.menu = new Menu(this);
         this.observer = new Observer(this);
