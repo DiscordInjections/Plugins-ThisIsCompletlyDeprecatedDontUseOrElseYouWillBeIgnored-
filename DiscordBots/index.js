@@ -399,7 +399,7 @@ class DiscordBotsSettings extends window.DI.React.Component {
                 defaultValue: false
             }),
             e(SettingsOptionDescription, {
-                text: '<a href="//discordbots.org" target="_blank">DiscordBots.org</a> uses a similar API as <a href="//bots.discord.pw" target="_blank">bots.discord.pw</a> but adds upvotes, badges for certified developers and bots and does not require a token.'
+                text: 'DiscordBots.org uses a similar API as bots.discord.pw but adds upvotes, badges for certified developers and bots and does not require a token.'
             }),
             e(SettingsDivider),
             e(SettingsOptionTextbox, {
