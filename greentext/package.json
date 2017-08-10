@@ -1,0 +1,11 @@
+{
+  "name": "greentext",
+  "version": "0.2.0",
+  "description": "Make lines that start with \">\" into greentext (includes orange text)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Snazzah, kaloncpu57",
+  "license": "MIT"
+}
