@@ -1,6 +1,7 @@
 const Plugin = module.parent.require('../Structures/Plugin');
 const $ = require("jquery");
-const { SettingsDivider } = window.DI.require('./Structures/Components');
+const e = window.DI.React.createElement;
+const { SettingsDivider, SettingsOptionToggle, SettingsOptionTitle, SettingsOptionTextbox, SettingsOptionDescription, SettingsOptionButton } = window.DI.require('./Structures/Components');
 
 class BFRedux extends Plugin {
     constructor(...args) {
@@ -22,17 +23,15 @@ class BFRedux extends Plugin {
                                 formatting: {fullWidthMap: true, reorderUpsidedown: true, startCaps: true},
                                 plugin: {hoverOpen: true, closeOnSend: true, chainFormats: true},
                                 style: {rightSide: true, opacity: 1, fontSize: "85%"}}
-        this.settings = {wrappers: {superscript: "^", smallcaps: "%", fullwidth: "##", upsidedown: "&&", varied: "||"},
-                        formatting: {fullWidthMap: true, reorderUpsidedown: true, startCaps: true},
-                        plugin: {hoverOpen: true, closeOnSend: true, chainFormats: true},
-                        style: {rightSide: true, opacity: 1, fontSize: "85%"}}
+
+        if(Object.keys(this.settings).length === 0) this.settings = this.defaultSettings;
                         
         this.customWrappers = Object.keys(this.settings.wrappers);
 
         this.loadSettings();
         this.mo = new MutationObserver(this.init.bind(this));
         this.mo.observe(document.querySelector("[data-reactroot]"), { childList: true, subtree: true });
-        this.generateSettings();
+        window.DI.DISettings.registerSettingsTab(this, 'Better Formatting Redux', BFSettings);
     }
 
     init() {
@@ -73,9 +72,9 @@ class BFRedux extends Plugin {
     }
 
     updateStyle() {
-        this.updateSide()
-        this.updateOpacity()
-        this.updateFontSize()
+        this.updateSide();
+        this.updateOpacity();
+        this.updateFontSize();
     }
     
     updateSide() {
@@ -220,91 +219,146 @@ class BFRedux extends Plugin {
             })
         this.updateStyle()
     }
-    
-    generateSettings() {
-        // Scrapped since it's just pure HTML and can't be integrated into a settings tab.
-        
-        /*
-        if (this.hasUpdate) {
-            var header = $('<div class="formNotice-2tZsrh margin-bottom-20 padded cardWarning-31DHBH card-3DrRmC">').css("background", SettingField.getAccentColor()).css("border-color", "transparent")
-            var headerText = $('<div class="default-3bB32Y formText-1L-zZB formNoticeBody-1C0wup whiteText-32USMe modeDefault-389VjU primary-2giqSn">')
-            headerText.html("Update Available! Your version: " + this.getVersion() + " | Current version: " + this.remoteVersion + "<br>Get it on Zere's GitHub! http://bit.ly/ZerebosBD")
-            headerText.css("line-height", "150%")
-            headerText.appendTo(header)
-            header.appendTo(panel)
-        }*/
-        var bfr = this;
 
-        class BFSettings extends window.DI.React.Component {
-            render() {
-                var panel = $("<form>").addClass("form").css("width", "100%");
-                new ControlGroup("Wrapper Options", () => {bfr.saveSettings()}).appendTo(panel).append(
-                    new TextSetting("Superscript", "The wrapper for superscripted text.", bfr.settings.wrappers.superscript, bfr.defaultSettings.wrappers.superscript,
-                                    (text) => {bfr.settings.wrappers.superscript = text != "" ? text : bfr.defaultSettings.wrappers.superscript}),
-                    new TextSetting("Smallcaps", "The wrapper to make Smallcaps.", bfr.settings.wrappers.smallcaps, bfr.defaultSettings.wrappers.smallcaps,
-                                    (text) => {bfr.settings.wrappers.smallcaps = text != "" ? text : bfr.defaultSettings.wrappers.smallcaps}),
-                    new TextSetting("Full Width", "The wrapper for E X P A N D E D  T E X T.", bfr.settings.wrappers.fullwidth, bfr.defaultSettings.wrappers.fullwidth,
-                                    (text) => {bfr.settings.wrappers.fullwidth = text != "" ? text : bfr.defaultSettings.wrappers.fullwidth}),
-                    new TextSetting("Upsidedown", "The wrapper to flip the text upsidedown.", bfr.settings.wrappers.upsidedown, bfr.defaultSettings.wrappers.upsidedown,
-                                    (text) => {bfr.settings.wrappers.upsidedown = text != "" ? text : bfr.defaultSettings.wrappers.upsidedown}),
-                    new TextSetting("Varied Caps", "The wrapper to VaRy the capitalization.", bfr.settings.wrappers.varied, bfr.defaultSettings.wrappers.varied,
-                                    (text) => {bfr.settings.wrappers.varied = text != "" ? text : bfr.defaultSettings.wrappers.varied})
-                )
-                
-                new ControlGroup("Formatting Options", () => {bfr.saveSettings()}).appendTo(panel).append(
-                    new PillSetting("Fullwidth Style", "Which style of fullwidth formatting should be used.", "T H I S", "ｔｈｉｓ",
-                                        bfr.settings.formatting.fullWidthMap, (checked) => {bfr.settings.formatting.fullWidthMap = checked}), 
-                    new CheckboxSetting("Reorder Upsidedown Text", "Having bfr enabled reorders the upside down text to make it in-order.",
-                                        bfr.settings.formatting.reorderUpsidedown, (checked) => {bfr.settings.formatting.reorderUpsidedown = checked}),
-                    new CheckboxSetting("Start VaRiEd Caps With Capital", "Enabling bfr starts a varied text string with a capital.",
-                                        bfr.settings.formatting.startCaps, (checked) => {bfr.settings.formatting.startCaps = checked})
-                )
-                
-                new ControlGroup("Plugin Options", () => {bfr.saveSettings()}).appendTo(panel).append(
-                    new CheckboxSetting("Open On Hover", "Enabling bfr makes you able to open the menu just by hovering the arrow instead of clicking it.", bfr.settings.plugin.hoverOpen,
-                        (checked) => {
-                             bfr.settings.plugin.hoverOpen = checked;
-                             if (checked) {
-                                $(".bf-toolbar").removeClass('bf-visible')
-                                $(".bf-toolbar").addClass('bf-hover')
-                             }
-                             else {
-                                 $(".bf-toolbar").removeClass('bf-hover')
-                             }
-                        }
-                    ),
-                    new CheckboxSetting("Close On Send", "This option will close the toolbar when the message is sent when \"Open On Hover\" is disabled.",
-                                        bfr.settings.plugin.closeOnSend, (checked) => {bfr.settings.plugin.closeOnSend = checked;}),
-                    new PillSetting("Format Chaining", "Swaps priority of wrappers between inner first and outer first. Check the GitHub for more info.", "Inner", "Outer",
-                                        bfr.settings.plugin.chainFormats, (checked) => {bfr.settings.plugin.chainFormats = checked;})
-                )
-                
-                new ControlGroup("Style Options", () => {bfr.saveSettings()}).appendTo(panel).append(
-                    new PillSetting("Toolbar Location", "This option enables swapping toolbar from right side to left side.", "Left", "Right",
-                                    bfr.settings.style.rightSide, (checked) => {bfr.settings.style.rightSide = checked; bfr.updateSide();}),
-                    new SliderSetting("Opacity", "This allows the toolbar to be partially seethrough.", 0, 1, 0.01, bfr.settings.style.opacity, (val) => {bfr.settings.style.opacity = val; bfr.updateOpacity();}),
-                    new SliderSetting("Font Size", "Adjust the font size between 0 and 100%.", 0, 100, 1, bfr.settings.style.fontSize, (val) => {bfr.settings.style.fontSize = val+"%"; bfr.updateFontSize();}).setLabelUnit("%")
-                )
+    settingsChanged(){
+        let settings = this.settings;
+        settings.wrappers.superscript = settings.wrappers.superscript != "" ? settings.wrappers.superscript : this.defaultSettings.wrappers.superscript;
+        settings.wrappers.smallcaps = settings.wrappers.smallcaps != "" ? settings.wrappers.smallcaps : this.defaultSettings.wrappers.smallcaps;
+        settings.wrappers.fullwidth = settings.wrappers.fullwidth != "" ? settings.wrappers.fullwidth : this.defaultSettings.wrappers.fullwidth;
+        settings.wrappers.upsidedown = settings.wrappers.upsidedown != "" ? settings.wrappers.upsidedown : this.defaultSettings.wrappers.upsidedown;
+        settings.wrappers.varied = settings.wrappers.varied != "" ? settings.wrappers.varied : this.defaultSettings.wrappers.varied;
+        if (settings.plugin.hoverOpen) {
+            $(".bf-toolbar").removeClass('bf-visible');
+            $(".bf-toolbar").addClass('bf-hover');
+        } else $(".bf-toolbar").removeClass('bf-hover');
+        this.settings = settings;
+        this.updateStyle();
+    }
+}
 
-                var resetButton = $("<button>");
-                resetButton.on("click.BFRedux", function() {
-                    bfr.settings = bfr.defaultSettings;
-                    bfr.saveSettings();
-                    panel.empty()
-                    bfr.generateSettings(panel)
-                });
-                resetButton.text("Reset To Defaults");
-                resetButton.css("float", "right");
-                resetButton.attr("type","button")
-
-                panel.append(resetButton);
-
-                $(".ui-standard-sidebar-view .content-region .content-column.default .flex-vertical").append(panel[0]);
-                return window.DI.React.createElement('div', {}, window.DI.React.createElement(SettingsDivider));
-            }
-        }
-
-        //window.DI.DISettings.registerSettingsTab(this, 'Better Formatting Redux', BFSettings);
+class BFSettings extends window.DI.React.Component {
+    render() {
+        return e('div', {},
+            e(SettingsOptionTitle, { text: "Wrapper Options" }),
+            e(SettingsOptionTextbox, {
+                title: 'Superscript',
+                description: 'The wrapper for superscripted text.',
+                plugin: this.props.plugin,
+                lsNode: 'wrappers.superscript',
+                defaultValue: '^'
+            }),
+            e(SettingsDivider),
+            e(SettingsOptionTextbox, {
+                title: 'Smallcaps',
+                description: 'The wrapper to make Smallcaps.',
+                plugin: this.props.plugin,
+                lsNode: 'wrappers.smallcaps',
+                defaultValue: '%'
+            }),
+            e(SettingsDivider),
+            e(SettingsOptionTextbox, {
+                title: 'Full Width',
+                description: 'The wrapper for E X P A N D E D  T E X T.',
+                plugin: this.props.plugin,
+                lsNode: 'wrappers.fullwidth',
+                defaultValue: '##'
+            }),
+            e(SettingsDivider),
+            e(SettingsOptionTextbox, {
+                title: 'Upsidedown',
+                description: 'The wrapper to flip the text upsidedown.',
+                plugin: this.props.plugin,
+                lsNode: 'wrappers.upsidedown',
+                defaultValue: '&&'
+            }),
+            e(SettingsDivider),
+            e(SettingsOptionTextbox, {
+                title: 'Varied Caps',
+                description: 'The wrapper to VaRy the capitalization.',
+                plugin: this.props.plugin,
+                lsNode: 'wrappers.varied',
+                defaultValue: '||'
+            }),
+            e(SettingsDivider),
+            e(SettingsOptionTitle, { text: "Formatting Options" }),
+            e(SettingsOptionToggle, {
+                title: 'Fullwidth Style',
+                lsNode: 'formatting.fullWidthMap',
+                plugin: this.props.plugin,
+                defaultValue: true
+            }),
+            e(SettingsOptionDescription, {
+                text: 'Which style of fullwidth formatting should be used. T H I S <==> ｔｈｉｓ'
+            }),
+            e(SettingsDivider),
+            e(SettingsOptionToggle, {
+                title: 'Reorder Upsidedown Text',
+                lsNode: 'formatting.reorderUpsidedown',
+                plugin: this.props.plugin,
+                defaultValue: true
+            }),
+            e(SettingsOptionDescription, {
+                text: 'Having this enabled reorders the upside down text to make it in-order.'
+            }),
+            e(SettingsDivider),
+            e(SettingsOptionToggle, {
+                title: 'Start VaRiEd Caps With Capital',
+                lsNode: 'formatting.startCaps',
+                plugin: this.props.plugin,
+                defaultValue: true
+            }),
+            e(SettingsOptionDescription, {
+                text: 'Enabling this starts a varied text string with a capital.'
+            }),
+            e(SettingsDivider),
+            e(SettingsOptionTitle, { text: "Plugin Options" }),
+            e(SettingsOptionToggle, {
+                title: 'Open On Hover',
+                lsNode: 'plugin.closeOnSend',
+                plugin: this.props.plugin,
+                defaultValue: true
+            }),
+            e(SettingsOptionDescription, {
+                text: 'Enabling this makes you able to open the menu just by hovering the arrow instead of clicking it.'
+            }),
+            e(SettingsDivider),
+            e(SettingsOptionToggle, {
+                title: 'Close On Send',
+                lsNode: 'plugin.closeOnSend',
+                plugin: this.props.plugin,
+                defaultValue: true
+            }),
+            e(SettingsOptionDescription, {
+                text: 'This option will close the toolbar when the message is sent when "Open On Hover" is disabled.'
+            }),
+            e(SettingsDivider),
+            e(SettingsOptionToggle, {
+                title: 'Format Chaining',
+                lsNode: 'plugin.chainFormats',
+                plugin: this.props.plugin,
+                defaultValue: true
+            }),
+            e(SettingsOptionDescription, {
+                text: 'Swaps priority of wrappers between inner first and outer first. Check the GitHub for more info.'
+            }),
+            e(SettingsDivider),
+            e(SettingsOptionTitle, { text: "Style Options" }),
+            e(SettingsOptionToggle, {
+                title: 'Toolbar Location',
+                lsNode: 'style.rightSide',
+                plugin: this.props.plugin,
+                defaultValue: true
+            }),
+            e(SettingsOptionDescription, {
+                text: 'This option enables swapping toolbar from right side to left side. Left <==> Right'
+            }),
+            e(SettingsDivider),
+            e(SettingsOptionButton, {
+                text: 'Reset To Defaults',
+                outline: true,
+                onClick: ()=>this.props.plugin.settings = this.props.plugin.defaultSettings
+            })
+        );
     }
 }
 
