@@ -14,7 +14,7 @@ class Experihax extends Plugin {
     }
 
     lolhacked(args) {
-        webpackJsonp([6],{d:(m,e,r)=>{for(let k in r.c)(m=r.c[k].exports)&&m.isDeveloper&&(m.isDeveloper=_=>true)}},["d"]);        
+        Object.defineProperty(webpackJsonp([], {}, [791]), "isDeveloper", { get() { return true; } })       
 
         this.log('lol hacked');
         if (args !== false) this.sendLocalMessage('lol hacked');
