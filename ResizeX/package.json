@@ -1,0 +1,14 @@
+{
+  "name": "ResizeX",
+  "version": "0.1.2",
+  "description": "Lets you resize videos and images",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Snazzah, Anxeal",
+  "license": "MIT",
+  "dependencies": {
+    "jquery": "^3.2.1"
+  }
+}
