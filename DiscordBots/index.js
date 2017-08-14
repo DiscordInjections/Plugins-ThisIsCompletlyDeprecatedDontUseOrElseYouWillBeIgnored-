@@ -283,8 +283,8 @@ class DiscordBots extends Plugin {
                 $(`<div class="member-roles"><component class="member-role" style=""><span class="name">${res.body.lib}</span></component><component class="member-role" style=""><span class="name">${res.body.server_count.formatNumber()} Servers</span></component>${
                     res.body.shard_count ? `<component class="member-role" style=""><span class="name">${res.body.shard_count.formatNumber()} Shards</span></component>` : ""
                 }<component class="member-role" style=""><span class="name">${res.body.points.formatNumber()} Upvotes</span></component></div>`)
-                  .insertAfter(".user-popout .username-wrapper");
-                $(".user-popout .username-wrapper").append(`<div class="activity db-prefix">Prefix: <strong>${res.body.prefix}</strong></div>`);
+                  .insertAfter(".userPopout-4pfA0d .headerText-3tKBWq");
+                $(".userPopout-4pfA0d .headerText-3tKBWq").append(`<div class="headerActivityText-3qBQRo marginBottom8-1mABJ4 db-prefix">Prefix: <strong>${res.body.prefix}</strong></div>`);
                 this.belowNoteHTML = `<div class="section"><div class="section-header">DiscordBots Plugin</div><div class="note"><button class="btn add-friend no-link">Upvotes</button></div></div>`
             }).catch(e => {
                 if(e.toString() === "Error: Not Found") return;
@@ -300,9 +300,9 @@ class DiscordBots extends Plugin {
                     }${
                         shard_count !== 1 ? `<component class="member-role" style=""><span class="name">${shard_count.formatNumber()} Shards</span></component>` : ""
                     }</div>`)
-                      .insertAfter(".user-popout .username-wrapper");
+                      .insertAfter(".userPopout-4pfA0d .headerText-3tKBWq");
                 }).catch(e => {
-                    $(".user-popout .username-wrapper").append(`<div class="activity db-prefix">Prefix: <strong>${res.body.prefix}</strong></div>`);
+                    $(".userPopout-4pfA0d .headerText-3tKBWq").append(`<div class="activity db-prefix">Prefix: <strong>${res.body.prefix}</strong></div>`);
                 });
             }).catch(e => {
                 if(e.toString() === "Error: Not Found") return;
@@ -316,7 +316,7 @@ class DiscordBots extends Plugin {
         if(this.settings.usedbl){
             DBLAPI.getUser(user.id).then(res => {
                 if(res.body.banner !== "" && res.body.banner){
-                    $(".user-popout .header").addClass("with-background").attr('style', `background-image:url('${res.body.banner.replace(/^http:/g, "https:")}')!important;background-size:cover;background-position:center;`)
+                    $(".userPopout-4pfA0d .header-3mZJcV").addClass("with-background").attr('style', `background-image:url('${res.body.banner.replace(/^http:/g, "https:")}')!important;background-size:cover;background-position:center;`)
                 }
             }).catch(e => {
                 if(e.toString() === "Error: Not Found") return;
@@ -349,14 +349,14 @@ class DiscordBots extends Plugin {
     }
 
     checkForPopout(){
-        this.noPopout = !$(".user-popout")[0];
+        this.noPopout = !$(".userPopout-4pfA0d")[0];
         if(this.noPopout){ // If the profile is open
             this.checkedPopout = false;
             return;
         }
         if(this.checkedPopout) return;
         this.checkedPopout = true;
-        let user = this.reactInst($(".user-popout .discord-tag")[0].parentNode)._currentElement.props.children[1].props.user;
+        let user = this.reactInst($(".userPopout-4pfA0d")[0])._currentElement.props.children[1].props.children[1][1].props.user;
         if(user.bot){
             this.onBotPopout(user);
         }else{
