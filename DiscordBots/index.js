@@ -280,11 +280,11 @@ class DiscordBots extends Plugin {
         if(!this.settings.popout) return;
         if(this.settings.usedbl){
             DBLAPI.getBot(user.id).then(res => {
-                $(`<div class="member-roles"><component class="member-role" style=""><span class="name">${res.body.lib}</span></component><component class="member-role" style=""><span class="name">${res.body.server_count.formatNumber()} Servers</span></component>${
+                $(`<div class="member-roles marginBottom8-1mABJ4"><component class="member-role" style=""><span class="name">${res.body.lib}</span></component><component class="member-role" style=""><span class="name">${res.body.server_count.formatNumber()} Servers</span></component>${
                     res.body.shard_count ? `<component class="member-role" style=""><span class="name">${res.body.shard_count.formatNumber()} Shards</span></component>` : ""
                 }<component class="member-role" style=""><span class="name">${res.body.points.formatNumber()} Upvotes</span></component></div>`)
                   .insertAfter(".userPopout-4pfA0d .headerText-3tKBWq");
-                $(".userPopout-4pfA0d .headerText-3tKBWq").append(`<div class="headerActivityText-3qBQRo marginBottom8-1mABJ4 db-prefix">Prefix: <strong>${res.body.prefix}</strong></div>`);
+                $(".userPopout-4pfA0d .headerText-3tKBWq").append(`<div class="headerActivityText-3qBQRo db-prefix">Prefix: <strong>${res.body.prefix}</strong></div>`);
                 this.belowNoteHTML = `<div class="section"><div class="section-header">DiscordBots Plugin</div><div class="note"><button class="btn add-friend no-link">Upvotes</button></div></div>`
             }).catch(e => {
                 if(e.toString() === "Error: Not Found") return;
@@ -295,14 +295,14 @@ class DiscordBots extends Plugin {
                 BDPAPI.getBotStats(user.id, this.settings.bdptoken).then(res2 => {
                     let shard_count = res2.body.stats.length;
                     let server_count = res2.body.stats.map(s=>s.server_count).reduce((prev, val) => prev + val);
-                    $(`<div class="member-roles"><component class="member-role" style=""><span class="name">${res.body.library}</span></component>${
+                    $(`<div class="member-roles marginBottom8-1mABJ4"><component class="member-role" style=""><span class="name">${res.body.library}</span></component>${
                         server_count ? `<component class="member-role" style=""><span class="name">${server_count.formatNumber()} Servers</span></component>` : ""
                     }${
                         shard_count !== 1 ? `<component class="member-role" style=""><span class="name">${shard_count.formatNumber()} Shards</span></component>` : ""
                     }</div>`)
                       .insertAfter(".userPopout-4pfA0d .headerText-3tKBWq");
                 }).catch(e => {
-                    $(".userPopout-4pfA0d .headerText-3tKBWq").append(`<div class="activity db-prefix">Prefix: <strong>${res.body.prefix}</strong></div>`);
+                    $(".userPopout-4pfA0d .headerText-3tKBWq").append(`<div class="headerActivityText-3qBQRo db-prefix">Prefix: <strong>${res.body.prefix}</strong></div>`);
                 });
             }).catch(e => {
                 if(e.toString() === "Error: Not Found") return;
