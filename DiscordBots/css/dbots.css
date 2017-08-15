@@ -11,7 +11,10 @@
 .profile-badge.dblbadge+.profile-badge.badge-partner+.header-info-inner{margin-left:0px;transform:translateX(9px);}
 .profile-badge.badge-partner+.profile-badge.dblbadge{margin-left:-20px!important;transform:translateX(15px);}
 .profile-badge.badge-partner+.profile-badge.dblbadge+.header-info-inner{margin-left:4px;transform:translateX(4px);}
-.with-background .headerText-3tKBWq:before{content:'';display:block;margin-top:-5px;position:absolute;width:250px;height:50px;background-color:rgba(255,255,255,0.4);z-index:99;}
+.with-background.header-3mZJcV{padding:10px 0 0;}
+.with-background.header-3mZJcV>div{}
+.with-background .headerText-3tKBWq{background-color:rgba(255,255,255,0.4);width:100%;}
+.with-background .headerText-3tKBWq:before{content:'';display:block;margin-top:-5px;position:absolute;width:250px;height:0;background-color:rgba(255,255,255,0.4);z-index:99;}
 .with-background .headerText-3tKBWq>div{z-index:100;}
 .with-background .header-info{border:5px solid transparent;background-color:rgba(255,255,255,0.4);background-size:cover;}
 .with-background .header-info:before{content:'';display: block;position:absolute;width:300px;height:calc(100% + 10px);margin-left:-305px;background-color:inherit;}
