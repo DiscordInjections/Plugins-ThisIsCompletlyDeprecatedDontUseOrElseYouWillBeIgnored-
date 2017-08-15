@@ -245,7 +245,7 @@ class DiscordBots extends Plugin {
                     res2.body.results.map(bot => owners.push(new Discord.User(window.DI.client, bot)));
                     this.log(owners, res2, new Discord.User(window.DI.client, res2.body.results[0]))
                     if(owners.length !== 0){
-                        html += `<div class="section"><div class="section-header">Bots</div>`;
+                        html += `<div class="section dbl-section"><div class="section-header">Bots</div>`;
                         owners.map(user=>html+=this.makeProfileGuild(user));
                         html += `</div>`;
                     };
@@ -331,6 +331,17 @@ class DiscordBots extends Plugin {
             this.checkedProfile = false;
             this.belowNoteHTML = "";
             this.longdesc = "";
+            this.lastUser = null;
+            return;
+        }
+        if($("#user-profile-modal")[0] && this.lastUser && this.reactInst($("#user-profile-modal .header-info-inner .discord-tag")[0].parentNode)._currentElement.props.children[0].props.user.id !== this.lastUser.id){
+            $("#user-profile-modal>.fade").removeClass("injected");
+            $(".dbl-section,.dblbadge").remove();
+            $("#user-profile-modal .header").removeClass("with-background").attr('style', ``)
+            this.checkedProfile = false;
+            this.belowNoteHTML = "";
+            this.longdesc = "";
+            this.lastUser = null;
             return;
         }
         if($("#user-profile-modal>.fade:not(.injected)").length !== 0 && this.belowNoteHTML !== ""){
@@ -340,11 +351,11 @@ class DiscordBots extends Plugin {
         }
         if(this.checkedProfile) return;
         this.checkedProfile = true;
-        let user = this.reactInst($("#user-profile-modal .header-info-inner .discord-tag")[0].parentNode)._currentElement.props.children[0].props.user;
-        if(user.bot){
-            this.onBotProfile(user);
+        this.lastUser = this.reactInst($("#user-profile-modal .header-info-inner .discord-tag")[0].parentNode)._currentElement.props.children[0].props.user;
+        if(this.lastUser.bot){
+            this.onBotProfile(this.lastUser);
         }else{
-            this.onUserProfile(user);
+            this.onUserProfile(this.lastUser);
         }
     }
 
@@ -354,7 +365,7 @@ class DiscordBots extends Plugin {
             this.checkedPopout = false;
             return;
         }
-        if(this.checkedPopout) return;
+        if(this.checkedPopout || !this.reactInst($(".userPopout-4pfA0d")[0])._currentElement.props.children[1].props.children[1]) return;
         this.checkedPopout = true;
         let user = this.reactInst($(".userPopout-4pfA0d")[0])._currentElement.props.children[1].props.children[1][1].props.user;
         if(user.bot){
@@ -406,7 +417,10 @@ class DiscordBotsSettings extends window.DI.React.Component {
                 title: 'bots.discord.pw Token',
                 lsNode: 'bdptoken',
                 plugin: this.props.plugin,
-                defaultValue: ''
+                password: true,
+                defaultValue: '',
+                apply: true,
+                onApply: () => {}
             }),
             e(SettingsDivider)
         );
