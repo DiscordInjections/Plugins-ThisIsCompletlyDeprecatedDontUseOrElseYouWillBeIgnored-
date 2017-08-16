@@ -1,0 +1,14 @@
+{
+  "name": "wikipedia",
+  "version": "1.0.0",
+  "description": "A plugin that pulls data from wikipedia based on a user-supplied article.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mackan/Sven65 [https://mackan.xyz]",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "snekfetch": "^3.2.8"
+  }
+}
