@@ -64,7 +64,7 @@ class Renamer extends Plugin {
 
     //this.getUpdates()
     this.log("Initializing MutationObserver...");
-    const contextmo = new MutationObserver((changes, _) => {
+    this.contextmo = new MutationObserver((changes, _) => {
       changes.forEach(
         (change, i) => {
           if (change.addedNodes) {
@@ -81,7 +81,7 @@ class Renamer extends Plugin {
     // });
     this.log("Attaching chat listeners...");
     this.attachChatListners();
-    contextmo.observe($("#app-mount>:first-child")[ 0 ], { childList: true })
+    this.contextmo.observe($("#app-mount>:first-child")[ 0 ], { childList: true })
     // dm_mo.observe($(".app>.flex-spacer>.flex-spacer")[0],{childList:true})
     this.log("Loading settings...");
     this.loadSettings();
@@ -93,13 +93,15 @@ class Renamer extends Plugin {
 
   get configTemplate() {
       return {
-          color: 'FFA500'
+          color: 'FFA500',
+          iconURL: 'https://discordinjections.xyz/img/logo-alt-yellow.svg'
       };
   }
 
   unload () {
     $('#CSS-Renamer').remove();
     this.processmo.disconnect();
+    this.contextmo.disconnect();
     window.DI.StateWatcher.removeListener('slugmod-reloaded', this.slugModFunction.bind(this));
   }
 
@@ -112,12 +114,12 @@ class Renamer extends Plugin {
       usage: "<@user> [#color] <tag>",
       func: (args) => {
         if(!args[1]){
-          window.DI.Helpers.sendLog('Renamer', "Failed to execute: Not enough arguments.");
+          this.sendLocalMessage("Failed to execute: Not enough arguments.");
           return;
         }
         let user = window.DI.Helpers.resolveMention(args[0]);
         if(!user){
-          window.DI.Helpers.sendLog('Renamer', "Failed to execute: Invalid user.");
+          this.sendLocalMessage("Failed to execute: Invalid user.");
           return;
         }
         let shorthandRegex = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i;
@@ -143,7 +145,7 @@ class Renamer extends Plugin {
             fore: fore(h2rgb(color))
           }
         });
-        window.DI.Helpers.sendLog('Renamer', `Set ${user.username}'s tag to ${tag}.`);
+        this.sendLocalMessage(`Set ${user.username}'s tag to ${tag}.`);
       }
     });
 
@@ -153,18 +155,16 @@ class Renamer extends Plugin {
       usage: "<@user>",
       func: (args) => {
         if(!args[0]){
-          window.DI.Helpers.sendLog('Renamer', "Failed to execute: Not enough arguments.");
+          this.sendLocalMessage("Failed to execute: Not enough arguments.");
           return;
         }
         let user = window.DI.Helpers.resolveMention(args[0]);
         if(!user){
-          window.DI.Helpers.sendLog('Renamer', "Failed to execute: Invalid user.");
+          this.sendLocalMessage("Failed to execute: Invalid user.");
           return;
         }
         this.resetUserProp(user.id, "tag");
-        this.process(true);
-        this.saveSettings();
-        window.DI.Helpers.sendLog('Renamer', `Reset ${user.username}'s tag.`);
+        this.sendLocalMessage(`Reset ${user.username}'s tag.`);
       }
     });
 
@@ -174,12 +174,12 @@ class Renamer extends Plugin {
       usage: "<@user> [#color] <nick>",
       func: (args) => {
         if(!args[1]){
-          window.DI.Helpers.sendLog('Renamer', "Failed to execute: Not enough arguments.");
+          this.sendLocalMessage("Failed to execute: Not enough arguments.");
           return;
         }
         let user = window.DI.Helpers.resolveMention(args[0]);
         if(!user){
-          window.DI.Helpers.sendLog('Renamer', "Failed to execute: Invalid user.");
+          this.sendLocalMessage("Failed to execute: Invalid user.");
           return;
         }
         let shorthandRegex = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i;
@@ -194,7 +194,7 @@ class Renamer extends Plugin {
         }
         if(color) obj.color = color;
         this.setUserData(user, obj);
-        window.DI.Helpers.sendLog('Renamer', `Set ${user.username}'s local nickname to ${nick}.`);
+        this.sendLocalMessage(`Set ${user.username}'s local nickname to ${nick}.`);
       }
     });
 
@@ -204,19 +204,17 @@ class Renamer extends Plugin {
       usage: "<@user>",
       func: (args)=>{
         if(!args[0]){
-          window.DI.Helpers.sendLog('Renamer', "Failed to execute: Not enough arguments.");
+          this.sendLocalMessage("Failed to execute: Not enough arguments.");
           return;
         }
         let user = window.DI.Helpers.resolveMention(args[0]);
         if(!user){
-          window.DI.Helpers.sendLog('Renamer', "Failed to execute: Invalid user.");
+          this.sendLocalMessage("Failed to execute: Invalid user.");
           return;
         }
         this.resetUserProp(user.id, "nick");
         this.resetUserProp(user.id, "color");
-        this.process(true);
-        this.saveSettings();
-        window.DI.Helpers.sendLog('Renamer', `Reset ${user.username}'s local nickname.`);
+        this.sendLocalMessage(`Reset ${user.username}'s local nickname.`);
       }
     });
   }
@@ -280,8 +278,6 @@ class Renamer extends Plugin {
           return;
         }
         this.resetUserProp(user.id, "tag");
-        this.process(true);
-        this.saveSettings();
         su.sendACMessage(`Reset ${user.username}'s tag.`);
       });
 
@@ -332,8 +328,6 @@ class Renamer extends Plugin {
         }
         this.resetUserProp(user.id, "nick");
         this.resetUserProp(user.id, "color");
-        this.process(true);
-        this.saveSettings();
         su.sendACMessage(`Reset ${user.username}'s local nickname.`);
       });
     }
@@ -408,9 +402,7 @@ class Renamer extends Plugin {
       .appendTo("#app-mount>:first-child")
       .on("click", ".modal-reset", (e) => {
         this.resetUserProp(user.id, "tag");
-        this.process(true);
         modal.remove();
-        this.saveSettings();
       })
       .on("click", ".callout-backdrop,button.btn-default", (e) => {modal.remove()})
     modal.find("#modal-text").click().focus();
@@ -467,9 +459,7 @@ class Renamer extends Plugin {
       .appendTo("#app-mount>:first-child")
       .on("click", ".reset-nick", (e) => {
         this.resetUserProp(user.id, "nick");
-        this.process(true);
         modal.remove();
-        this.saveSettings();
       })
       .on("click", ".callout-backdrop,button.btn-default", (e) => {modal.remove()})
       .on("click", ".ui-color-picker-swatch:not(.custom)", (e) => {
@@ -489,54 +479,47 @@ class Renamer extends Plugin {
   }
 
   resetUserProp (id, prop) {
-    delete this.settings.globals[ id ][ prop ];
+    let settings = this.settings;
+    delete settings.globals[ id ][ prop ];
+    this.settings = settings;
+    this.process(true);
   }
 
   setUserData (user, data) {
     let { nick, color, tag } = data;
     let { username, discriminator, id } = user;
-    if (this.settings.globals[ id ]) {
+    let settings = this.settings;
+    if (settings.globals[ id ]) {
       this.log(username, "has new nickname", nick)
       if (nick) {
-        this.settings.globals[ id ].nick = nick;
-        this.settings.globals[ id ].colour = color
+        settings.globals[ id ].nick = nick;
+        settings.globals[ id ].colour = color
       }
-      username && (this.settings.globals[ id ].username = username);
-      discriminator && (this.settings.globals[ id ].discriminator = discriminator);
+      username && (settings.globals[ id ].username = username);
+      discriminator && (settings.globals[ id ].discriminator = discriminator);
       if (tag) {
-        this.settings.globals[ id ].tag = tag;
+        settings.globals[ id ].tag = tag;
         this.log(username, "has tag", tag)
       }
+      this.settings = settings;
+      this.process(true);
     } else {
-      this.log(username, "is now", nick)
-      this.settings.globals[ id ] = {
+      settings.globals[ id ] = {
         id,
         username,
         discriminator,
       }
-      if (nick) {
-        this.settings.globals[ id ].nick = nick;
-        this.settings.globals[ id ].colour = color
-      }
-      if (tag) {
-        this.settings.globals[ id ].tag = tag;
-      }
+      this.settings = settings;
+      this.setUserData(user, data);
     }
-    this.saveSettings();
-    this.process(true);
   }
 
   syncColoredTextSetting () {
     this.coloredText = true;
   }
 
-  saveSettings () {
-    window.DI.localStorage.setItem("Renamer", JSON.stringify(this.settings));
-  }
-
   loadSettings () {
-    this.settings = $.extend({}, this.defaultSettings, JSON.parse(window.DI.localStorage.getItem("Renamer")))
-    this.saveSettings();
+    this.settings = $.extend({}, this.defaultSettings, JSON.parse(window.DI.localStorage.getItem("DI-Renamer")));
   }
 
   getNickname (id, channel) {
