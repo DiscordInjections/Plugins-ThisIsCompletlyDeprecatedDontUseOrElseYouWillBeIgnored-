@@ -1,15 +1,12 @@
 const Plugin = module.parent.require('../Structures/Plugin')
 const snekfetch = require("snekfetch")
 
-Object.defineProperty(Array.prototype, "random", {
-	enumerable: false,
-	writable: true,
-	value: function(){
-		return this[Math.floor(Math.random() * ((this.length-1) - 0 + 1)) + 0]
-	}
-})
-
 class Reddit extends Plugin{
+
+	arrayRandom(array){
+		return array[Math.floor(Math.random() * ((array.length-1) - 0 + 1)) + 0]
+	}
+
 	constructor(...args){
 		super(...args)
 
@@ -60,7 +57,7 @@ class Reddit extends Plugin{
 
 							if(selfPosts.length > 0){
 
-								let post = selfPosts.random()
+								let post = this.arrayRandom(selfPosts)
 
 								let text = post.data.selftext.replace(/\*/g, "\\*")
 								
@@ -75,7 +72,7 @@ class Reddit extends Plugin{
 						}else{
 							if(mediaPosts.length > 0){
 
-								let post = mediaPosts.random()
+								let post = this.arrayRandom(mediaPosts)
 
 								let link = post.data.url
 
