@@ -58,7 +58,9 @@ class UserAdditions extends Plugin {
     	if(this.settings.joinedAt.length !== 0 && obj.guild){
     		let cts = document.createElement('div');
     		cts.className = "headerActivityText-3qBQRo";
-    		cts.innerHTML = window.DI.Helpers.sanitize(m(obj.guild.joinedAt).format(this.settings.joinedAt));
+            let joinedAt = window.DI.client.guilds.get(obj.guild.id)
+                .members.get(obj.userId).joinedAt;
+    		cts.innerHTML = window.DI.Helpers.sanitize(m(joinedAt).format(this.settings.joinedAt));
     		document.querySelector('.headerTag-3zin_i').appendChild(cts);
     	}
     }
