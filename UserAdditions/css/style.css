@@ -1,0 +1,2 @@
+.status.avatar-link {cursor:pointer;-webkit-user-select:text;width:30px;height:30px;border-radius:50%;position:absolute;z-index:100;font-size:0;background-image:url(https://storage.googleapis.com/material-icons/external-assets/v4/icons/svg/ic_link_white_24px.svg);background-size:contain;background-color:#555;right:calc(50% - 15px);bottom:-10px;}
+.status.avatar-link:focus{background-color:#2ecc71}

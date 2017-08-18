@@ -1,0 +1,14 @@
+{
+  "name": "UserAdditions",
+  "version": "0.1.0",
+  "description": "Adds little things",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Snazzah",
+  "license": "MIT",
+  "dependencies": {
+    "moment": "^2.18.1"
+  }
+}
