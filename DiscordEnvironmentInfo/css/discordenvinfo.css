@@ -1,0 +1,19 @@
+.di-clydelike-DiscordEnvironmentInfo .avatar-large {
+    background-color: #7289DA;
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDQ4IDQ4Ij48cGF0aCBkPSJNMjIgMzRoNFYyMmgtNHYxMnptMi0zMEMxMi45NSA0IDQgMTIuOTUgNCAyNHM4Ljk1IDIwIDIwIDIwIDIwLTguOTUgMjAtMjBTMzUuMDUgNCAyNCA0em0wIDM2Yy04LjgyIDAtMTYtNy4xOC0xNi0xNlMxNS4xOCA4IDI0IDhzMTYgNy4xOCAxNiAxNi03LjE4IDE2LTE2IDE2em0tMi0yMmg0di00aC00djR6Ii8+PC9zdmc+)!important;
+}
+.di-clydelike-DiscordEnvironmentInfo .user-name {
+    font-size: 0px!important;
+}
+.di-clydelike-DiscordEnvironmentInfo .username-wrapper,
+.di-clydelike-DiscordEnvironmentInfo .avatar-large {
+    pointer-events: none;
+}
+.di-clydelike-DiscordEnvironmentInfo u {
+    border-bottom: 10px!important;
+}
+.di-clydelike-DiscordEnvironmentInfo .user-name:after {
+    font-size: 1rem!important;
+    content: "Current environment info";
+    text-decoration: underline;
+}    

@@ -1,0 +1,11 @@
+{
+  "name": "DiscordEnvironmentInfo",
+  "version": "1.0.0",
+  "description": "Shows information about the current environment.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Pointy",
+  "license": "ISC"
+}
