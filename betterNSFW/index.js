@@ -42,7 +42,8 @@ class BetterNSFW extends Plugin {
             let channelname = channel.childNodes[0].lastChild.childNodes[1]
             if (channelname === undefined) return
             channelname = channelname.childNodes[0];
-            if(!channel.classList.contains("nsfw-filtered") && ((svg.childNodes.length > 1 && svg.childNodes[1].getAttribute("d").startsWith("M9.75,8")) || nsfwRegex.test(channelname.data))){
+            if(!channel.classList.contains("nsfw-filtered") && ((svg.childNodes.length > 1 && svg.childNodes[1].getAttribute("d").startsWith("M9.75,8")) || nsfwRegex.test(channelname.data)) &&
+				channel.querySelector('.nsfw-channel-tag') === null){
                 channel.classList.add("nsfw-filtered");
                 channelname.parentNode.outerHTML += `<span class="nsfw-channel-tag">18+</span>`;
                 //channelname.data = channelname.data.replace(/^nsfw-/, "");
