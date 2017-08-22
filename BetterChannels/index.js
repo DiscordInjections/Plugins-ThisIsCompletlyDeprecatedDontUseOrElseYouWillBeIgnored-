@@ -14,7 +14,7 @@ class BetterChannels extends Plugin {
         let c_channels = document.querySelectorAll(".channel-margin-left");
         let c_headers = document.querySelectorAll(".channel-header");
         for(let i = 0; i < c_channels.length; i++){
-            c_channels[i].className = c_channels[i].classList.remove("channel-margin-left");
+            c_channels[i].classList.remove("channel-margin-left");
             c_channels[i].querySelector("div[class*='name']").innerHTML = c_channels[i].dataset.name
         }
         for(let i = 0; i < c_headers.length; i++){
@@ -50,8 +50,8 @@ class BetterChannels extends Plugin {
                             header.className = "channel-header";
                             header.innerHTML = channel_category;
                             
-                            channel_container.previousSibling.className += " channel-margin-left";
-                            channel_container.className += " channel-margin-left";
+                            channel_container.previousSibling.classList.add("channel-margin-left");
+                            channel_container.classList.add("channel-margin-left");
                                 
                             let prev_channel = channel_container.previousSibling.querySelector("div > div > div + div");
                                 
