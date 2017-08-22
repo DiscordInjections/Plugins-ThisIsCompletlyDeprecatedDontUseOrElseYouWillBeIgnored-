@@ -39,8 +39,8 @@ class BetterNSFW extends Plugin {
         document.querySelectorAll(".channels-wrap div[class*=scroller] div[class*=containerDefault]").forEach(channel => {
             let svg = channel.childNodes[0].lastChild.childNodes[0].childNodes[0]
             if (svg === undefined || svg.childNodes.length == 1) return;
-			let channelname = channel.childNodes[0].lastChild.childNodes[1]
-			if (channelname === undefined) return
+            let channelname = channel.childNodes[0].lastChild.childNodes[1]
+            if (channelname === undefined) return
             channelname = channelname.childNodes[0];
             if(!channel.classList.contains("nsfw-filtered") && ((svg.childNodes.length > 1 && svg.childNodes[1].getAttribute("d").startsWith("M9.75,8")) || nsfwRegex.test(channelname.data))){
                 channel.classList.add("nsfw-filtered");
