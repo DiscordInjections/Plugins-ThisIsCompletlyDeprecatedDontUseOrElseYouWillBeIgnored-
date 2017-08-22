@@ -14,7 +14,8 @@ class Experihax extends Plugin {
     }
 
     lolhacked(args) {
-        webpackJsonp([6],{d:(m,e,r)=>{for(let k in r.c)(m=r.c[k].exports)&&m.isDeveloper&&(m.isDeveloper=_=>true)}},["d"]);        
+        webpackJsonp([],{d:(a,b,d)=>{let f={};for(i=0;0!==f.isDeveloper;i++)f=d(i)||{};let o=Object;o.setPrototypeOf(f,o.assign({},o.getPrototypeOf(f),{isDeveloper:1}))}},["d"]);
+        // new code to enable experiments :)
 
         this.log('lol hacked');
         if (args !== false) this.sendLocalMessage('lol hacked');
