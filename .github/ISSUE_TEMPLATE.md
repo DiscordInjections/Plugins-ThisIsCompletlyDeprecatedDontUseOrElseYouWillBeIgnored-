@@ -1,17 +1,15 @@
 ### Information (fill this out)
 
-DI Version: 
-
-Plugin Name:
-
-Author (mention them):
+> DI Version:  <br>
+> Plugin Name:  <br>
+> Author (mention them):
 
 Client:
  - [ ] Stable
  - [ ] PTB
  - [ ] Canary
  - [ ] Development
-
+ 
 OS:
  - [ ] Windows
  - [ ] Mac
