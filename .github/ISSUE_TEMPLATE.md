@@ -7,14 +7,12 @@ Plugin Name:
 Author (mention them):
 
 Client:
-
  - [ ] Stable
  - [ ] PTB
  - [ ] Canary
  - [ ] Development
 
 OS:
-
  - [ ] Windows
  - [ ] Mac
  - [ ] Linux (include distro)
@@ -22,7 +20,6 @@ OS:
 ### Checklist
 
 I have:
-
  - [ ] Updated the plugin to the latest version
  - [ ] Updated DiscordInjections to the latest version
  - [ ] Checked to see if there are any existing issues open for this problem
