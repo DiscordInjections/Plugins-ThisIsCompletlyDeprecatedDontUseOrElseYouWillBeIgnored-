@@ -1,22 +1,18 @@
 ### Information
 
-Plugin Name:
-
-DI Version Tested On:
-
-Original Author (mention if applicable):
+> Plugin Name:  <br>
+> DI Version Tested On:  <br>
+> Original Author (mention if applicable):  <br>
 
 ### Systems Tested On
 
 Client:
-
  - [ ] Stable
  - [ ] PTB
  - [ ] Canary
  - [ ] Development
 
 OS:
-
  - [ ] Windows
  - [ ] Mac
  - [ ] Linux (include distro)
