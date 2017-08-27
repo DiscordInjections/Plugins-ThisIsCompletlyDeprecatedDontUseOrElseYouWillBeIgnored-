@@ -6,6 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "dependencies": {
+    "node-ssh": "^4.2.3",
+    "require-reload": "^0.2.2"
+  },
   "author": "kev",
   "license": "ISC"
 }
