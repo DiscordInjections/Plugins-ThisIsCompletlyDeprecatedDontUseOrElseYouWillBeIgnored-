@@ -31,15 +31,15 @@ module.exports = {
             if (!res[0]) {
                 return log('No results found. Please try a different search term.');
             }
-
             if (results > res.length) {
                 results = res.length;
             }
 
+            const content = `Search results for \`${args}\`:`;
             const embeds = [];
             for (let i = 0; i < results; i++) {
                 embeds[i] = {
-                    title: `Search results for ${args}`,
+                    title: res[i].title,
                     url: res[i].href,
                     description: res[i].description
                 };
@@ -52,12 +52,12 @@ module.exports = {
                 const embedPerms = window.DI.client.selectedChannel.type !== 'text' || window.DI.client.selectedChannel.permissionsFor(window.DI.client.user).has('EMBED_LINKS');
 
                 if (embedPerms) {
-                    window.DI.client.selectedChannel.send({ embed: embeds[0] });
+                    window.DI.client.selectedChannel.send({ content, embed: embeds[0] });
                 } else {
-                    window.DI.client.selectedChannel.send(embeds[0].description);
+                    window.DI.client.selectedChannel.send(`${embeds[0].title} | <${embeds[0].url}>\n\`\`\`\n${embeds[0].description}\`\`\``);
                 }
             } else {
-                log({ embeds });
+                log({ content, embeds });
             }
         });
     }
