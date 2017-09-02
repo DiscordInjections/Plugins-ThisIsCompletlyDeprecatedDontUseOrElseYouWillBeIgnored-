@@ -12,7 +12,7 @@ class XClass extends Plugin {
         window.A.Watcher.on('userModal', this.userModalBind);
     }
 
-    static get after() { return ['AFunc'] }
+    static get after() { return ['afunc'] }
 
     get configTemplate() {
         return {
