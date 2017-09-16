@@ -9,7 +9,7 @@ class DigitalClock extends Plugin {
             this.injectOptionHTML();
         });
         this.load();
-        this.mo.observe($("[data-reactroot]")[0], { childList: true, subtree: true });
+        this.mo.observe($("#app-mount>div")[0], { childList: true, subtree: true });
 
         if(this.settings.enabled){
             this.clock = $("<div/>", { id: "clockPluginClock" });
