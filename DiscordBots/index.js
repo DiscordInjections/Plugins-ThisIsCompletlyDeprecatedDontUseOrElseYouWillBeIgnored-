@@ -29,7 +29,7 @@ class DiscordBots extends Plugin {
             this.checkForProfile();
             this.checkForPopout();
         });
-        this.mo.observe($("[data-reactroot]")[0], { childList: true, subtree: true });
+        this.mo.observe($("#app-mount>div")[0], { childList: true, subtree: true });
         this.registerCommand({
             name: "db-setbdptoken",
             info: "Sets your bots.discord.pw token.",
