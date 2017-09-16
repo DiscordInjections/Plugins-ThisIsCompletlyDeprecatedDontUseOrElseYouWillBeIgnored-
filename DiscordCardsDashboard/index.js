@@ -13,7 +13,7 @@ class DiscordCardsDashboard extends Plugin {
     constructor(...args) {
         super(...args);
         this.mo = new MutationObserver(this.check.bind(this));
-        this.mo.observe(document.querySelector("[data-reactroot]"), { childList: true, subtree: true });
+        this.mo.observe(document.querySelector("#app-mount>div"), { childList: true, subtree: true });
         this.sbind = this.switched.bind(this);
         window.DI.client.on('selectedUpdate', this.sbind);
         window.DI.client.once('ready', ()=>{this.switched({}, {channel:window.DI.client.selectedChannel})});
