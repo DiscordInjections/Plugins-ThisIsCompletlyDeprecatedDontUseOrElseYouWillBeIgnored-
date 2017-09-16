@@ -683,7 +683,7 @@ class Renamer extends Plugin {
       this.process();
     })
     this.processmo.observe($(".app>*:first-child>*:first-child")[ 0 ], { childList: true, subtree: true });
-    $("div[data-reactroot]>.theme-dark:not(.pictureInPicture-Ryvh67), div[data-reactroot]>.theme-light:not(.pictureInPicture-Ryvh67)").each((i, elm) => {
+    $("#app-mount>div>.theme-dark:not(.pictureInPicture-Ryvh67), div[data-reactroot]>.theme-light:not(.pictureInPicture-Ryvh67)").each((i, elm) => {
       this.processmo.observe(elm, { childList: true, subtree: true });
     });
     // processmo.observe( $(".channel-members")[0] , {childList:true, subtree: true} )
