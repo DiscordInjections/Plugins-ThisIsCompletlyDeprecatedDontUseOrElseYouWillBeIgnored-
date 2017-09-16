@@ -13,7 +13,7 @@ class ResizeX extends Plugin {
         super(...args);
         let plugin = this;
         this.mo = new MutationObserver(this.init.bind(this));
-        this.mo.observe(document.querySelector("[data-reactroot]"), { childList: true, subtree: true });
+        this.mo.observe(document.querySelector("#app-mount>div"), { childList: true, subtree: true });
         $(document).on("mousemove.resizex", function(e) {
             if (resizexHandle) {
                 $(resizexHandle).siblings().width(resizexWidth + (e.pageX - resizexX + e.pageY - resizexY) / 2);
