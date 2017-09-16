@@ -6,7 +6,7 @@ class CharacterCounter extends Plugin {
         super(...args);
         this.didInit = false;
         this.mo = new MutationObserver(this.init.bind(this));
-        this.mo.observe(document.querySelector("[data-reactroot]"), { childList: true, subtree: true });
+        this.mo.observe(document.querySelector("#app-mount>div"), { childList: true, subtree: true });
     }
 
     init() {
