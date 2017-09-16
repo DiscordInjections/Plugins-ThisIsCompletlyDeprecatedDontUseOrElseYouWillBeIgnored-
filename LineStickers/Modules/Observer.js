@@ -4,7 +4,7 @@ class Observer {
     constructor(plugin) {
         this.plugin = plugin;
         this.mo = new MutationObserver(this.observer.bind(this));
-        this.mo.observe(document.querySelector("[data-reactroot]"), { childList: true, subtree: true });
+        this.mo.observe(document.querySelector("#app-mount>div"), { childList: true, subtree: true });
     }
     observer(recs){
         let self = this;
