@@ -547,7 +547,7 @@ class Renamer extends Plugin {
 
     $(".chat .comment").each((i, group) => {
       try {
-        let userData = this.getNickname(Renamer.getReactInstance(group).memoizedProps.props.children[ 0 ][ 0 ].props.message.author.id),
+        let userData = this.getNickname(Renamer.getReactInstance(group).memoizedProps.children[ 0 ][ 0 ].props.message.author.id),
           names = $("strong.user-name:not([renamer])", group).each((i, el) => {
             //this.log(i,el);
             //FORGIVE ME LORD FOR I HAVE SINNED
@@ -588,7 +588,7 @@ class Renamer extends Plugin {
       //if (i > 2000) return this.log("WHATTHEFUCK")
 
       if(member.className.includes("member")){ // Member List
-        const userData = this.getNickname(Renamer.getReactInstance(member).memoizedProps.props.children[ 0 ].props.user.id);
+        const userData = this.getNickname(Renamer.getReactInstance(member).memoizedProps.children[ 0 ].props.user.id);
         if (userData) {
           const name = $(".member-username-inner", member)[ 0 ];
           if (userData.nick) {
@@ -612,7 +612,7 @@ class Renamer extends Plugin {
     // user popouts and profiles
     $(".user-popout .discord-tag:not([renamer]), #user-profile-modal .discord-tag:not([renamer])").each((i, member) => {
       member.setAttribute("renamer", "");
-      const userData = this.getNickname(Renamer.getReactInstance(member.parentNode).memoizedProps.props.children[member.parentNode.className === "header-info-inner" ? 0 : 1].props.user.id);
+      const userData = this.getNickname(Renamer.getReactInstance(member.parentNode).memoizedProps.children[member.parentNode.className === "header-info-inner" ? 0 : 1].props.user.id);
       if (userData) {
         const name = $(".username", member)[0];
         if (userData.nick) {
@@ -638,7 +638,7 @@ class Renamer extends Plugin {
     // this.log(context)
     let inst = Renamer.getReactInstance(context)
     if (!inst) return;
-    for (const child of inst.memoizedProps.props.children) {
+    for (const child of inst.memoizedProps.children) {
       if (child && child.props && child.props.user) {
         let { id, username, discriminator } = child.props.user;
         // this.log(child.props.user)

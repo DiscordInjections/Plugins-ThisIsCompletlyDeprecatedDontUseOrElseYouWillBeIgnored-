@@ -26,10 +26,10 @@ class BetterNSFW extends Plugin {
             channel.classList.remove("nsfw-filtered");
             let react = this.react(channel);
             if(!react) return;
-            if(react.memoizedProps.props.children[0]){
-                channel.childNodes[0].lastChild.childNodes[1].childNodes[0].data = react.memoizedProps.props.children[0].props.channel.name;
+            if(react.memoizedProps.children[0]){
+                channel.childNodes[0].lastChild.childNodes[1].childNodes[0].data = react.memoizedProps.children[0].props.channel.name;
             }else{
-                channel.childNodes[0].lastChild.childNodes[1].childNodes[0].data = react.memoizedProps.props.children.props.channel.name;
+                channel.childNodes[0].lastChild.childNodes[1].childNodes[0].data = react.memoizedProps.children.props.channel.name;
             }
         });
     }
