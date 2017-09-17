@@ -1,4 +1,4 @@
-# MediaSupport
+# ReactDevtools
 ###### [Originally made by square](https://github.com/Inve1951/BetterDiscordStuff/blob/master/plugins/enableReactDevtools.plugin.js)
 
 You should place this file in the `Plugins` folder of the DiscordInjections project.
