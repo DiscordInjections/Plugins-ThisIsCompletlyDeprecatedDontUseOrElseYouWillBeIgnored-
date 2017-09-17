@@ -16,7 +16,7 @@ function getOwnerInstance(e, {include, exclude=["Popout", "Tooltip", "Scroller",
     // Get displayName of the React class associated with this element
     // Based on getName(), but only check for an explicit displayName
     function getDisplayName(owner) {
-        const type = owner._currentElement.type;
+        const type = owner.memoizedProps.type;
         const constructor = owner._instance && owner._instance.constructor;
         return type.displayName || constructor && constructor.displayName || null;
     }
@@ -40,13 +40,13 @@ function getOwnerInstance(e, {include, exclude=["Popout", "Tooltip", "Scroller",
             }
         }
 
-        if (_isNil(curr._currentElement)) {
+        if (_isNil(curr.memoizedProps)) {
             continue;
         }
 
         // Get a React object if one corresponds to this DOM element
         // e.g. .user-popout -> UserPopout, ...
-        let owner = curr._currentElement._owner;
+        let owner = curr.memoizedProps._owner;
         if (!_isNil(owner) && classFilter(owner)) {
             return owner._instance;
         }

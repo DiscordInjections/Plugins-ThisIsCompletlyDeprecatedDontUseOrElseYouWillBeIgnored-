@@ -36,7 +36,7 @@ class Citador extends Plugin {
 			const excluding = include === undefined;
 			const filter = excluding ? exclude : include;
 			function getDisplayName(owner) {
-				const type = owner._currentElement.type;
+				const type = owner.memoizedProps.type;
 				const constructor = owner._instance && owner._instance.constructor;
 				return type.displayName || constructor && constructor.displayName || null;
 			}
@@ -54,10 +54,10 @@ class Citador extends Plugin {
 					}
 				}
 
-				if (_.isNil(curr._currentElement)) {
+				if (_.isNil(curr.memoizedProps)) {
 					continue;
 				}
-				let owner = curr._currentElement._owner;
+				let owner = curr.memoizedProps._owner;
 				if (!_.isNil(owner) && classFilter(owner)) {
 					return owner._instance;
 				}

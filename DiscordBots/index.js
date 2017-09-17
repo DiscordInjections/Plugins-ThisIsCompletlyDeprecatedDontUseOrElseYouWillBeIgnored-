@@ -334,7 +334,7 @@ class DiscordBots extends Plugin {
             this.lastUser = null;
             return;
         }
-        if($("#user-profile-modal")[0] && this.lastUser && this.reactInst($("#user-profile-modal .header-info-inner .discord-tag")[0].parentNode)._currentElement.props.children[0].props.user.id !== this.lastUser.id){
+        if($("#user-profile-modal")[0] && this.lastUser && this.reactInst($("#user-profile-modal .header-info-inner .discord-tag")[0].parentNode).memoizedProps.props.children[0].props.user.id !== this.lastUser.id){
             $("#user-profile-modal>.fade").removeClass("injected");
             $(".dbl-section,.dblbadge").remove();
             $("#user-profile-modal .header").removeClass("with-background").attr('style', ``)
@@ -351,7 +351,7 @@ class DiscordBots extends Plugin {
         }
         if(this.checkedProfile) return;
         this.checkedProfile = true;
-        this.lastUser = this.reactInst($("#user-profile-modal .header-info-inner .discord-tag")[0].parentNode)._currentElement.props.children[0].props.user;
+        this.lastUser = this.reactInst($("#user-profile-modal .header-info-inner .discord-tag")[0].parentNode).memoizedProps.props.children[0].props.user;
         if(this.lastUser.bot){
             this.onBotProfile(this.lastUser);
         }else{
@@ -365,9 +365,9 @@ class DiscordBots extends Plugin {
             this.checkedPopout = false;
             return;
         }
-        if(this.checkedPopout || !this.reactInst($(".userPopout-4pfA0d")[0])._currentElement.props.children[1].props.children[1]) return;
+        if(this.checkedPopout || !this.reactInst($(".userPopout-4pfA0d")[0]).memoizedProps.props.children[1].props.children[1]) return;
         this.checkedPopout = true;
-        let user = this.reactInst($(".userPopout-4pfA0d")[0])._currentElement.props.children[1].props.children[1][1].props.user;
+        let user = this.reactInst($(".userPopout-4pfA0d")[0]).memoizedProps.props.children[1].props.children[1][1].props.user;
         if(user.bot){
             this.onBotPopout(user);
         }else{
