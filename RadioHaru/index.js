@@ -3,7 +3,7 @@ const Plugin = module.parent.require('../Structures/Plugin');
 class RadioHaru extends Plugin {
     constructor(...args) {
         super(...args);
-		var audio = new Audio('http://stream.radioharu.pw/listen');
+		var audio = new Audio('http://stream.radioharu.pw/owo');
 
         this.log('Radio Haru loaded!');
 
