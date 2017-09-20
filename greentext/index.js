@@ -7,7 +7,7 @@ class greentext extends Plugin {
         super(...args);
         this.didInit = false;
         this.mo = new MutationObserver(this.init.bind(this));
-        this.mo.observe(document.querySelector("[data-reactroot]"), { childList: true, subtree: true });
+        this.mo.observe(document.querySelector("#app-mount>div"), { childList: true, subtree: true });
         window.DI.DISettings.registerSettingsTab(this, 'greentext', greentextSettings);
         window.DI.client.on('selectedUpdate', this.recolor.bind(this));
         this.recolor();
