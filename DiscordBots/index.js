@@ -67,7 +67,7 @@ class DiscordBots extends Plugin {
                         window.DI.Helpers.sendLog('Discord Bots Plugin', "Mode set to Discordbots.org.", this.iconURL);
                         break;
                     default:
-                        window.DI.Helpers.sendLog('Discord Bots Plugin', "Error: Invalid mode", this.iconURL);
+                        window.DI.Helpers.sendLog('Discord Bots Plugin', "Error: Invalid mode, must be `discordbotslist` or `botsdiscordpw`", this.iconURL);
                         break;
                 }
             }
