@@ -27,7 +27,7 @@ class greentext extends Plugin {
         if(!this.settings.orangetext) document.querySelectorAll(".markup>.orangetext").forEach(e => e.outerHTML = e.innerHTML);
         m.forEach(mr => {
             if(mr.addedNodes) mr.addedNodes.forEach(e => {
-                if(e.classList && e.classList.contains("message") && !e.classList.contains("message-sending")) this.process(e.childNodes[0].childNodes[0].childNodes[2]);
+                if(e.classList && e.classList.contains("message") && !e.classList.contains("message-sending")) this.process(e.childNodes[0].childNodes[0].childNodes[e.childNodes[0].childNodes[0].childNodes.length === 2 ? 1 : 2]);
                 if(e.classList && e.classList.contains("message-group")){
                     if(!e.childNodes[1].childNodes[0].classList.contains("message-sending")){
                         e.childNodes[1].childNodes.forEach(me => {
