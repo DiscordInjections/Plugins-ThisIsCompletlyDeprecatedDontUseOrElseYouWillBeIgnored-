@@ -31,7 +31,8 @@ class greentext extends Plugin {
                 if(e.classList && e.classList.contains("message-group")){
                     if(!e.childNodes[1].childNodes[0].classList.contains("message-sending")){
                         e.childNodes[1].childNodes.forEach(me => {
-                            this.process(me.childNodes[0].childNodes[me.classList.contains("first") ? 1 : 0].childNodes[2]);
+                            var messageNode = me.childNodes[0].childNodes[me.classList.contains("first") ? 1 : 0];
+                            this.process(messageNode.childNodes[messageNode.childNodes.length === 2 ? 1 : 2]);
                         });
                     }
                 }
