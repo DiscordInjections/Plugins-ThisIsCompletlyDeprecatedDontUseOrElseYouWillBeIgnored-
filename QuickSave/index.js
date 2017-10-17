@@ -9,7 +9,7 @@ class QuickSave extends Plugin {
     constructor(...args) {
         super(...args);
         this.mo = new MutationObserver(this.observer.bind(this));
-        this.mo.observe(document.querySelector("#app-mount>div"), { childList: true, subtree: true });
+        this.mo.observe(document.querySelector(".app-XZYfmp"), { childList: true, subtree: true });
         window.DI.DISettings.registerSettingsTab(this, 'QuickSave', QSSettings);
     }
 
@@ -28,8 +28,7 @@ class QuickSave extends Plugin {
                 let filetype =  '.'+url.split('.').slice(-1)[0].split('?')[0];
 
                 let loops = 50;
-                const dest = _path.join(dir, filename, filetype);
-                while(plugin.accessSync(dest) && loops--)
+                while(plugin.accessSync(dir+(dir.endsWith("\\")?"":"\\")+filename+filetype) && loops--)
                     filename = plugin.randomFilename64(parseInt(settings.fnLength));
 
                 if(loops == -1){
@@ -50,8 +49,7 @@ class QuickSave extends Plugin {
 
                 let num = 2;
                 let loops = 2048;
-                const dest = _path.join(dir, filename);
-                while(plugin.accessSync(dest) && loops--) {
+                while( plugin.accessSync(dir+(dir.endsWith("\\")?"":"\\")+filename) && loops-- ){
                     filename = filename_original + ` (${num})` + filetype_original;
                     num++;
                 }
@@ -283,7 +281,7 @@ class QuickSave extends Plugin {
             return;
         }
 
-        const dest = _path.join(dir, filename);
+        var dest = dir+(dir.endsWith("\\")?"":"\\")+filename;
         self.log("Quicksaving", url, '-->', dest);
 
         var file = fs.createWriteStream(dest);
