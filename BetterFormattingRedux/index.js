@@ -30,7 +30,7 @@ class BFRedux extends Plugin {
 
         this.loadSettings();
         this.mo = new MutationObserver(this.init.bind(this));
-        this.mo.observe(document.querySelector("#app-mount>div"), { childList: true, subtree: true });
+        this.mo.observe(document.querySelector(".app-XZYfmp"), { childList: true, subtree: true });
         window.DI.DISettings.registerSettingsTab(this, 'Better Formatting Redux', BFSettings);
     }
 

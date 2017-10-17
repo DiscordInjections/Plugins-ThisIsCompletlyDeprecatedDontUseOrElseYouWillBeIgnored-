@@ -4,7 +4,7 @@ class BetterNSFW extends Plugin {
     constructor(...args) {
         super(...args);
         this.mo = new MutationObserver(this.check.bind(this));
-        this.mo.observe(document.querySelector("#app-mount>div"), { childList: true, subtree: true });
+        this.mo.observe(document.querySelector(".app-XZYfmp"), { childList: true, subtree: true });
     }
 
     get configTemplate() {
@@ -43,7 +43,7 @@ class BetterNSFW extends Plugin {
             if (channelname === undefined) return
             channelname = channelname.childNodes[0];
             if(!channel.classList.contains("nsfw-filtered") && ((svg.childNodes.length > 1 && svg.childNodes[1].getAttribute("d").startsWith("M9.75,8")) || nsfwRegex.test(channelname.data)) &&
-				channel.querySelector('.nsfw-channel-tag') === null){
+                channel.querySelector('.nsfw-channel-tag') === null){
                 channel.classList.add("nsfw-filtered");
                 channelname.parentNode.outerHTML += `<span class="nsfw-channel-tag">18+</span>`;
                 //channelname.data = channelname.data.replace(/^nsfw-/, "");

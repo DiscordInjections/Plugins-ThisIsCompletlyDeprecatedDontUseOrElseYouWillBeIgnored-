@@ -7,7 +7,7 @@ class greentext extends Plugin {
         super(...args);
         this.didInit = false;
         this.mo = new MutationObserver(this.init.bind(this));
-        this.mo.observe(document.querySelector("#app-mount>div"), { childList: true, subtree: true });
+        this.mo.observe(document.querySelector(".app-XZYfmp"), { childList: true, subtree: true });
         window.DI.DISettings.registerSettingsTab(this, 'greentext', greentextSettings);
         window.DI.client.on('selectedUpdate', this.recolor.bind(this));
         this.recolor();
@@ -27,12 +27,11 @@ class greentext extends Plugin {
         if(!this.settings.orangetext) document.querySelectorAll(".markup>.orangetext").forEach(e => e.outerHTML = e.innerHTML);
         m.forEach(mr => {
             if(mr.addedNodes) mr.addedNodes.forEach(e => {
-                if(e.classList && e.classList.contains("message") && !e.classList.contains("message-sending")) this.process(e.childNodes[0].childNodes[0].childNodes[e.childNodes[0].childNodes[0].childNodes.length === 2 ? 1 : 2]);
+                if(e.classList && e.classList.contains("message") && !e.classList.contains("message-sending")) this.process(e.childNodes[0].childNodes[0].childNodes[2]);
                 if(e.classList && e.classList.contains("message-group")){
                     if(!e.childNodes[1].childNodes[0].classList.contains("message-sending")){
                         e.childNodes[1].childNodes.forEach(me => {
-                            var messageNode = me.childNodes[0].childNodes[me.classList.contains("first") ? 1 : 0];
-                            this.process(messageNode.childNodes[messageNode.childNodes.length === 2 ? 1 : 2]);
+                            this.process(me.childNodes[0].childNodes[me.classList.contains("first") ? 1 : 0].childNodes[2]);
                         });
                     }
                 }
