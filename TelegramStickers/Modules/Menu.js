@@ -10,7 +10,7 @@ class Menu {
         const boxTop = btnBCR.top-357;
         const boxLeft = btnBCR.left-318;
         $(`<div class="popout popout-top-right no-arrow no-shadow" style="z-index: 2000; visibility: visible; left: ${boxLeft}px; top: ${boxTop}px;"></div>`)
-            .appendTo($('.nux-highlights+[class="theme-dark"],.nux-highlights+[class="theme-light"]').first())
+            .appendTo($('.app>.popouts').first())
             .append(this.build());
         this.plugin.tspack.checkSets();
     }
