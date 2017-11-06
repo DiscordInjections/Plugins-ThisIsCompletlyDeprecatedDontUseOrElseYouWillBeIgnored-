@@ -3,7 +3,7 @@ const Plugin = module.parent.require('../Structures/Plugin');
 class RadioHaru extends Plugin {
     constructor(...args) {
         super(...args);
-		var audio = new Audio('http://stream.radioharu.pw/owo');
+		var audio = new Audio('https://stream.radioharu.pw/owo');
 
         this.log('Radio Haru loaded!');
 
@@ -36,7 +36,7 @@ class RadioHaru extends Plugin {
     get configTemplate() {
         return {
             color: 'aaaaaa',
-            iconURL: 'https://boo.owns-this.space/b7957c.jpg'
+            iconURL: 'https://files.isabel.moe/hNKOYP5.png'
         };
     }
 
