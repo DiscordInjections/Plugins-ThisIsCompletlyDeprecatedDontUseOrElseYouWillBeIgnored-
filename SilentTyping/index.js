@@ -5,12 +5,14 @@ class SilentTyping extends Plugin {
     constructor(...args) {
         super(...args);
 
-        const module = WebpackModules.findByUniqueProperties(["sendTyping"]);
-        if (!module) {
-            this.log("unable to monkey patch sendTyping method");
-            return;
-        }
-        this._cancel = monkeyPatch(module, "sendTyping", {instead: ()=>{}});
+        window.setTimeout(()=>{
+            const module = WebpackModules.findByUniqueProperties(["sendTyping"]);
+            if (!module) {
+                this.log("unable to monkey patch sendTyping method");
+                return;
+            }
+            this._cancel = monkeyPatch(module, "sendTyping", {instead: ()=>{}});
+        }, 1000);
     }
 
     unload() {
