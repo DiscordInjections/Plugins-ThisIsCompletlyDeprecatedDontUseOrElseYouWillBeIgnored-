@@ -10,7 +10,7 @@ class Menu {
         const boxTop = btnBCR.top-357;
         const boxLeft = btnBCR.left-318;
         $(`<div class="popout popout-top-right no-arrow no-shadow" style="z-index: 2000; visibility: visible; left: ${boxLeft}px; top: ${boxTop}px;"></div>`)
-            .appendTo($('.app>.popouts').first())
+            .appendTo($('.popouts,.tooltips+[class*="theme-"]').first())
             .append(this.build())
     }
 
@@ -64,7 +64,7 @@ class Menu {
                 $(`<h3 class="value"></h3>`),
                 $(`<h3 style="padding: 10px;">${locale['delete-confirm']}</h3>`),
                 $(`<div></div>`).append([
-                    $(`<span class="yes">${locale['yes']}</span>`).click(function() {
+                    $(`<span class="yes">${window.A ? window.A.Controller.locale.YES_TEXT : locale['yes']}</span>`).click(function() {
                         let id = $(this).attr('data-id');
                         if(!id) return;
                         self.plugin.storage.deletePack(Number(id));
@@ -72,7 +72,7 @@ class Menu {
                         self.confirmHide();
                         $(this).attr('data-id', '');
                     }),
-                    $(`<span class="no">${locale['no']}</span>`).click(self.confirmHide)
+                    $(`<span class="no">${window.A ? window.A.Controller.locale.NO_TEXT : locale['no']}</span>`).click(self.confirmHide)
                 ])
             ])
         );

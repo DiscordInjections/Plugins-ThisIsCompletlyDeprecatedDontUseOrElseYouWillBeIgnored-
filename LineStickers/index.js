@@ -49,7 +49,12 @@ class LineStickers extends Plugin {
             }
         });
 
+        window.DI.StateWatcher.on('languageChange', () => {if($(".emojiButton-38mF6t")[0]) this.insertButton();})
         if($(".line-emotes-btn")[0] || !$(".emojiButton-38mF6t")[0]) return;
+        this.insertButton();
+    }
+
+    insertButton(){
         $(`<div class="line-emotes-btn"></div>`)
             .append(
                 $(`<div style="background-image: url(${this.randomStickerID ? `//api.snazzah-is.cool/line-sticker/${this.randomStickerID}` : "//i-need.discord.cards/dab204.png"})"></div>`)

@@ -49,7 +49,12 @@ class TelegramStickers extends Plugin {
             }
         });
 
+        window.DI.StateWatcher.on('languageChange', () => {if($(".emojiButton-38mF6t")[0]) this.insertButton();})
         if($(".telegram-emotes-btn")[0] || !$(".emojiButton-38mF6t")[0]) return;
+        this.insertButton();
+    }
+
+    insertButton(){
         $(`<div class="telegram-emotes-btn"></div>`)
             .append(
                 $(`<div style="background-image: url(${this.randomSticker ? this.randomSticker : "//i-need.discord.cards/eda565.png"})"></div>`)
