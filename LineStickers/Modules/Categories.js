@@ -61,7 +61,7 @@ class Categories {
                     })
                 ]),
                 $(`<button type="button" class="line-add-button ui-button filled brand small">`).append(
-                    $(`<div class="ui-button-contents">${locale['addform-add']}</div>`)
+                    $(`<div class="ui-button-contents">${window.A ? window.A.Controller.locale.SETTINGS_GAMES_ADD : 'Add'}</div>`)
                 ).mouseenter(validate).on('click', (event) => {
                     if (validate()) {
                         var title = $('#line-add-title').val().trim();

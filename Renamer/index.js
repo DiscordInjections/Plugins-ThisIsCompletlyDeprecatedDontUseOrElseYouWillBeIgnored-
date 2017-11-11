@@ -635,8 +635,8 @@ class Renamer extends Plugin {
   }
 
   onContextMenu (context) {
-    // this.log(context)
     let inst = Renamer.getReactInstance(context)
+    this.log({e:context,inst});
     if (!inst) return;
     for (const child of inst.memoizedProps.children) {
       if (child && child.props && child.props.user) {
@@ -682,10 +682,8 @@ class Renamer extends Plugin {
     this.processmo = new MutationObserver((changes, _) => {
       this.process();
     })
-    this.processmo.observe($(".app>*:first-child>*:first-child")[ 0 ], { childList: true, subtree: true });
-    $("#app-mount>div>.theme-dark:not(.pictureInPicture-Ryvh67), div[data-reactroot]>.theme-light:not(.pictureInPicture-Ryvh67)").each((i, elm) => {
-      this.processmo.observe(elm, { childList: true, subtree: true });
-    });
+    this.processmo.observe($(".popouts")[ 0 ], { childList: true, subtree: true });
+    this.processmo.observe($(".layers")[ 0 ], { childList: true, subtree: true });
     // processmo.observe( $(".channel-members")[0] , {childList:true, subtree: true} )
     // processmo.observe( $(".channel-voice-states")[0] , {childList:true, subtree: true} )
   }

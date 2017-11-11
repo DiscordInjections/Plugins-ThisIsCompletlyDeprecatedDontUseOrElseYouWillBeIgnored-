@@ -4,7 +4,7 @@ class Observer {
     constructor(plugin) {
         this.plugin = plugin;
         this.mo = new MutationObserver(this.observer.bind(this));
-        this.mo.observe(document.querySelector(".app-XZYfmp"), { childList: true, subtree: true });
+        this.mo.observe(document.querySelector(".app-XZYfmp,.app"), { childList: true, subtree: true });
     }
     observer(recs){
         let self = this;

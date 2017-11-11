@@ -18,18 +18,18 @@ class Categories {
         return [
             $(`<div class="add-form" style="opacity: 0; pointer-events: none;">`).append([
                 $(`<div class="labels">`).append([
-                    `<label for="line-add-title">Name</label>`
+                    `<label for="line-add-title">${window.A ? window.A.Controller.locale.WEBHOOK_FORM_NAME : 'Name'}</label>`
                 ]),
                 $(`<div class="inputs">`).append([
-                    `<input id="line-add-title" placeholder="Name">`,
+                    `<input id="line-add-title" placeholder="${window.A ? window.A.Controller.locale.WEBHOOK_FORM_NAME : 'Name'}">`,
                     `<label id="telegram-status"></label>`
                 ]),
                 $(`<button type="button" class="line-add-button ui-button filled brand small">`).append(
-                    $(`<div class="ui-button-contents">Add</div>`)
+                    $(`<div class="ui-button-contents">${window.A ? window.A.Controller.locale.SETTINGS_GAMES_ADD : 'Add'}</div>`)
                 ).on('click', (event) => {
                     $('#telegram-status').removeClass('bad').text('Requesting...');
                     var title = $('#line-add-title').val().trim();
-                    superagent.get(`https://api.snazzah-is.cool/telegram/${title.split("/")[0]}`).then(res => {
+                    if(title.split("/")[0].length !== 0) superagent.get(`https://api.snazzah-is.cool/telegram/${title.split("/")[0]}`).then(res => {
                         this.plugin.log(res.body);
                         if(!$('#bda-qem-telegram-container')[0]) return;
                         this.plugin.tspack.appendSet(res.body);
