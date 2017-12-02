@@ -3,8 +3,8 @@ const Plugin = module.parent.require('../Structures/Plugin');
 class BetterNSFW extends Plugin {
     constructor(...args) {
         super(...args);
-        this.mo = new MutationObserver(this.check.bind(this));
-        this.mo.observe(document.querySelector(".app-XZYfmp"), { childList: true, subtree: true });
+        this.checkBind = this.check.bind(this)
+    	window.DI.StateWatcher.on('mutation', this.checkBind);
     }
 
     get configTemplate() {
@@ -13,18 +13,12 @@ class BetterNSFW extends Plugin {
         };
     }
 
-    react(node){
-        return node[Object.keys(node).find((key) => key.startsWith("__reactInternalInstance"))];
-    }
-
     unload(){
-        this.mo.disconnect();
-        document.querySelectorAll(".nsfw-channel-tag").forEach(tag => {
-            tag.parentNode.removeChild(tag);
-        });
+    	window.DI.StateWatcher.removeListener('mutation', this.checkBind);
+        document.querySelectorAll(".nsfw-channel-tag").forEach(tag => tag.parentNode.removeChild(tag));
         document.querySelectorAll(".nsfw-filtered").forEach(channel => {
             channel.classList.remove("nsfw-filtered");
-            let react = this.react(channel);
+            let react = window.DI.getReactInstance(channel);
             if(!react) return;
             if(react.memoizedProps.children[0]){
                 channel.childNodes[0].lastChild.childNodes[1].childNodes[0].data = react.memoizedProps.children[0].props.channel.name;

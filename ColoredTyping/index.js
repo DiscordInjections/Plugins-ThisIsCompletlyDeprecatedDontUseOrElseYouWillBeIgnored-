@@ -4,22 +4,24 @@ class ColoredTyping extends Plugin {
     constructor(...args) {
         super(...args);
         this.data = {};
-        window.DI.client.on('typingStart', this.onTyping.bind(this));
-        window.DI.client.on('selectedUpdate', this.onSwitch.bind(this));
-        window.DI.client.on('guildMemberUpdate', this.update.bind(this));
-        this.mo = new MutationObserver((changes, _) => {
-          this.colorize();
-        });
-        this.mo.observe(document.querySelector(".app>*:first-child>*:first-child"), { childList: true, subtree: true });
-        window.DI.client.once('ready', this.onSwitch.bind(this));
+        this.oTB = this.onTyping.bind(this);
+        this.oSB = this.onSwitch.bind(this);
+        this.ouB = this.update.bind(this);
+        this.ocB = this.colorize.bind(this);
+        window.DI.client.on('typingStart', this.oTB);
+        window.DI.client.on('selectedUpdate', this.oSB);
+        window.DI.client.on('guildMemberUpdate', this.ouB);
+        window.DI.StateWatcher.on('mutation', this.ocB);
+        window.DI.client.once('ready', this.oSB);
         this.colorize();
     }
 
     unload() {
         this.decolorize();
-        window.DI.client.removeListener('typingStart', this.onTyping.bind(this));
-        window.DI.client.removeListener('selectedUpdate', this.onSwitch.bind(this));
-        window.DI.client.removeListener('guildMemberUpdate', this.update.bind(this));
+        window.DI.client.removeListener('typingStart', this.oTB);
+        window.DI.client.removeListener('selectedUpdate', this.oSB);
+        window.DI.client.removeListener('guildMemberUpdate', this.ouB);
+        window.DI.StateWatcher.removeListener('mutation', this.ocB);
     }
 
     hexToRgb(hex) {

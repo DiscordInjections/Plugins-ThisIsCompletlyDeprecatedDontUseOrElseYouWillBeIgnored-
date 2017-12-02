@@ -16,80 +16,60 @@ class Renamer extends Plugin {
         }
       }
     };
-    this.contextMarkup =
-      `<div class="item-group renamer">
-      <div class="item name-item">
-        <span>Change Local Nickname</span>
-        <div class="hint"></div>
-      </div>
-      <div class="item tag-item">
-        <span>Change User Tag</span>
-        <div class="hint"></div>
-      </div>
-    </div>`;
 
     this.modalMarkup =
       `<span class="renamer-modal"><div class="callout-backdrop renamer" style="background-color:#000; opacity:0.85"></div><div class="modal" style="opacity: 1">
         <div class="modal-inner">
             <form class="form">
-                <div class="form-header">
-                    <header class="modal-header">modal-header</header>
+              <div class="form-header">
+                <header class="modal-header">modal-header</header>
+              </div>
+              <div class="form-inner">
+                <div class="control-group">
+                  <label class="modal-text-label" for="modal-text">
+                    modal-text-label
+                  </label>
+                  <input type="text" id="modal-text" name="text">
                 </div>
-                <div class="form-inner">
-                    <div class="control-group">
-                        <label class="modal-text-label" for="modal-text">
-                            modal-text-label
-                        </label>
-                        <input type="text" id="modal-text" name="text">
-                    </div>
-                    <div class="control-group">
-                        <label class="modal-reset"><a class="modal-reset-text">modal-reset-text</a></label>
-                    </div>
-              <div class="control-group">
-                <label class="color-picker-label">color-picker-label</label>
-                <div class="color-picker">
-                <div class="swatches"></div>
+                <div class="control-group">
+                  <label class="modal-reset"><a class="modal-reset-text">modal-reset-text</a></label>
+                </div>
+                <div class="control-group">
+                  <label class="color-picker-label">color-picker-label</label>
+                  <div class="color-picker">
+                    <div class="swatches"></div>
+                  </div>
                 </div>
               </div>
-                </div>
-                <div class="form-actions">
-                    <button type="button" class="btn btn-default">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save</button>
-                </div>
+              <div class="form-actions">
+                <button type="button" class="btn btn-default">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save</button>
+              </div>
             </form>
         </div>
     </div></span>`
 
+    this.modalMarkup2 = `
+    <div class="ui-form-item margin-bottom-20"><h5 class="h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY marginBottom8-1mABJ4 modal-text-label">modal-text-label</h5><input type="text" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_" id="modal-text" name="text"></div>
+    <div class="ui-form-item margin-bottom-20"><div class="modal-reset"><a class="contentsDefault-nt2Ym5 contents-4L4hQM contentsLink-2ScJ_P contents-4L4hQM modal-reset-text">modal-reset-text</a></div></div>
+    <div class="ui-form-item margin-bottom-20"><h5 class="h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY marginBottom8-1mABJ4 color-picker-label">color-picker-label</h5><div class="color-picker"><div class="swatches"></div></div></div>`
+
     this.colourList = ['rgb(26, 188, 156)','rgb(46, 204, 113)','rgb(52, 152, 219)','rgb(155, 89, 182)','rgb(233, 30, 99)','rgb(241, 196, 15)','rgb(230, 126, 34)','rgb(231, 76, 60)','rgb(149, 165, 166)','rgb(96, 125, 139)','rgb(17, 128, 106)','rgb(31, 139, 76)','rgb(32, 102, 148)','rgb(113, 54, 138)','rgb(173, 20, 87)','rgb(194, 124, 14)','rgb(168, 67, 0)','rgb(153, 45, 34)','rgb(151, 156, 159)','rgb(84, 110, 122)'];
 
     //this.getUpdates()
-    this.log("Initializing MutationObserver...");
-    this.contextmo = new MutationObserver((changes, _) => {
-      changes.forEach(
-        (change, i) => {
-          if (change.addedNodes) {
-            [ ...change.addedNodes ].forEach((node) => {
-              if (node.nodeType == 1 && node.className.includes("context-menu")) this.onContextMenu(node)
-            })
-          }
-        }
-      )
-    })
-    // ,dm_mo = new MutationObserver((...args)=>{
-    //   this.log("dm_mo")
-    //   this.attachChatListners()
-    // });
     this.log("Attaching chat listeners...");
-    this.attachChatListners();
-    this.contextmo.observe($("#app-mount>:first-child")[ 0 ], { childList: true })
-    // dm_mo.observe($(".app>.flex-spacer>.flex-spacer")[0],{childList:true})
+    this.processBind = this.process.bind(this);
+    window.DI.StateWatcher.on('mutation', this.processBind);
+    this.contextMenuBind = this.contextMenu.bind(this);
+    window.A.Watcher.on('contextMenu', this.contextMenuBind);
     this.log("Loading settings...");
     this.loadSettings();
     $("head").append("<link rel='stylesheet' href='https://bgrins.github.io/spectrum/spectrum.css' />");
-    this.contextExtention = $(this.contextMarkup)
-    this.syncColoredTextSetting();
+    this.coloredText = true;
     this.attachSlugCommand();
   }
+
+  static get after() { return ['afunc'] }
 
   get configTemplate() {
       return {
@@ -100,9 +80,9 @@ class Renamer extends Plugin {
 
   unload () {
     $('#CSS-Renamer').remove();
-    this.processmo.disconnect();
-    this.contextmo.disconnect();
+    window.DI.StateWatcher.removeListener('mutation', this.processBind);
     window.DI.StateWatcher.removeListener('slugmod-reloaded', this.slugModFunction.bind(this));
+    window.A.Watcher.removeListener('contextMenu', this.contextMenuBind);
   }
 
   attachSlugCommand () {
@@ -379,33 +359,40 @@ class Renamer extends Plugin {
     let { nick, username, tag } = ((user) => user ? user : {})(this.getNickname(user.id))
     nick = nick ? nick : user.username;
     //this.log(nick, username)
-    let modal = $(this.modalMarkup)
-    modal.find(".modal-header").text("Change User Tag")
-    modal.find(".modal-text-label").text("Tag Text")
-    tag && tag.text && modal.find("#modal-text").val(tag.text)
-    modal.find(".modal-reset-text").text("Delete Tag")
-    modal.find(".color-picker-label").text("Tag Color")
-    this.setSwatches(tag && tag.back, this.colourList, modal.find(".swatches"));
-    modal.on("submit", "form", (e) => {
-      e.preventDefault();
-      const fore = ((c) => (c[ 0 ] * 0.299 + c[ 1 ] * 0.587 + c[ 2 ] * 0.114) > 186 ? "#000" : "#FFF")($(".ui-color-picker-swatch.selected").css("backgroundColor").slice(4, -1).split(", "))
-      const back = ((result) => result == "rgb(153, 170, 181)" ? "#7289da" : result)($(".ui-color-picker-swatch.selected").css("backgroundColor"))
-      this.setUserData(user, {
-        tag: {
-          text: e.target.elements.text.value,
-          back: ((result) => result == "rgb(153, 170, 181)" ? "#7289da" : result)($(".ui-color-picker-swatch.selected").css("backgroundColor")),
-          fore: ((c) => (c[ 0 ] * 0.299 + c[ 1 ] * 0.587 + c[ 2 ] * 0.114) > 186 ? "#000" : "#FFF")($(".ui-color-picker-swatch.selected").css("backgroundColor").slice(4, -1).split(", "))
-        }
-      });
-      modal.remove();
-    })
-      .appendTo("#app-mount>:first-child")
-      .on("click", ".modal-reset", (e) => {
+    let modalInner = $(this.modalMarkup2);
+    modalInner.find(".modal-text-label").text("Tag Text")
+    tag && tag.text && modalInner.find("#modal-text").val(tag.text)
+    modalInner.find(".modal-reset-text").text("Delete Tag")
+    modalInner.find(".color-picker-label").text("Tag Color")
+    this.setSwatches(tag && tag.back, this.colourList, modalInner.find(".swatches"));
+    let modal = new window.A.dialog('default', {
+      title: 'Change User Tag',
+      content: [modalInner[0],modalInner[2],modalInner[4]],
+      buttons: [
+        {
+          text: 'Save',
+          onClick: () => {
+            const fore = ((c) => (c[ 0 ] * 0.299 + c[ 1 ] * 0.587 + c[ 2 ] * 0.114) > 186 ? "#000" : "#FFF")($(".ui-color-picker-swatch.selected").css("backgroundColor").slice(4, -1).split(", "))
+            const back = ((result) => result == "rgb(153, 170, 181)" ? "#7289da" : result)($(".ui-color-picker-swatch.selected").css("backgroundColor"))
+            this.setUserData(user, {
+              tag: {
+                text: modalInner.find("#modal-text").text(),
+                back: ((result) => result == "rgb(153, 170, 181)" ? "#7289da" : result)($(".ui-color-picker-swatch.selected").css("backgroundColor")),
+                fore: ((c) => (c[ 0 ] * 0.299 + c[ 1 ] * 0.587 + c[ 2 ] * 0.114) > 186 ? "#000" : "#FFF")($(".ui-color-picker-swatch.selected").css("backgroundColor").slice(4, -1).split(", "))
+              }
+            });
+            modal.hide();
+          }
+        },
+        {text: 'Cancel', style:'ghost'}
+      ]
+    });
+    modalInner.on("click", ".modal-reset", (e) => {
         this.resetUserProp(user.id, "tag");
-        modal.remove();
+        modal.hide();
       })
-      .on("click", ".callout-backdrop,button.btn-default", (e) => {modal.remove()})
-    modal.find("#modal-text").click().focus();
+    modal.show();
+    modalInner.find("#modal-text").click().focus();
   }
 
   showInputModal (user) {
@@ -414,7 +401,37 @@ class Renamer extends Plugin {
     let custom,
       selection = this.colourList.indexOf(colour);
     //this.log(nick, username, colour)
-    let colorGroup =
+    let modalInner = $(this.modalMarkup2);
+    modalInner.find(".modal-text-label").text(`Nickname ${user.username}`)
+    tag && tag.text && modalInner.find("#modal-text").val(nick)
+    modalInner.find(".modal-reset-text").text("Reset Nickname")
+    modalInner.find(".color-picker-label").text("Nickname Color")
+    this.setSwatches(tag && tag.back, this.colourList, modalInner.find(".swatches"));
+    let modal = new window.A.dialog('default', {
+      title: 'Change Local Username',
+      content: [modalInner[0],modalInner[2],modalInner[4]],
+      buttons: [
+        {
+          text: 'Save',
+          onClick: () => {
+            this.setUserData(user, {
+              nick: modalInner.find("#modal-text").text(),
+              color: ((result) => result == "rgb(153, 170, 181)" ? null : result)($(".ui-color-picker-swatch.selected").css("backgroundColor"))
+            });
+            modal.hide();
+          }
+        },
+        {text: 'Cancel', style:'ghost'}
+      ]
+    });
+    modalInner.on("click", ".modal-reset", (e) => {
+        this.resetUserProp(user.id, "tag");
+        modal.hide();
+      })
+    modal.show();
+    modalInner.find("#modal-text").click().focus();
+
+    /*let colorGroup =
       `<div class="ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-nowrap" style="flex: 1 1 auto; margin-top: 5px;"><div class="ui-color-picker-swatch large${colour == null ? " selected" : ""}" style="background-color: rgb(153, 170, 181);"></div><div class="ui-color-picker-swatch large custom${selection == -1 && colour ? " selected" : ""}" style="background-color:${selection == -1 && colour ? colour : 'rgb(255, 255, 255)'}"></div>
     <div class="regulars ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-wrap ui-color-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;">` + this.colourList.map((val, i) => `<div class="ui-color-picker-swatch${i == selection ? " selected" : ""}" style="background-color: ${val};"></div>`).join("") + `</div></div>`
     let modal = $(`<span class="renamer-modal"><div class="callout-backdrop renamer" style="background-color:#000; opacity:0.85"></div><div class="modal" style="opacity: 1">
@@ -475,7 +492,7 @@ class Renamer extends Plugin {
         custom.css("backgroundColor", color.toRgbString()).addClass("selected")
       }
     })
-    modal.find("#nickname").click().focus();
+    modal.find("#nickname").click().focus();*/
   }
 
   resetUserProp (id, prop) {
@@ -514,10 +531,6 @@ class Renamer extends Plugin {
     }
   }
 
-  syncColoredTextSetting () {
-    this.coloredText = true;
-  }
-
   loadSettings () {
     this.settings = $.extend({}, this.defaultSettings, JSON.parse(window.DI.localStorage.getItem("DI-Renamer")));
   }
@@ -527,6 +540,7 @@ class Renamer extends Plugin {
   }
 
   process (force) {
+    let self = this;
     if (force) {
       $("[renamer]").removeAttr("renamer");
       $(".renamer-tag").remove();
@@ -541,8 +555,8 @@ class Renamer extends Plugin {
         return color;
       }).removeAttr("data-renamer-color");
     }
+
     //chat names
-    this.syncColoredTextSetting();
     const start = Date.now()
 
     $(".chat .comment").each((i, group) => {
@@ -634,29 +648,22 @@ class Renamer extends Plugin {
     });
   }
 
-  onContextMenu (context) {
-    let inst = Renamer.getReactInstance(context)
-    this.log({e:context,inst});
-    if (!inst) return;
-    for (const child of inst.memoizedProps.children) {
-      if (child && child.props && child.props.user) {
-        let { id, username, discriminator } = child.props.user;
-        // this.log(child.props.user)
-        let data = { id, username, discriminator }
-        $(context).append(this.contextExtention)
-          .on("click.renamer", ".name-item", data, this.onContextName.bind(this))
-          .on("click.renamer", ".tag-item", data, this.onContextTag.bind(this))
-        //.on("click.renamer",".avatar-item",data,this.onContextAvatar.bind(this))
-        break;
-      }
+  contextMenu(props) {
+    if(props.type === "member" || props.type === "groupMember"){
+      window.A.contextMenu.fromArray([[{
+        text: "Set Local Nickname",
+        onClick: () => {
+          this.showInputModal({id: props.user.id, username: props.user.username, discriminator: props.user.discriminator});
+          props.element.style.display = "none";
+        }
+      },{
+        text: "Set Local Tag",
+        onClick: () => {
+          this.showTagModal({id: props.user.id, username: props.user.username, discriminator: props.user.discriminator});
+          props.element.style.display = "none";
+        }
+      }]]).appendToContextMenu(props.element);
     }
-    //this.log(this.getReactObject( context).props.type)
-  }
-
-  onContextName (e) {
-    $(e.delegateTarget).hide()
-    //this.log("SetName",e.data);
-    this.showInputModal(e.data)
   }
 
   waitForElement (css, callback) {
@@ -676,21 +683,6 @@ class Renamer extends Plugin {
         }
       }, 100)
     }
-  }
-
-  attachChatListners () {
-    this.processmo = new MutationObserver((changes, _) => {
-      this.process();
-    })
-    this.processmo.observe($(".popouts")[ 0 ], { childList: true, subtree: true });
-    this.processmo.observe($(".layers")[ 0 ], { childList: true, subtree: true });
-    // processmo.observe( $(".channel-members")[0] , {childList:true, subtree: true} )
-    // processmo.observe( $(".channel-voice-states")[0] , {childList:true, subtree: true} )
-  }
-
-  onContextTag (e) {
-    $(e.delegateTarget).hide();
-    this.showTagModal(e.data);
   }
 }
 
