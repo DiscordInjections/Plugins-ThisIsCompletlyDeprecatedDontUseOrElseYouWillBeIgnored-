@@ -71,7 +71,7 @@ class LineStickers extends Plugin {
     }
 
     unload() {
-        this.observer.mo.disconnect();
+        window.DI.StateWatcher.removeListener('mutation', this.observer.oBind);
         $('.line-emotes-btn').remove();
         $('.popout>#bda-qem-line-container').parent().remove();
         $('.messages .markup a[style="display: none;"]').css('display', 'initial');

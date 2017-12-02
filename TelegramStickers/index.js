@@ -71,7 +71,7 @@ class TelegramStickers extends Plugin {
     }
 
     unload() {
-        this.observer.mo.disconnect();
+        window.DI.StateWatcher.removeListener('mutation', this.observer.bind);
         $('.telegram-emotes-btn').remove();
         $('.popout>#bda-qem-telegram-container').parent().remove();
         $('.messages .markup a[style="display: none;"]').css('display', 'initial');

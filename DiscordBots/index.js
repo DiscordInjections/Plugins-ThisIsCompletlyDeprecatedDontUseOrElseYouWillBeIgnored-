@@ -25,11 +25,11 @@ class DiscordBots extends Plugin {
         this.noProfile = true;
         this.checkedPopout = false;
         this.noPopout = true;
-        this.mo = new MutationObserver((changes, _) => {
-            this.checkForProfile();
+        this.mBind = rec => {
+            rec.map(r => {if(r && r.addedNodes) r.addedNodes.forEach(n => this.checkForProfile(n))});
             this.checkForPopout();
-        });
-        this.mo.observe($("#app-mount>div")[0], { childList: true, subtree: true });
+        }
+        window.DI.StateWatcher.on('mutation', this.mBind);
         this.registerCommand({
             name: "db-setbdptoken",
             info: "Sets your bots.discord.pw token.",
@@ -86,22 +86,25 @@ class DiscordBots extends Plugin {
     }
 
     unload() {
-        this.mo.disconnect();
-    }
-
-    reactInst(node){
-        return node[ Object.keys(node).find((key) => key.startsWith("__reactInternalInstance")) ]
+        window.DI.StateWatcher.removeListener('mutation', this.mBind);
     }
 
     makeProfileGuild(user){
-        return `<div class="guild no-link"><div class="avatar-large stop-animation" style="background-image: url(&quot;${user.displayAvatarURL}&quot;);"><div class="status status-${user.presence.game && user.presence.game.streaming ? "streaming" : user.presence.status}"></div></div><div class="guild-inner"><div class="guild-name"><span class="username">${user.username.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;")}</span><span class="discriminator">#${user.discriminator}</span></div></div></div>`
+        let st = {
+            online: "statusOnline-1Mp2_H",
+            offline: "statusOffline-jZXr_u",
+            dnd: "statusDnd-35xAXU",
+            idle: "statusIdle-2AQdvu"
+        }
+        return `<div class="listRow-1wEi-U weightMedium-13x9Y8"><div class="avatar-1BXaQj large-3yh-62 listAvatar-MpHQ5z"><div class="image-EVRGPw mask-2vyqAW" style="background-image: url(&quot;${user.displayAvatarURL}&quot;);"></div><div class="listAvatarStatus-1Egz5B ${st[user.presence.status]} status-3jUEha status-3jUEha"></div></div><div class="listName-1Xr1Jk size16-3IvaX_ height16-1qXrGy nameTag-26T3kW"><span class="username">${user.username.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;")}</span><span class="discriminator listDiscriminator-yFeQU- size12-1IGJl9">#${user.discriminator}</span></div></div>`
     }
 
     onBotProfile(user){
         if(this.settings.usedbl){
             DBLAPI.getBot(user.id).then(res => {
                 if(res.body.certifiedBot){
-                    $(".header-info").prepend(`<div class="profile-badge dblbadge badge-dblcertbot"></div>`);
+                    if(!$(".nameTag-2n-N0D+.flex-lFgbSz>.flex-lFgbSz")) $(".nameTag-2n-N0D+.flex-lFgbSz").append(`<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO" style="flex: 1 1 auto;"></div>`);
+                    $(".header-info").prepend(`<div class="profileBadge-kI8nxa dblbadge badge-dblcertbot"></div>`);
                     $(".badge-dblcertbot").mouseover(()=>{
                         let tt = $("<div>").append("Certified Bot").addClass("tooltip tooltip-top tooltip-normal db-tt dblcertbot")
                         $(".tooltips").append(tt);
@@ -117,29 +120,27 @@ class DiscordBots extends Plugin {
                         window.open("//discordbots.org/certification")
                     });
                 };
-                $(`<div class="actions db-bot"><button class="btn reject-friend no-link">${res.body.lib}</button>${
-                    res.body.server_count ? `<button class="btn no-link">${res.body.server_count.formatNumber()} Servers</button>` : ""
-                }${
-                    res.body.shard_count ? `<button class="btn no-link">${res.body.shard_count.formatNumber()} Shards</button>` : ""
-                }<button class="btn add-friend no-link">${res.body.points.formatNumber()} Upvotes</button></div>`)
-                .insertAfter(".header-info");
-                $(".header-info-inner").append(`<div class="activity db-prefix">Prefix: <strong>${res.body.prefix.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;")}</strong></div>`);
-                let html = `<div class="section db-more"><div class="section-header">About</div><div class="note">`;
+                $(".headerInfo-Gkqcz9").append(`<div class="activity db-prefix">Prefix: <strong>${res.body.prefix.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;")}</strong></div>`);
+                let html = `<div class="userInfoSection-2WJxMm db-more"><div class="userInfoSectionHeader-pmdPGs size12-1IGJl9 weightBold-2qbcng">About</div><div class="note">`;
                 html += `<div class="description-3MVziF formText-1L-zZB note-UEZmbY marginTop4-2rEBfJ modeDefault-389VjU primary-2giqSn" style="flex: 1 1 auto;">${res.body.shortdesc.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;")}</div>`
-                html += `<a href="//discordbots/bot/${user.id}"><button class="btn">Discordbots.org Page</button></a>`;
-                if(res.body.invite !== "") html += `<a href="${res.body.invite}"><button class="btn">Invite</button></a>`;
-                if(res.body.website !== "") html += `<a href="${res.body.website}"><button class="btn">Website</button></a>`;
-                if(res.body.github !== "") html += `<a href="${res.body.github}"><button class="btn">GitHub Repo</button></a>`;
+                html += `<a href="//discordbots/bot/${user.id}"><button class="buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu" style="flex: 0 0 auto;"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">Discordbots.org Page</div></button></a>`;
+                if(res.body.invite !== "") html += `<a href="${res.body.invite}"><button class="buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu buttonSpacing-3R7DSg" style="flex: 0 0 auto;"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">Invite</div></button></a>`;
+                if(res.body.website !== "") html += `<a href="${res.body.website}"><button class="buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu buttonSpacing-3R7DSg" style="flex: 0 0 auto;"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">Website</div></button></a>`;
+                if(res.body.github !== "") html += `<a href="${res.body.github}"><button class="buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu buttonSpacing-3R7DSg" style="flex: 0 0 auto;"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">GitHub Repo</div></button></a>`;
+                html += `<a><button class="no-link buttonBrandGhostDefault-2JCnWW buttonGhostDefault-2NFSwJ buttonDefault-2OLW-v button-2t3of8 buttonGhost-2Y7zWJ buttonBrandGhost-1-Lmhc mediumGrow-uovsMu buttonSpacing-3R7DSg" style="flex: 0 0 auto;"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsGhost-2Yp1r8">${res.body.lib}</div></button></a>`;
+                if(res.body.server_count) html += `<a><button class="no-link buttonBrandGhostDefault-2JCnWW buttonGhostDefault-2NFSwJ buttonDefault-2OLW-v button-2t3of8 buttonGhost-2Y7zWJ buttonBrandGhost-1-Lmhc mediumGrow-uovsMu buttonSpacing-3R7DSg" style="flex: 0 0 auto;"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsGhost-2Yp1r8">${res.body.server_count.formatNumber()} Servers</div></button></a>`;
+                if(res.body.shard_count) html += `<a><button class="no-link buttonBrandGhostDefault-2JCnWW buttonGhostDefault-2NFSwJ buttonDefault-2OLW-v button-2t3of8 buttonGhost-2Y7zWJ buttonBrandGhost-1-Lmhc mediumGrow-uovsMu buttonSpacing-3R7DSg" style="flex: 0 0 auto;"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsGhost-2Yp1r8">${res.body.shard_count.formatNumber()} Shards</div></button></a>`;
+                html += `<a><button type="button" class="buttonGreenFilledDefault-_lLQaz buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonGreenFilled-6QHNrw mediumGrow-uovsMu buttonSpacing-3R7DSg"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">${res.body.points.formatNumber()} Upvotes</div></button></a>`;
                 html += `</div></div></div>`;
                 let owners = [];
                 res.body.owners.map(id => {if(window.DI.client.users.get(id)) owners.push(window.DI.client.users.get(id))});
                 if(owners.length !== 0){
-                    html += `<div class="section"><div class="section-header">Owner(s)</div>`;
+                    html += `<div class="userInfoSection-2WJxMm"><div class="userInfoSectionHeader-pmdPGs size12-1IGJl9 weightBold-2qbcng">Owner(s)</div>`;
                     owners.map(user=>html+=this.makeProfileGuild(user));
                     html += `</div>`;
                 }
                 if(this.settings.renderdesc) {
-                    html += `<div class="section db-fulldesc"><iframe width="470" height="800px"></iframe></div>`;
+                    html += `<div class="userInfoSection-2WJxMm db-fulldesc"><iframe width="470" height="800px"></iframe></div>`;
                     this.longdesc = res.body.longdesc;
                 };
                 this.belowNoteHTML = html;
@@ -152,13 +153,13 @@ class DiscordBots extends Plugin {
                 BDPAPI.getBotStats(user.id, this.settings.bdptoken).then(res2 => {
                     let shard_count = res2.body.stats.length;
                     let server_count = res2.body.stats.map(s=>s.server_count).reduce((prev, val) => prev + val);
-                    $(".header-info-inner").append(`<div class="activity db-prefix">Prefix: <strong>${res.body.prefix.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;")}</strong></div>`);
+                    $(".headerInfo-Gkqcz9").append(`<div class="activity db-prefix">Prefix: <strong>${res.body.prefix.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;")}</strong></div>`);
                     $(`<div class="actions db-bot"><button class="btn reject-friend no-link">${res.body.library}</button>${
                         server_count ? `<button class="btn no-link">${server_count.formatNumber()} Servers</button>` : ""
                     }${
                         shard_count !== 1 ? `<button class="btn no-link">${shard_count.formatNumber()} Shards</button>` : ""
-                    }</div>`).insertAfter(".header-info");
-                    let html = `<div class="section db-more"><div class="section-header">About</div><div class="note">`;
+                    }</div>`).insertAfter(".headerInfo-Gkqcz9");
+                    let html = `<div class="userInfoSection-2WJxMm db-more"><div class="userInfoSectionHeader-pmdPGs size12-1IGJl9 weightBold-2qbcng">About</div><div class="note">`;
                     html += `<div class="description-3MVziF formText-1L-zZB note-UEZmbY marginTop4-2rEBfJ modeDefault-389VjU primary-2giqSn" style="flex: 1 1 auto;">${res.body.description.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;")}</div>`
                     html += `<a href="//bots.discord.pw/bots/${user.id}"><button class="btn">bots.discord.pw Page</button></a>`;
                     if(res.body.invite_url !== "") html += `<a href="${res.body.invite_url}"><button class="btn">Invite</button></a>`;
@@ -167,12 +168,12 @@ class DiscordBots extends Plugin {
                     let owners = [];
                     res.body.owner_ids.map(id => {if(window.DI.client.users.get(id)) owners.push(window.DI.client.users.get(id))});
                     if(owners.length !== 0){
-                        html += `<div class="section"><div class="section-header">Owner(s)</div>`;
+                        html += `<div class="userInfoSection-2WJxMm"><div class="userInfoSectionHeader-pmdPGs size12-1IGJl9 weightBold-2qbcng">Owner(s)</div>`;
                         owners.map(user=>html+=this.makeProfileGuild(user));
                         html += `</div>`;
                     }
                     if(this.settings.renderdesc) {
-                        html += `<div class="section db-fulldesc"><iframe width="470" height="800px"></iframe></div>`;
+                        html += `<div class="userInfoSection-2WJxMm db-fulldesc"><iframe width="470" height="800px"></iframe></div>`;
                         this.longdesc = res.body.full_description;
                     };
                     this.belowNoteHTML = html;
@@ -192,10 +193,11 @@ class DiscordBots extends Plugin {
         if(this.settings.usedbl){
             DBLAPI.getUser(user.id).then(res => {
                 DBLAPI.getUserBots(user.id).then(res2 => {
+                    if(!$(".nameTag-2n-N0D+.flex-lFgbSz>.flex-lFgbSz")) $(".nameTag-2n-N0D+.flex-lFgbSz").append(`<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO" style="flex: 1 1 auto;"></div>`);
                     if(res.body.certifiedDev){
-                        $(".header-info").prepend(`<div class="profile-badge dblbadge badge-dblcertdev"></div>`);
+                        $(".nameTag-2n-N0D+.flex-lFgbSz>.flex-lFgbSz").prepend(`<div class="profileBadge-kI8nxa dblbadge badge-dblcertdev"></div>`);
                         $(".badge-dblcertdev").mouseover(()=>{
-                            let tt = $("<div>").append("Certified Developer").addClass("tooltip tooltip-top tooltip-normal db-tt dblcertdev")
+                            let tt = $("<div>").append("Certified Developer").addClass("tooltip tooltip-top tooltip-brand db-tt dblcertdev")
                             $(".tooltips").append(tt);
                             var position = $(".badge-dblcertdev").offset();
                             position.top -= 38 + tt.height();
@@ -210,9 +212,9 @@ class DiscordBots extends Plugin {
                         });
                     };
                     if(res.body.admin){
-                        $(".header-info").prepend(`<div class="profile-badge dblbadge no-link badge-dbladmin"></div>`);
+                        $(".nameTag-2n-N0D+.flex-lFgbSz>.flex-lFgbSz").prepend(`<div class="profileBadge-kI8nxa dblbadge no-link badge-dbladmin"></div>`);
                         $(".badge-dbladmin").mouseover(()=>{
-                            let tt = $("<div>").append("Discord Bot List Site Administrator").addClass("tooltip tooltip-top tooltip-normal db-tt dbladmin")
+                            let tt = $("<div>").append("Discord Bot List Site Administrator").addClass("tooltip tooltip-top tooltip-brand db-tt dbladmin")
                             $(".tooltips").append(tt);
                             var position = $(".badge-dbladmin").offset();
                             position.top -= 38 + tt.height();
@@ -224,9 +226,9 @@ class DiscordBots extends Plugin {
                         });
                     };
                     if(res.body.mod){
-                        $(".header-info").prepend(`<div class="profile-badge dblbadge no-link badge-dblmod"></div>`);
+                        $(".nameTag-2n-N0D+.flex-lFgbSz>.flex-lFgbSz").prepend(`<div class="profileBadge-kI8nxa dblbadge no-link badge-dblmod"></div>`);
                         $(".badge-dblmod").mouseover(()=>{
-                            let tt = $("<div>").append("Discord Bot List Moderator").addClass("tooltip tooltip-top tooltip-normal db-tt dblmod")
+                            let tt = $("<div>").append("Discord Bot List Moderator").addClass("tooltip tooltip-top tooltip-brand db-tt dblmod")
                             $(".tooltips").append(tt);
                             var position = $(".badge-dblmod").offset();
                             position.top -= 38 + tt.height();
@@ -238,14 +240,14 @@ class DiscordBots extends Plugin {
                         });
                     };
                     if(res.body.banner !== "" && res.body.banner){
-                        $("#user-profile-modal .header").addClass("with-background").attr('style', `background-image:url('${res.body.banner.replace(/^http:/g, "https:")}')!important;background-size:cover;background-position:center;`)
+                        $(".inner-1_1f7b .topSectionNormal-2LlRG1").addClass("with-background").attr('style', `background-image:url('${res.body.banner.replace(/^http:/g, "https:")}')!important;background-size:cover;background-position:center;`)
                     }
                     let html = '';
                     let owners = [];
                     res2.body.results.map(bot => owners.push(new Discord.User(window.DI.client, bot)));
                     this.log(owners, res2, new Discord.User(window.DI.client, res2.body.results[0]))
                     if(owners.length !== 0){
-                        html += `<div class="section dbl-section"><div class="section-header">Bots</div>`;
+                        html += `<div class="userInfoSection-2WJxMm dbl-section"><div class="userInfoSectionHeader-pmdPGs size12-1IGJl9 weightBold-2qbcng">Bots</div>`;
                         owners.map(user=>html+=this.makeProfileGuild(user));
                         html += `</div>`;
                     };
@@ -264,7 +266,7 @@ class DiscordBots extends Plugin {
                 let owners = [];
                 res.body.bots.map(bot => {if(window.DI.client.users.get(bot.user_id)) owners.push(window.DI.client.users.get(bot.user_id))});
                 if(owners.length !== 0){
-                    html += `<div class="section"><div class="section-header">Bots</div>`;
+                    html += `<div class="userInfoSection-2WJxMm"><div class="userInfoSectionHeader-pmdPGs size12-1IGJl9 weightBold-2qbcng">Bots</div>`;
                     owners.map(user=>html+=this.makeProfileGuild(user));
                     html += `</div>`;
                 }
@@ -285,7 +287,7 @@ class DiscordBots extends Plugin {
                 }<component class="member-role" style=""><span class="name">${res.body.points.formatNumber()} Upvotes</span></component></div>`)
                   .insertAfter(".userPopout-4pfA0d .headerText-3tKBWq");
                 $(".userPopout-4pfA0d .headerText-3tKBWq").append(`<div class="headerActivityText-3qBQRo db-prefix">Prefix: <strong>${res.body.prefix}</strong></div>`);
-                this.belowNoteHTML = `<div class="section"><div class="section-header">DiscordBots Plugin</div><div class="note"><button class="btn add-friend no-link">Upvotes</button></div></div>`
+                this.belowNoteHTML = `<div class="userInfoSection-2WJxMm"><div class="userInfoSectionHeader-pmdPGs size12-1IGJl9 weightBold-2qbcng">DiscordBots Plugin</div><div class="note note-39NEdV"><button class="btn add-friend no-link">Upvotes</button></div></div>`
             }).catch(e => {
                 if(e.toString() === "Error: Not Found") return;
                 this.log("Failed to recieve bot information", user, e);
@@ -325,8 +327,15 @@ class DiscordBots extends Plugin {
         }
     }
 
-    checkForProfile(){
-        this.noProfile = !$("#user-profile-modal")[0];
+    profileExists(){
+        return $(".inner-1_1f7b")[0]
+            && window.DI.getReactInstance($(".inner-1_1f7b")[0]).memoizedProps.children
+            && window.DI.getReactInstance($(".inner-1_1f7b")[0]).memoizedProps.children.props
+            && window.DI.getReactInstance($(".inner-1_1f7b")[0]).memoizedProps.children.props.mutualGuilds
+    }
+
+    checkForProfile(n){
+        this.noProfile = !this.profileExists();
         if(this.noProfile){ // If the profile is open
             this.checkedProfile = false;
             this.belowNoteHTML = "";
@@ -334,24 +343,24 @@ class DiscordBots extends Plugin {
             this.lastUser = null;
             return;
         }
-        if($("#user-profile-modal")[0] && this.lastUser && this.reactInst($("#user-profile-modal .header-info-inner .discord-tag")[0].parentNode).memoizedProps.children[0].props.user.id !== this.lastUser.id){
-            $("#user-profile-modal>.fade").removeClass("injected");
+        if(this.profileExists() && this.lastUser && window.DI.getReactInstance($(".inner-1_1f7b")[0]).memoizedProps.children.props.user.id !== this.lastUser.id){
+            $(".inner-1_1f7b>div>.body-3_tdh6").removeClass("injected");
             $(".dbl-section,.dblbadge").remove();
-            $("#user-profile-modal .header").removeClass("with-background").attr('style', ``)
+            $(".inner-1_1f7b .topSectionNormal-2LlRG1").removeClass("with-background").attr('style', ``)
             this.checkedProfile = false;
             this.belowNoteHTML = "";
             this.longdesc = "";
             this.lastUser = null;
             return;
         }
-        if($("#user-profile-modal>.fade:not(.injected)").length !== 0 && this.belowNoteHTML !== ""){
-            $(this.belowNoteHTML).insertAfter($("#user-profile-modal>.fade:not(.injected) .section").first());
-            $("#user-profile-modal>.fade").addClass("injected");
+        if($(".inner-1_1f7b>div>.body-3_tdh6:not(.injected)").length !== 0 && this.belowNoteHTML !== ""){
+            $(this.belowNoteHTML).insertAfter($(".inner-1_1f7b>div>.body-3_tdh6:not(.injected) .userInfoSection-2WJxMm").first());
+            $(".inner-1_1f7b>div>.body-3_tdh6").addClass("injected");
             if($("iframe")[0]) $("iframe")[0].src = `data:text/html,${this.longdesc}`;
         }
         if(this.checkedProfile) return;
         this.checkedProfile = true;
-        this.lastUser = this.reactInst($("#user-profile-modal .header-info-inner .discord-tag")[0].parentNode).memoizedProps.children[0].props.user;
+        this.lastUser = window.DI.getReactInstance($(".inner-1_1f7b")[0]).memoizedProps.children.props.user;
         if(this.lastUser.bot){
             this.onBotProfile(this.lastUser);
         }else{
@@ -365,9 +374,9 @@ class DiscordBots extends Plugin {
             this.checkedPopout = false;
             return;
         }
-        if(this.checkedPopout || !this.reactInst($(".userPopout-4pfA0d")[0]).memoizedProps.children[1].props.children[1]) return;
+        if(this.checkedPopout || !window.DI.getReactInstance($(".userPopout-4pfA0d")[0]).memoizedProps.children[1]) return;
         this.checkedPopout = true;
-        let user = this.reactInst($(".userPopout-4pfA0d")[0]).memoizedProps.children[1].props.children[1][1].props.user;
+        let user = window.DI.client.users.get(window.DI.getReactInstance($(".userPopout-4pfA0d")[0]).memoizedProps.children[1].props.children[1][1].props.userId);
         if(user.bot){
             this.onBotPopout(user);
         }else{

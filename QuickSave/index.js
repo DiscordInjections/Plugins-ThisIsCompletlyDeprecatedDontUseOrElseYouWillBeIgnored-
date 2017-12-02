@@ -8,8 +8,8 @@ const SettingsOptionFolderbox = require('./SettingsOptionFolderbox');
 class QuickSave extends Plugin {
     constructor(...args) {
         super(...args);
-        this.mo = new MutationObserver(this.observer.bind(this));
-        this.mo.observe(document.querySelector(".app-XZYfmp"), { childList: true, subtree: true });
+        this.oBind = this.observer.bind(this);
+        window.DI.StateWatcher.on('mutation', this.oBind);
         window.DI.DISettings.registerSettingsTab(this, 'QuickSave', QSSettings);
     }
 
@@ -168,7 +168,7 @@ class QuickSave extends Plugin {
 
     get defaultSettings() {
         return {
-            directory: "./Downloads",
+            directory: `${__dirname}/Downloads`,
             namingmethod: "original",
             fnLength: '4'
         };
@@ -185,7 +185,7 @@ class QuickSave extends Plugin {
     }
 
     unload() {
-        this.mo.disconnect();
+        window.DI.StateWatcher.removeListener('mutation', this.oBind);
         $(".quicksave-icon-btn").remove();
     }
 

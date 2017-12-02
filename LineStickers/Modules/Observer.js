@@ -3,13 +3,12 @@ const $ = require('jquery');
 class Observer {
     constructor(plugin) {
         this.plugin = plugin;
-        this.mo = new MutationObserver(this.observer.bind(this));
-        this.mo.observe(document.querySelector(".app-XZYfmp,.app"), { childList: true, subtree: true });
+        this.oBind = this.observer.bind(this);
+        window.DI.StateWatcher.on('mutation', this.oBind);
     }
-    observer(recs){
+    observer(mutation){
         let self = this;
         /*
-        let mutation = recs[0];
         if (this.plugin.storage.hideUrls) {
                 for (var i = 0; i < mutation.addedNodes.length; ++i) {
                 var next = mutation.addedNodes.item(i);
@@ -41,28 +40,14 @@ class Observer {
         }*/
 
 
-        if (this.plugin.storage.hideUrls) {
+        if (self.plugin.storage.hideUrls) {
             $('.messages .markup a:not([style="display: none;"])').each(function(){
                 self.inject(this);
             });
-        }else{
-            $('.messages .markup a[style="display: none;"]').css('display', 'initial');
-        }
+        }else $('.messages .markup a[style="display: none;"]').css('display', 'initial');
 
         if($(".line-emotes-btn")[0] || !$(".emojiButton-38mF6t")[0]) return;
-        $(`<div class="line-emotes-btn"></div>`)
-            .append(
-                $(`<div style="background-image: url(${this.plugin.randomStickerID ? `//api.snazzah-is.cool/line-sticker/${this.plugin.randomStickerID}` : "//i-need.discord.cards/dab204.png"})"></div>`)
-                    .mouseover(e=>{
-                        if(e.target.classList.contains('hovered')) return;
-                        $(e.target).attr('style', `background-image: url(${this.plugin.randomStickerID ? `//api.snazzah-is.cool/line-sticker/${this.plugin.randomStickerID}` : "//i-need.discord.cards/dab204.png"})`)
-                    })
-            )
-            .insertAfter(".emojiButton-38mF6t")
-            .click(e=>{
-                e.target.classList.add('hovered');
-                this.plugin.menu.init(e);
-            });
+        self.plugin.insertButton();
     }
     getNodes(node){
         var next;
