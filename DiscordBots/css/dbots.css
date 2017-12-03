@@ -4,26 +4,24 @@
 .badge-dbladmin{background-image:url(https://discordbots.org/images/adminbadge.png);}
 .badge-dblmod{background-image:url(https://discordbots.org/images/modbadge.png);}
 .badge-dblsupporter{background-image:url(https://discordbots.org/images/supporterbadge.png);}
+.badge-dblartist{background-image:url(https://discordbots.org/images/artistbadge.png);}
 .no-link{cursor:default!important;}
-.profile-badge.dblbadge+.profile-badge.badge-hypesquad{margin-right:0!important;margin-left:-12px;transform:translateX(6px);}
-.profile-badge.dblbadge+.profile-badge.badge-partner{margin-right:0!important;margin-left:-12px;transform:translateX(7px);}
-.profile-badge.dblbadge+.profile-badge.badge-hypesquad+.header-info-inner{margin-left:0px;transform:translateX(9px);}
-.profile-badge.dblbadge+.profile-badge.badge-partner+.header-info-inner{margin-left:0px;transform:translateX(9px);}
-.profile-badge.badge-partner+.profile-badge.dblbadge{margin-left:-20px!important;transform:translateX(15px);}
-.profile-badge.badge-partner+.profile-badge.dblbadge+.header-info-inner{margin-left:4px;transform:translateX(4px);}
-.with-background.topSectionNormal-2LlRG1{padding:10px 0 0;}
 .with-background .header-2Lg0Oe {background-color: transparent!important}
 .with-background .headerText-3tKBWq{background-color:rgba(255,255,255,0.4);width:110%;}
 .with-background .headerText-3tKBWq:before{content:'';display:block;margin-top:-5px;position:absolute;width:250px;height:0;background-color:rgba(255,255,255,0.4);z-index:99;}
 .with-background .headerText-3tKBWq>div{z-index:100;}
 .with-background .headerInfo-Gkqcz9{border:5px solid transparent;background-color:rgba(255,255,255,0.4);background-size:cover;}
-.with-background .headerInfo-Gkqcz9:before{content:'';display:block;position:absolute;width:300px;height:52px;margin-left:-305px;margin-top:-5px;background-color:inherit;}
-.with-background .headerInfo-Gkqcz9:after{content:'';display:block;position:absolute;width:300px;height:52px;margin-left:345px;margin-top:-47px;background-color:inherit;}
+.with-background .nameTag-2n-N0D+.flex-lFgbSz { height: 16px; }
 .with-background .actions{padding:0!important;transform:translateY(30px);}
 .with-background .header-info-inner{background-color:transparent!important;}
 .with-background.topSectionNormal-2LlRG1 .avatar-1BXaQj{z-index:101;}
+.with-background .headerInfo-Gkqcz9 * { z-index: 101; }
+.with-background .nameTag-2n-N0D,.with-background .headerInfo-Gkqcz9+button,.with-background .additionalActionsIcon-WiVlux,.with-background.topSectionNormal-2LlRG1 .avatar-1BXaQj,.with-background.topSectionPlaying-3jAH9b .avatar-1BXaQj { z-index: 101; position: relative; }
+.with-background .headerInfo-Gkqcz9{background-color:transparent!important;}
+.with-background .headerInfo-Gkqcz9:after { z-index: 9; background-color: rgba(0,0,0,0.4); }
+.with-background .headerInfo-Gkqcz9:after{content:'';display:block;position:absolute;width:100%;height:52px;right:0;margin-top:-47px;}
 .with-background .activityUserPopout-1nmgaw {background-color:rgba(255,255,255,0.4);}
-.with-background .profile-badge.dblbadge+.profile-badge.badge-partner+.header-info-inner{margin-left:-5px;transform:translateX(13px);}
+.with-background .profileBadge-kI8nxa+.flex-lFgbSz{margin:0;}
 .header-info{padding-top:0!important;transform:translateY(20px);}
 .db-bot.actions{padding:0!important;transform:translateY(30px);}
 .db-bot>*{padding:5px!important;height:auto!important;line-height:1!important;margin-right: 10px;margin-top:5px;}

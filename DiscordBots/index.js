@@ -102,25 +102,16 @@ class DiscordBots extends Plugin {
     onBotProfile(user){
         if(this.settings.usedbl){
             DBLAPI.getBot(user.id).then(res => {
+                console.log(res);
                 if(res.body.certifiedBot){
-                    if(!$(".nameTag-2n-N0D+.flex-lFgbSz>.flex-lFgbSz")) $(".nameTag-2n-N0D+.flex-lFgbSz").append(`<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO" style="flex: 1 1 auto;"></div>`);
-                    $(".header-info").prepend(`<div class="profileBadge-kI8nxa dblbadge badge-dblcertbot"></div>`);
-                    $(".badge-dblcertbot").mouseover(()=>{
-                        let tt = $("<div>").append("Certified Bot").addClass("tooltip tooltip-top tooltip-normal db-tt dblcertbot")
-                        $(".tooltips").append(tt);
-                        var position = $(".badge-dblcertbot").offset();
-                        position.top -= 38 + tt.height();
-                        position.left += $(".badge-dblcertbot").width()/2 - tt.width()/2 - 11;
-                        tt.offset(position);
-                    });
-                    $(".badge-dblcertbot").mouseout(()=>{
-                        $(".tooltip.dblcertbot").remove();
-                    });
+                    console.log(!$(".nameTag-2n-N0D+.flex-lFgbSz>.flex-lFgbSz")[0], $(".nameTag-2n-N0D+.flex-lFgbSz>.flex-lFgbSz"),$(".nameTag-2n-N0D+.flex-lFgbSz"));
+                    if(!$(".nameTag-2n-N0D+.flex-lFgbSz>.flex-lFgbSz")[0]) $(".nameTag-2n-N0D+.flex-lFgbSz").append(`<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO" style="flex: 1 1 auto;"></div>`);
+                    $(".nameTag-2n-N0D+.flex-lFgbSz>.flex-lFgbSz").prepend(`<div class="profileBadge-kI8nxa dblbadge badge-dblcertbot"></div><div class="profileBadgeText-3obufS size12-1IGJl9 weightSemiBold-T8sxWH">Certified Bot</div>`);
                     $(".badge-dblcertbot").click(()=>{
                         window.open("//discordbots.org/certification")
                     });
                 };
-                $(".headerInfo-Gkqcz9").append(`<div class="activity db-prefix">Prefix: <strong>${res.body.prefix.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;")}</strong></div>`);
+                $(`<div class="activity db-prefix">Prefix: <strong>${res.body.prefix.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;")}</strong></div>`).insertAfter(".headerInfo-Gkqcz9");
                 let html = `<div class="userInfoSection-2WJxMm db-more"><div class="userInfoSectionHeader-pmdPGs size12-1IGJl9 weightBold-2qbcng">About</div><div class="note">`;
                 html += `<div class="description-3MVziF formText-1L-zZB note-UEZmbY marginTop4-2rEBfJ modeDefault-389VjU primary-2giqSn" style="flex: 1 1 auto;">${res.body.shortdesc.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;")}</div>`
                 html += `<a href="//discordbots/bot/${user.id}"><button class="buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu" style="flex: 0 0 auto;"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">Discordbots.org Page</div></button></a>`;
@@ -193,14 +184,17 @@ class DiscordBots extends Plugin {
         if(this.settings.usedbl){
             DBLAPI.getUser(user.id).then(res => {
                 DBLAPI.getUserBots(user.id).then(res2 => {
-                    if(!$(".nameTag-2n-N0D+.flex-lFgbSz>.flex-lFgbSz")) $(".nameTag-2n-N0D+.flex-lFgbSz").append(`<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO" style="flex: 1 1 auto;"></div>`);
+                    if(!$(".nameTag-2n-N0D+.flex-lFgbSz>.flex-lFgbSz")[0]) $(".nameTag-2n-N0D+.flex-lFgbSz").append(`<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO" style="flex: 1 1 auto;"></div>`);
+                    let tnames = [];
                     if(res.body.certifiedDev){
+                        tnames.push("Certified Developer");
                         $(".nameTag-2n-N0D+.flex-lFgbSz>.flex-lFgbSz").prepend(`<div class="profileBadge-kI8nxa dblbadge badge-dblcertdev"></div>`);
                         $(".badge-dblcertdev").mouseover(()=>{
-                            let tt = $("<div>").append("Certified Developer").addClass("tooltip tooltip-top tooltip-brand db-tt dblcertdev")
+                            tnames.push("Certified Developer");
+                            let tt = $("<div>").append("Certified Developer").addClass("tooltip tooltip-top tooltip-black db-tt dblcertdev")
                             $(".tooltips").append(tt);
                             var position = $(".badge-dblcertdev").offset();
-                            position.top -= 38 + tt.height();
+                            position.top -= 40 + tt.height();
                             position.left += $(".badge-dblcertdev").width()/2 - tt.width()/2 - 11;
                             tt.offset(position);
                         });
@@ -212,12 +206,13 @@ class DiscordBots extends Plugin {
                         });
                     };
                     if(res.body.admin){
+                        tnames.push("Discord Bot List Site Administrator");
                         $(".nameTag-2n-N0D+.flex-lFgbSz>.flex-lFgbSz").prepend(`<div class="profileBadge-kI8nxa dblbadge no-link badge-dbladmin"></div>`);
                         $(".badge-dbladmin").mouseover(()=>{
-                            let tt = $("<div>").append("Discord Bot List Site Administrator").addClass("tooltip tooltip-top tooltip-brand db-tt dbladmin")
+                            let tt = $("<div>").append("Discord Bot List Site Administrator").addClass("tooltip tooltip-top tooltip-black db-tt dbladmin")
                             $(".tooltips").append(tt);
                             var position = $(".badge-dbladmin").offset();
-                            position.top -= 38 + tt.height();
+                            position.top -= 40 + tt.height();
                             position.left += $(".badge-dbladmin").width()/2 - tt.width()/2 - 11;
                             tt.offset(position);
                         });
@@ -226,12 +221,13 @@ class DiscordBots extends Plugin {
                         });
                     };
                     if(res.body.mod){
+                        tnames.push("Discord Bot List Moderator");
                         $(".nameTag-2n-N0D+.flex-lFgbSz>.flex-lFgbSz").prepend(`<div class="profileBadge-kI8nxa dblbadge no-link badge-dblmod"></div>`);
                         $(".badge-dblmod").mouseover(()=>{
-                            let tt = $("<div>").append("Discord Bot List Moderator").addClass("tooltip tooltip-top tooltip-brand db-tt dblmod")
+                            let tt = $("<div>").append("Discord Bot List Moderator").addClass("tooltip tooltip-top tooltip-black db-tt dblmod")
                             $(".tooltips").append(tt);
                             var position = $(".badge-dblmod").offset();
-                            position.top -= 38 + tt.height();
+                            position.top -= 40 + tt.height();
                             position.left += $(".badge-dblmod").width()/2 - tt.width()/2 - 11;
                             tt.offset(position);
                         });
@@ -239,8 +235,45 @@ class DiscordBots extends Plugin {
                             $(".tooltip.dblmod").remove();
                         });
                     };
+                    if(res.body.supporter){
+                        tnames.push("Discord Bot List Supporter");
+                        $(".nameTag-2n-N0D+.flex-lFgbSz>.flex-lFgbSz").prepend(`<div class="profileBadge-kI8nxa dblbadge badge-dblsupporter"></div>`);
+                        $(".badge-dblsupporter").mouseover(()=>{
+                            let tt = $("<div>").append("Discord Bot List Supporter").addClass("tooltip tooltip-top tooltip-black db-tt dblsupporter")
+                            $(".tooltips").append(tt);
+                            var position = $(".badge-dblsupporter").offset();
+                            position.top -= 40 + tt.height();
+                            position.left += $(".badge-dblsupporter").width()/2 - tt.width()/2 - 11;
+                            tt.offset(position);
+                        });
+                        $(".badge-dblsupporter").mouseout(()=>{
+                            $(".tooltip.dblsupporter").remove();
+                        });
+                        $(".badge-dblsupporter").click(()=>{
+                            window.open("//patreon.com/discordbots")
+                        });
+                    };
+                    if(res.body.artist){
+                        tnames.push("Discord Bot List Artist");
+                        $(".nameTag-2n-N0D+.flex-lFgbSz>.flex-lFgbSz").prepend(`<div class="profileBadge-kI8nxa dblbadge no-link badge-dblartist"></div>`);
+                        $(".badge-dblartist").mouseover(()=>{
+                            let tt = $("<div>").append("Discord Bot List Artist").addClass("tooltip tooltip-top tooltip-black db-tt dblartist")
+                            $(".tooltips").append(tt);
+                            var position = $(".badge-dblartist").offset();
+                            position.top -= 40 + tt.height();
+                            position.left += $(".badge-dblartist").width()/2 - tt.width()/2 - 11;
+                            tt.offset(position);
+                        });
+                        $(".badge-dblartist").mouseout(()=>{
+                            $(".tooltip.dblartist").remove();
+                        });
+                    };
                     if(res.body.banner !== "" && res.body.banner){
-                        $(".inner-1_1f7b .topSectionNormal-2LlRG1").addClass("with-background").attr('style', `background-image:url('${res.body.banner.replace(/^http:/g, "https:")}')!important;background-size:cover;background-position:center;`)
+                        $(".inner-1_1f7b .topSectionNormal-2LlRG1,.inner-1_1f7b .topSectionPlaying-3jAH9b").addClass("with-background").attr('style', `background-image:url('${res.body.banner.replace(/^http:/g, "https:")}')!important;background-size:cover;background-position:center;`)
+                    }
+                    if($(".nameTag-2n-N0D+.flex-lFgbSz>.flex-lFgbSz").children().length==$(".nameTag-2n-N0D+.flex-lFgbSz>.flex-lFgbSz").children(".dblbadge").length){
+                        $(".nameTag-2n-N0D+.flex-lFgbSz>.flex-lFgbSz").children(".dblbadge").last().off("mouseover");
+                        $(".nameTag-2n-N0D+.flex-lFgbSz>.flex-lFgbSz").append(`<div class="profileBadgeText-3obufS size12-1IGJl9 weightSemiBold-T8sxWH">${tnames[0]}</div>`);
                     }
                     let html = '';
                     let owners = [];
