@@ -102,7 +102,6 @@ class DiscordBots extends Plugin {
     onBotProfile(user){
         if(this.settings.usedbl){
             DBLAPI.getBot(user.id).then(res => {
-                console.log(res);
                 if(res.body.certifiedBot){
                     console.log(!$(".nameTag-2n-N0D+.flex-lFgbSz>.flex-lFgbSz")[0], $(".nameTag-2n-N0D+.flex-lFgbSz>.flex-lFgbSz"),$(".nameTag-2n-N0D+.flex-lFgbSz"));
                     if(!$(".nameTag-2n-N0D+.flex-lFgbSz>.flex-lFgbSz")[0]) $(".nameTag-2n-N0D+.flex-lFgbSz").append(`<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO" style="flex: 1 1 auto;"></div>`);
