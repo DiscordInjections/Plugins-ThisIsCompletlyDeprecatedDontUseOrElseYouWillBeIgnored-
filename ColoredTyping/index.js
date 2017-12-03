@@ -58,6 +58,7 @@ class ColoredTyping extends Plugin {
     }
 
     onTyping(channel, user) {
+        if(!window || !window.DI || !window.DI.client || !window.DI.client.selectedChannel || !channel) return;
         if(!window.DI.client.selectedChannel.id === channel.id) return;
         if(!channel.guild){
             this.data[user.username] = "inherit";
