@@ -17,7 +17,6 @@
 .with-background.topSectionNormal-2LlRG1 .avatar-1BXaQj{z-index:101;}
 .with-background .headerInfo-Gkqcz9 * { z-index: 101; }
 .with-background .nameTag-2n-N0D,.with-background .headerInfo-Gkqcz9+button,.with-background .additionalActionsIcon-WiVlux,.with-background.topSectionNormal-2LlRG1 .avatar-1BXaQj,.with-background.topSectionPlaying-3jAH9b .avatar-1BXaQj { z-index: 101; position: relative; }
-.with-background .headerInfo-Gkqcz9{background-color:transparent!important;}
 .with-background .headerInfo-Gkqcz9:after{z-index: 9;background-color:rgba(255,255,255,255.2);content:'';display:block;position:absolute;width:100%;height:52px;right:0;margin-top:-47px;}
 .with-background .activityUserPopout-1nmgaw {background-color:rgba(255,255,255,0.2);}
 .with-background .profileBadge-kI8nxa+.flex-lFgbSz{margin:0;}
