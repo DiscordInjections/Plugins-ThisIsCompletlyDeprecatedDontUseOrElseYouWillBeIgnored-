@@ -271,7 +271,7 @@ class DiscordBots extends Plugin {
                     if(res.body.banner !== "" && res.body.banner){
                         $(".inner-1_1f7b .topSectionNormal-2LlRG1,.inner-1_1f7b .topSectionPlaying-3jAH9b").addClass("with-background").attr('style', `background-image:url('${res.body.banner.replace(/^http:/g, "https:")}')!important;background-size:cover;background-position:center;`)
                     }
-                    if($(".nameTag-2n-N0D+.flex-lFgbSz>.flex-lFgbSz").children().length==$(".nameTag-2n-N0D+.flex-lFgbSz>.flex-lFgbSz").children(".dblbadge").length){
+                    if($(".nameTag-2n-N0D+.flex-lFgbSz>.flex-lFgbSz").children().length==$(".nameTag-2n-N0D+.flex-lFgbSz>.flex-lFgbSz").children(".dblbadge").length&&$(".nameTag-2n-N0D+.flex-lFgbSz>.flex-lFgbSz").children().length!=0){
                         $(".nameTag-2n-N0D+.flex-lFgbSz>.flex-lFgbSz").children(".dblbadge").last().off("mouseover");
                         $(".nameTag-2n-N0D+.flex-lFgbSz>.flex-lFgbSz").append(`<div class="profileBadgeText-3obufS size12-1IGJl9 weightSemiBold-T8sxWH">${tnames[0]}</div>`);
                     }
