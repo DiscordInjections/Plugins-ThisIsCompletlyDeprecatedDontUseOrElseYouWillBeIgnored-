@@ -1,0 +1,14 @@
+{
+  "name": "FakeConnections",
+  "version": "1.0.0",
+  "description": "Create a fake connection on your profile.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Snazzah",
+  "license": "MIT",
+  "dependencies": {
+    "superagent": "^3.5.2"
+  }
+}
