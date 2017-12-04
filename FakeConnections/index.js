@@ -29,7 +29,7 @@ class FakeConnections extends Plugin {
             if(name === "") return self.sendStatusMessage("fail", "No name provided");
             self.log("Adding connection", id, name, box._selectedAccount);
             request.put(`https://canary.discordapp.com/api/v6/users/@me/connections/${box._selectedAccount}/${id}`)
-                .set("Authorization", DI.client.token).send({ name }).then(r => {
+                .set("Authorization", DI.client.token).send({ name, visibility: 1 }).then(r => {
                     self.log(r.body);
                     self.sendStatusMessage("success", "Success");
                 }).catch(e => {
