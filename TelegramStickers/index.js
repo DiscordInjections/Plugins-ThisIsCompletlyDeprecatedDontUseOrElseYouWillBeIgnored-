@@ -115,10 +115,7 @@ class TelegramStickers extends Plugin {
         }
         if(this.storage.sendEmbed && window.DI.client.selectedChannel && (window.DI.client.selectedChannel.type !== 'text' || window.DI.client.selectedChannel.permissionsFor(window.DI.client.user).has("EMBED_LINKS"))){
             window.DI.client.selectedChannel.send('', { embed: { image: { url: emote } } })
-        }else{
-            var ta = $(".chat .content textarea");
-            ta.val(ta.val().slice(-1) == " " ? ta.val() + emote : ta.val() + " " + emote);
-        }
+        }else window.DI.client.selectedChannel.send(emote);
     }
 }
 
