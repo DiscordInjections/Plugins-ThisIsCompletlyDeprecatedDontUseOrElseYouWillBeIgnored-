@@ -36,7 +36,7 @@ class Categories {
                         $('#line-add-title').val('');
                     }).catch(e => {
                         if(!$('#bda-qem-telegram-container')[0]) return;
-                        if(e.response && e.response.statusCode === 404) $('#telegram-status').addClass('bad').html('Not found - <a onclick="window.open(\'https://gist.github.com/SnazzyPine25/a3388954d5e386a35ae39d9d00962adb\')">Publish a sticker set</a>');
+                        if(e.response && e.response.statusCode === 404) $('#telegram-status').addClass('bad').html('Not found - <a onclick="window.open(\'https://gist.github.com/Snazzah/a3388954d5e386a35ae39d9d00962adb\')">Publish a sticker set</a>');
                             else {
                                 $('#telegram-status').addClass('bad').text('Invalid request, check console');
                                 this.plugin.error(e);
