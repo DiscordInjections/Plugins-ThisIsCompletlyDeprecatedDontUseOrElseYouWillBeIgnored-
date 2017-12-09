@@ -99,6 +99,10 @@ class DiscordBots extends Plugin {
         return `<div class="listRow-1wEi-U weightMedium-13x9Y8"><div class="avatar-1BXaQj large-3yh-62 listAvatar-MpHQ5z"><div class="image-EVRGPw mask-2vyqAW" style="background-image: url(&quot;${user.displayAvatarURL}&quot;);"></div><div class="listAvatarStatus-1Egz5B ${st[user.presence.status]} status-3jUEha status-3jUEha"></div></div><div class="listName-1Xr1Jk size16-3IvaX_ height16-1qXrGy nameTag-26T3kW"><span class="username">${user.username.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;")}</span><span class="discriminator listDiscriminator-yFeQU- size12-1IGJl9">#${user.discriminator}</span></div></div>`
     }
 
+    makeRoleButton(n){
+        return `<li class="role-3rahR_ flex-3B1Tl4 alignCenter-3VxkQP size12-1IGJl9 weightSemiBold-T8sxWH" style="border-color:rgba(185,187,190,0.6);"><div class="roleName-DUQZ9m" style="margin-left:4px;">${n}</div></li>`
+    }
+
     onBotProfile(user){
         if(this.settings.usedbl){
             DBLAPI.getBot(user.id).then(res => {
@@ -114,13 +118,13 @@ class DiscordBots extends Plugin {
                 let html = `<div class="userInfoSection-2WJxMm db-more"><div class="userInfoSectionHeader-pmdPGs size12-1IGJl9 weightBold-2qbcng">About</div><div class="note">`;
                 html += `<div class="description-3MVziF formText-1L-zZB note-UEZmbY marginTop4-2rEBfJ modeDefault-389VjU primary-2giqSn" style="flex: 1 1 auto;">${res.body.shortdesc.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;")}</div>`
                 html += `<a href="//discordbots/bot/${user.id}"><button class="buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu" style="flex: 0 0 auto;"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">Discordbots.org Page</div></button></a>`;
-                if(res.body.invite !== "") html += `<a href="${res.body.invite}"><button class="buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu buttonSpacing-3R7DSg" style="flex: 0 0 auto;"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">Invite</div></button></a>`;
-                if(res.body.website !== "") html += `<a href="${res.body.website}"><button class="buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu buttonSpacing-3R7DSg" style="flex: 0 0 auto;"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">Website</div></button></a>`;
-                if(res.body.github !== "") html += `<a href="${res.body.github}"><button class="buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu buttonSpacing-3R7DSg" style="flex: 0 0 auto;"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">GitHub Repo</div></button></a>`;
-                html += `<a><button class="no-link buttonBrandGhostDefault-2JCnWW buttonGhostDefault-2NFSwJ buttonDefault-2OLW-v button-2t3of8 buttonGhost-2Y7zWJ buttonBrandGhost-1-Lmhc mediumGrow-uovsMu buttonSpacing-3R7DSg" style="flex: 0 0 auto;"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsGhost-2Yp1r8">${res.body.lib}</div></button></a>`;
-                if(res.body.server_count) html += `<a><button class="no-link buttonBrandGhostDefault-2JCnWW buttonGhostDefault-2NFSwJ buttonDefault-2OLW-v button-2t3of8 buttonGhost-2Y7zWJ buttonBrandGhost-1-Lmhc mediumGrow-uovsMu buttonSpacing-3R7DSg" style="flex: 0 0 auto;"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsGhost-2Yp1r8">${res.body.server_count.formatNumber()} Servers</div></button></a>`;
-                if(res.body.shard_count) html += `<a><button class="no-link buttonBrandGhostDefault-2JCnWW buttonGhostDefault-2NFSwJ buttonDefault-2OLW-v button-2t3of8 buttonGhost-2Y7zWJ buttonBrandGhost-1-Lmhc mediumGrow-uovsMu buttonSpacing-3R7DSg" style="flex: 0 0 auto;"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsGhost-2Yp1r8">${res.body.shard_count.formatNumber()} Shards</div></button></a>`;
-                html += `<a><button type="button" class="buttonGreenFilledDefault-_lLQaz buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonGreenFilled-6QHNrw mediumGrow-uovsMu buttonSpacing-3R7DSg"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">${res.body.points.formatNumber()} Upvotes</div></button></a>`;
+                if(res.body.invite !== "") html += `<a href="${res.body.invite}"><button class="buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu" style="flex: 0 0 auto;"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">Invite</div></button></a>`;
+                if(res.body.website !== "") html += `<a href="${res.body.website}"><button class="buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu" style="flex: 0 0 auto;"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">Website</div></button></a>`;
+                if(res.body.github !== "") html += `<a href="${res.body.github}"><button class="buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu" style="flex: 0 0 auto;"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">GitHub Repo</div></button></a>`;
+                html += `<a><button class="no-link buttonBrandGhostDefault-2JCnWW buttonGhostDefault-2NFSwJ buttonDefault-2OLW-v button-2t3of8 buttonGhost-2Y7zWJ buttonBrandGhost-1-Lmhc mediumGrow-uovsMu" style="flex: 0 0 auto;"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsGhost-2Yp1r8">${res.body.lib}</div></button></a>`;
+                if(res.body.server_count) html += `<a><button class="no-link buttonBrandGhostDefault-2JCnWW buttonGhostDefault-2NFSwJ buttonDefault-2OLW-v button-2t3of8 buttonGhost-2Y7zWJ buttonBrandGhost-1-Lmhc mediumGrow-uovsMu" style="flex: 0 0 auto;"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsGhost-2Yp1r8">${res.body.server_count.formatNumber()} Servers</div></button></a>`;
+                if(res.body.shard_count) html += `<a><button class="no-link buttonBrandGhostDefault-2JCnWW buttonGhostDefault-2NFSwJ buttonDefault-2OLW-v button-2t3of8 buttonGhost-2Y7zWJ buttonBrandGhost-1-Lmhc mediumGrow-uovsMu" style="flex: 0 0 auto;"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsGhost-2Yp1r8">${res.body.shard_count.formatNumber()} Shards</div></button></a>`;
+                html += `<a><button type="button" class="buttonGreenFilledDefault-_lLQaz buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonGreenFilled-6QHNrw mediumGrow-uovsMu"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">${res.body.points.formatNumber()} Upvotes</div></button></a>`;
                 html += `</div></div></div>`;
                 let owners = [];
                 res.body.owners.map(id => {if(window.DI.client.users.get(id)) owners.push(window.DI.client.users.get(id))});
@@ -184,16 +188,13 @@ class DiscordBots extends Plugin {
             DBLAPI.getUser(user.id).then(res => {
                 DBLAPI.getUserBots(user.id).then(res2 => {
                     if(!$(".nameTag-2n-N0D+.flex-lFgbSz>.flex-lFgbSz")[0]) $(".nameTag-2n-N0D+.flex-lFgbSz").append(`<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO" style="flex: 1 1 auto;"></div>`);
-                    let tnames = [];
                     if(res.body.certifiedDev){
-                        tnames.push("Certified Developer");
-                        $(".nameTag-2n-N0D+.flex-lFgbSz>.flex-lFgbSz").prepend(`<div class="profileBadge-kI8nxa dblbadge badge-dblcertdev"></div>`);
+                        $(".nameTag-2n-N0D+.flex-lFgbSz").prepend(`<div class="profileBadge-kI8nxa dblbadge badge-dblcertdev"></div>`);
                         $(".badge-dblcertdev").mouseover(()=>{
-                            tnames.push("Certified Developer");
                             let tt = $("<div>").append("Certified Developer").addClass("tooltip tooltip-top tooltip-black db-tt dblcertdev")
                             $(".tooltips").append(tt);
                             var position = $(".badge-dblcertdev").offset();
-                            position.top -= 40 + tt.height();
+                            position.top -= 42 + tt.height();
                             position.left += $(".badge-dblcertdev").width()/2 - tt.width()/2 - 11;
                             tt.offset(position);
                         });
@@ -205,13 +206,12 @@ class DiscordBots extends Plugin {
                         });
                     };
                     if(res.body.admin){
-                        tnames.push("Discord Bot List Site Administrator");
-                        $(".nameTag-2n-N0D+.flex-lFgbSz>.flex-lFgbSz").prepend(`<div class="profileBadge-kI8nxa dblbadge no-link badge-dbladmin"></div>`);
+                        $(".nameTag-2n-N0D+.flex-lFgbSz").prepend(`<div class="profileBadge-kI8nxa dblbadge no-link badge-dbladmin"></div>`);
                         $(".badge-dbladmin").mouseover(()=>{
                             let tt = $("<div>").append("Discord Bot List Site Administrator").addClass("tooltip tooltip-top tooltip-black db-tt dbladmin")
                             $(".tooltips").append(tt);
                             var position = $(".badge-dbladmin").offset();
-                            position.top -= 40 + tt.height();
+                            position.top -= 42 + tt.height();
                             position.left += $(".badge-dbladmin").width()/2 - tt.width()/2 - 11;
                             tt.offset(position);
                         });
@@ -220,13 +220,12 @@ class DiscordBots extends Plugin {
                         });
                     };
                     if(res.body.mod){
-                        tnames.push("Discord Bot List Moderator");
-                        $(".nameTag-2n-N0D+.flex-lFgbSz>.flex-lFgbSz").prepend(`<div class="profileBadge-kI8nxa dblbadge no-link badge-dblmod"></div>`);
+                        $(".nameTag-2n-N0D+.flex-lFgbSz").prepend(`<div class="profileBadge-kI8nxa dblbadge no-link badge-dblmod"></div>`);
                         $(".badge-dblmod").mouseover(()=>{
                             let tt = $("<div>").append("Discord Bot List Moderator").addClass("tooltip tooltip-top tooltip-black db-tt dblmod")
                             $(".tooltips").append(tt);
                             var position = $(".badge-dblmod").offset();
-                            position.top -= 40 + tt.height();
+                            position.top -= 42 + tt.height();
                             position.left += $(".badge-dblmod").width()/2 - tt.width()/2 - 11;
                             tt.offset(position);
                         });
@@ -235,13 +234,12 @@ class DiscordBots extends Plugin {
                         });
                     };
                     if(res.body.supporter){
-                        tnames.push("Discord Bot List Supporter");
-                        $(".nameTag-2n-N0D+.flex-lFgbSz>.flex-lFgbSz").prepend(`<div class="profileBadge-kI8nxa dblbadge badge-dblsupporter"></div>`);
+                        $(".nameTag-2n-N0D+.flex-lFgbSz").prepend(`<div class="profileBadge-kI8nxa dblbadge badge-dblsupporter"></div>`);
                         $(".badge-dblsupporter").mouseover(()=>{
                             let tt = $("<div>").append("Discord Bot List Supporter").addClass("tooltip tooltip-top tooltip-black db-tt dblsupporter")
                             $(".tooltips").append(tt);
                             var position = $(".badge-dblsupporter").offset();
-                            position.top -= 40 + tt.height();
+                            position.top -= 42 + tt.height();
                             position.left += $(".badge-dblsupporter").width()/2 - tt.width()/2 - 11;
                             tt.offset(position);
                         });
@@ -253,13 +251,12 @@ class DiscordBots extends Plugin {
                         });
                     };
                     if(res.body.artist){
-                        tnames.push("Discord Bot List Artist");
-                        $(".nameTag-2n-N0D+.flex-lFgbSz>.flex-lFgbSz").prepend(`<div class="profileBadge-kI8nxa dblbadge no-link badge-dblartist"></div>`);
+                        $(".nameTag-2n-N0D+.flex-lFgbSz").prepend(`<div class="profileBadge-kI8nxa dblbadge no-link badge-dblartist"></div>`);
                         $(".badge-dblartist").mouseover(()=>{
                             let tt = $("<div>").append("Discord Bot List Artist").addClass("tooltip tooltip-top tooltip-black db-tt dblartist")
                             $(".tooltips").append(tt);
                             var position = $(".badge-dblartist").offset();
-                            position.top -= 40 + tt.height();
+                            position.top -= 42 + tt.height();
                             position.left += $(".badge-dblartist").width()/2 - tt.width()/2 - 11;
                             tt.offset(position);
                         });
@@ -269,10 +266,6 @@ class DiscordBots extends Plugin {
                     };
                     if(res.body.banner !== "" && res.body.banner){
                         $(".inner-1_1f7b .topSectionNormal-2LlRG1,.inner-1_1f7b .topSectionPlaying-3jAH9b").addClass("with-background").attr('style', `background-image:url('${res.body.banner.replace(/^http:/g, "https:")}')!important;background-size:cover;background-position:center;`)
-                    }
-                    if($(".nameTag-2n-N0D+.flex-lFgbSz>.flex-lFgbSz").children().length==$(".nameTag-2n-N0D+.flex-lFgbSz>.flex-lFgbSz").children(".dblbadge").length&&$(".nameTag-2n-N0D+.flex-lFgbSz>.flex-lFgbSz").children().length!=0){
-                        $(".nameTag-2n-N0D+.flex-lFgbSz>.flex-lFgbSz").children(".dblbadge").last().off("mouseover");
-                        $(".nameTag-2n-N0D+.flex-lFgbSz>.flex-lFgbSz").append(`<div class="profileBadgeText-3obufS size12-1IGJl9 weightSemiBold-T8sxWH">${tnames[0]}</div>`);
                     }
                     let html = '';
                     let owners = [];
@@ -314,9 +307,9 @@ class DiscordBots extends Plugin {
         if(!this.settings.popout) return;
         if(this.settings.usedbl){
             DBLAPI.getBot(user.id).then(res => {
-                $(`<div class="member-roles marginBottom8-1mABJ4"><component class="member-role" style=""><span class="name">${res.body.lib}</span></component><component class="member-role" style=""><span class="name">${res.body.server_count.formatNumber()} Servers</span></component>${
-                    res.body.shard_count ? `<component class="member-role" style=""><span class="name">${res.body.shard_count.formatNumber()} Shards</span></component>` : ""
-                }<component class="member-role" style=""><span class="name">${res.body.points.formatNumber()} Upvotes</span></component></div>`)
+                $(`<ul class="root-uMQa_6 flex-3B1Tl4 wrap-1da0e3 endBodySection-1WYzxu marginBottom20-2Ifj-2">${this.makeRoleButton(res.body.lib)}${this.makeRoleButton(res.body.server_count.formatNumber()+" Servers")}${
+                    res.body.shard_count ? this.makeRoleButton(`${res.body.shard_count.formatNumber()} Shards`) : ""
+                }${this.makeRoleButton(`${res.body.points.formatNumber()} Upvotes`)}</ul>`)
                   .insertAfter(".userPopout-4pfA0d .headerText-3tKBWq");
                 $(".userPopout-4pfA0d .headerText-3tKBWq").append(`<div class="headerActivityText-3qBQRo db-prefix">Prefix: <strong>${res.body.prefix}</strong></div>`);
                 this.belowNoteHTML = `<div class="userInfoSection-2WJxMm"><div class="userInfoSectionHeader-pmdPGs size12-1IGJl9 weightBold-2qbcng">DiscordBots Plugin</div><div class="note note-39NEdV"><button class="btn add-friend no-link">Upvotes</button></div></div>`
@@ -329,12 +322,10 @@ class DiscordBots extends Plugin {
                 BDPAPI.getBotStats(user.id, this.settings.bdptoken).then(res2 => {
                     let shard_count = res2.body.stats.length;
                     let server_count = res2.body.stats.map(s=>s.server_count).reduce((prev, val) => prev + val);
-                    $(`<div class="member-roles marginBottom8-1mABJ4"><component class="member-role" style=""><span class="name">${res.body.library}</span></component>${
-                        server_count ? `<component class="member-role" style=""><span class="name">${server_count.formatNumber()} Servers</span></component>` : ""
-                    }${
-                        shard_count !== 1 ? `<component class="member-role" style=""><span class="name">${shard_count.formatNumber()} Shards</span></component>` : ""
-                    }</div>`)
+                    $(`<ul class="class="root-uMQa_6 flex-3B1Tl4 wrap-1da0e3 endBodySection-1WYzxu marginBottom20-2Ifj-2"">${this.makeRoleButton(res.body.library)}${this.makeRoleButton(server_count.formatNumber()+" Servers")}${
+                        shard_count !== 1 ? this.makeRoleButton(`${shard_count.formatNumber()} Shards`) : "" }</ul>`)
                       .insertAfter(".userPopout-4pfA0d .headerText-3tKBWq");
+                    $(".userPopout-4pfA0d .headerText-3tKBWq").append(`<div class="headerActivityText-3qBQRo db-prefix">Prefix: <strong>${res.body.prefix}</strong></div>`);
                 }).catch(e => {
                     $(".userPopout-4pfA0d .headerText-3tKBWq").append(`<div class="headerActivityText-3qBQRo db-prefix">Prefix: <strong>${res.body.prefix}</strong></div>`);
                 });
@@ -402,18 +393,11 @@ class DiscordBots extends Plugin {
 
     checkForPopout(){
         this.noPopout = !$(".userPopout-4pfA0d")[0];
-        if(this.noPopout){ // If the profile is open
-            this.checkedPopout = false;
-            return;
-        }
+        if(this.noPopout) return this.checkedPopout = false;
         if(this.checkedPopout || !window.DI.getReactInstance($(".userPopout-4pfA0d")[0]).memoizedProps.children[1]) return;
         this.checkedPopout = true;
-        let user = window.DI.client.users.get(window.DI.getReactInstance($(".userPopout-4pfA0d")[0]).memoizedProps.children[1].props.children[1][1].props.userId);
-        if(user.bot){
-            this.onBotPopout(user);
-        }else{
-            this.onUserPopout(user);
-        }
+        let user = window.DI.getReactInstance($(".userPopout-4pfA0d")[0]).memoizedProps.children[1].props.children[0][1].props.user;
+        if(user.bot) this.onBotPopout(user); else this.onUserPopout(user);
     }
 }
 

@@ -1,4 +1,4 @@
-.dblbadge{background-size:contain;background-position:50%!important;margin:0!important;transform:translateX(-2px);}
+.dblbadge{background-size:contain;background-position:50%!important;margin:0!important;transform:translateX(-2px);width:16px;}
 .badge-dblcertdev{background-image:url(https://discordbots.org/images/certifieddeveloper.png);}
 .badge-dblcertbot{background-image:url(https://discordbots.org/images/certifiedbot.png);}
 .badge-dbladmin{background-image:url(https://discordbots.org/images/adminbadge.png);}
@@ -20,6 +20,7 @@
 .with-background .headerInfo-Gkqcz9:after{z-index: 9;background-color:rgba(255,255,255,255.2);content:'';display:block;position:absolute;width:100%;height:52px;right:0;margin-top:-47px;}
 .with-background .activityUserPopout-1nmgaw {background-color:rgba(255,255,255,0.2);}
 .with-background .profileBadge-kI8nxa+.flex-lFgbSz{margin:0;}
+.headerTop-1QGMLs .endBodySection-1WYzxu {margin-bottom:0;text-align:center;}
 .header-info{padding-top:0!important;transform:translateY(20px);}
 .db-bot.actions{padding:0!important;transform:translateY(30px);}
 .db-bot>*{padding:5px!important;height:auto!important;line-height:1!important;margin-right: 10px;margin-top:5px;}
@@ -30,3 +31,4 @@
 .db-more a{display:inline-block;}
 .db-more .btn:nth-child(odd){margin-left:8px;}
 .db-more .btn,.db-more iframe{margin-top:8px;}
+.db-more button {margin:0 4px 4px 0;}

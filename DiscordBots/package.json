@@ -1,6 +1,6 @@
 {
   "name": "DiscordBots",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "View bot or user stats.",
   "main": "index.js",
   "scripts": {
