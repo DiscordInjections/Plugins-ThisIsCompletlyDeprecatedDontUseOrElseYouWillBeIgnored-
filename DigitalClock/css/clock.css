@@ -1,9 +1,0 @@
-#clockPluginClock {
-    position: absolute;
-    color: #FFF;
-    background: transparent!important;
-    padding: 0 12px !important;
-    z-index: 100;
-    top: 40px;
-    right: 0;
-}

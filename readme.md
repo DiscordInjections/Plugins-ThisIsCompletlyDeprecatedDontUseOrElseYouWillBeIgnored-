@@ -1,7 +1,3 @@
 # Plugins
 
-This is a collection of plugins for the [DiscordInjections](https://github.com/DiscordInjections/DiscordInjections) project.
-
-## Contribution
-
-To contribute to this repository, please make a pull request that adheres to our [Contributing Guidelines](.github/contributing.md).
+These plugins are all deprecated, and are no longer supported. Eo not open an issue about a broken plugin or ask for help, they will go unanswered. 
