@@ -1,4 +1,0 @@
-.pre-copy-button{display:none;cursor:pointer;}
-pre:hover .pre-copy-button{display:inline-block;float:right;margin-top:-25px;width:25px;height:25px;background-image:url(https://storage.googleapis.com/material-icons/external-assets/v4/icons/svg/ic_content_copy_white_24px.svg);background-size:contain;background-position:50%;opacity:0.4;}
-pre:hover .pre-copy-button:hover{opacity:1;}
-.theme-light pre:hover .pre-copy-button{background-image:url(https://storage.googleapis.com/material-icons/external-assets/v4/icons/svg/ic_content_copy_black_24px.svg);}

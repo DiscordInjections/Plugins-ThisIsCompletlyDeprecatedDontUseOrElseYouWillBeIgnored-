@@ -1,9 +1,0 @@
-{
-  "name": "DiscordTrackingBlocker",
-  "version": "1.0.0",
-  "description": "Blocks connections to the /track endpoint within the client",
-  "main": "index.js",
-  "scripts": {},
-  "author": "Pointy",
-  "license": "ISC"
-}
